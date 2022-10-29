@@ -9,6 +9,7 @@ import tds.driver.ServicioPersistencia;
 public class Launcher {
 	public static void main(String[] args) {
 		System.out.println("hello world");
+		System.out.println("ola");
 		
 		ServicioPersistencia servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 		Entidad eProducto = new Entidad();
