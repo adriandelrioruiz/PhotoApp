@@ -3,6 +3,7 @@ package umu.tds.maven.apps.PhotoApp.controlador;
 import java.util.Date;
 
 import umu.tds.maven.apps.PhotoApp.modelo.User;
+import umu.tds.maven.apps.PhotoApp.modelo.UserRepository;
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
 
@@ -10,8 +11,13 @@ public class PhotoAppController {
 	
 	private static final boolean DEFAULT_PREMIUM = false;
 	
+	// única instancia (singleton)
 	private static PhotoAppController onlyInstance;
 	
+	// Repositorios (catálogos)
+	private UserRepository userRepository;
+	
+	// Adaptadores
 	private IUserAdapterDAO userAdapter;
 	
 	public static PhotoAppController getInstance() {
@@ -22,8 +28,15 @@ public class PhotoAppController {
 	
 	public PhotoAppController() {
 		initializeAdapters();
+		initializeRepositories();
 	}
 	
+	// Método para inicializar los repositorios (catálogos)
+	private void initializeRepositories() {
+		userRepository = UserRepository.getInstance();
+	}
+	
+	// Método para inicializar los adaptadores
 	private void initializeAdapters() {
 		FactoriaDAO factory = null;
 		try {
