@@ -1,9 +1,15 @@
 package umu.tds.maven.apps.PhotoApp.modelo;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
+import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
+import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
+import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 
 /** Usaremos esta clase para almacenar los usuarios de la base de datos al iniciar la aplicación, además
  * meteremos cada usuario nuevo que se registre aquí */
@@ -12,7 +18,7 @@ public class UserRepository {
 	
 	// Patrón singleton
 	private static UserRepository instance;
-	
+	// TODO quitar esto?
 	private static FactoriaDAO factory;
 	
 	private HashMap<String,User> usersByUsername;
@@ -33,6 +39,8 @@ public class UserRepository {
 			
 			// Recuperamos todos los usuarios de la base de datos
 			List<User> users = factory.getUserDAO().getAllUsers();
+			
+			
 			// Los introducimos en nuestro mapa
 			for (User user : users)
 				usersByUsername.put(user.getUserName(), user);
@@ -44,7 +52,7 @@ public class UserRepository {
 	}
 	
 	// Método para añadir un usuario al repositorio
-	public void addUser(User user) {
+	public void registerUser(User user) {
 		usersByUsername.put(user.getUserName(), user);
 	}
 	
@@ -53,14 +61,20 @@ public class UserRepository {
 		usersByUsername.remove(user.getUserName());
 	}
 	
-	// Método para comprobar si un nombre de usuario ya está cogido
-	public boolean userExists(User user) {
-		return usersByUsername.containsKey(user.getUserName());
-	}
 	
 	// Método que devuelve un usuario dado su nombre de usuario
-	public User getUser(String userName) {
+	public User getUserByUsername(String userName) {
 		return usersByUsername.get(userName);
+	}
+	
+	public User getUserByEmail(String email) {
+		User user = null;
+		Collection<User> allUsers = usersByUsername.values();
+		for(User u : allUsers) {
+			if (u.getEmail().equals(email))
+				user = u;
+		}
+		return user;
 	}
 	
 	

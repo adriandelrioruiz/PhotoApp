@@ -23,7 +23,7 @@ public class User {
 	private String profilePic;
 	private String bio;
 
-	public User(String fullName, String userName, String email, String password, Date dateOfBirth, boolean isPremium,
+	public User(String fullName, String email, String userName, String password, Date dateOfBirth, boolean isPremium,
 			String profilePic, String bio, LinkedList<User> followers, LinkedList<User> followed) {
 		super();
 		this.fullName = fullName;

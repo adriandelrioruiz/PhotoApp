@@ -16,6 +16,7 @@ import umu.tds.maven.apps.PhotoApp.modelo.User;
 
 public class UserAdapterTDS implements IUserAdapterDAO {
 
+	private static final String USER = "user";
 	private static final String FULLNAME = "fullName";
 	private static final String USERNAME = "userName";
 	private static final String EMAIL = "email";
@@ -25,7 +26,7 @@ public class UserAdapterTDS implements IUserAdapterDAO {
 	private static final String PROFILEPIC = "profilePic";
 	private static final String BIO = "bio";
 
-	public static ServicioPersistencia servPersistencia;
+	private static ServicioPersistencia servPersistencia;
 	private SimpleDateFormat dateFormat;
 
 	public static UserAdapterTDS instance;
@@ -37,6 +38,7 @@ public class UserAdapterTDS implements IUserAdapterDAO {
 	}
 
 	public UserAdapterTDS() {
+		
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	}
@@ -44,9 +46,9 @@ public class UserAdapterTDS implements IUserAdapterDAO {
 	private Entidad userToEntity(User user) {
 		Entidad eUser = new Entidad();
 
-		eUser.setNombre("user");
+		eUser.setNombre(USER);
 		eUser.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(new Propiedad(FULLNAME, user.getFullName()), new Propiedad(USERNAME, user.getFullName()),
+				Arrays.asList(new Propiedad(FULLNAME, user.getFullName()), new Propiedad(USERNAME, user.getUserName()),
 						new Propiedad(EMAIL, user.getEmail()), new Propiedad(PASSWORD, user.getPassword()),
 						new Propiedad(DATE, dateFormat.format(user.getDateOfBirth())),
 						new Propiedad(PREMIUM, String.valueOf(user.isPremium())),
@@ -84,7 +86,7 @@ public class UserAdapterTDS implements IUserAdapterDAO {
 
 		// Creamos el objeto User a partir de los atributos recuperados de la
 		// persistencia
-		User user = new User(fullName, userName, email, password, date, isPremium, profilePic, bio, null, null);
+		User user = new User(fullName, email, userName, password, date, isPremium, profilePic, bio, null, null);
 		// Le damos el código que le ha asignado la base de datos a nuestro usuario;
 		user.setCode(eUser.getId());
 
@@ -130,18 +132,9 @@ public class UserAdapterTDS implements IUserAdapterDAO {
 
 	}
 
-	// A partir del nombre de usuario o email, se busca al usuario en el repositorio
-	public User userExists(String usernameOrEmail) {
-
-		List<Entidad> entities = servPersistencia.recuperarEntidades(USERNAME);
-		List<User> users = new ArrayList<>();
-		// Intentamos buscar el usuario por el campo username
-
-		return null;
-	}
 
 	public List<User> getAllUsers() {
-		List<Entidad> entities = servPersistencia.recuperarEntidades(USERNAME);
+		List<Entidad> entities = servPersistencia.recuperarEntidades(USER);
 
 		List<User> users = new LinkedList<User>();
 		for (Entidad eUser : entities) {

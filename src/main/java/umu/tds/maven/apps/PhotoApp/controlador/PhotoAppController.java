@@ -14,6 +14,9 @@ public class PhotoAppController {
 	// única instancia (singleton)
 	private static PhotoAppController onlyInstance;
 	
+	// Usuario que se inicializará al hacer login
+	User user;
+	
 	// Repositorios (catálogos)
 	private UserRepository userRepository;
 	
@@ -26,6 +29,7 @@ public class PhotoAppController {
 		return onlyInstance;
 	}
 	
+	// Constructor con el que se inicializan los repositorios 
 	public PhotoAppController() {
 		initializeAdapters();
 		initializeRepositories();
@@ -50,13 +54,54 @@ public class PhotoAppController {
 	
 	// Método para registrar a un usuario en la base de datos
 	
-	public void registerUser(String fullName, String userName, String email, String password, Date date, String profilePic, String bio) {
-		User user = new User(fullName, userName, email, password, date, DEFAULT_PREMIUM, profilePic, bio, null, null);
+	public boolean registerUser(String fullName, String email, String userName, String password, Date date, String profilePic, String bio) {
+		
+		// Miramos si el userName ya está cogido
+		if (userRepository.getUserByUsername(userName) != null) {
+			// TODO quitar el print
+			System.out.println("Fallo al Registrarse: El userName " + userName + " ya está cogido");
+			return false;
+		}
+		
+		// Miramos si el email ya está cogido
+		if (userRepository.getUserByEmail(email) != null) {
+			// TODO quitar el print
+			System.out.println("Fallo al Registrarse: El email " + email + " ya está cogido");
+			return false;
+		}
+		
+		// En otro caso, podremos registrar al usuario en la persistencia y en el repositorio
+		
+		User user = new User(fullName, email, userName, password, date, DEFAULT_PREMIUM, profilePic, bio, null, null);
+		
 		userAdapter.registerUser(user);
+		userRepository.registerUser(user);
+		
+		// TODO quitar el print
+		System.out.println("El usuario " + userName + " se ha registrado con éxito!");
+		return true;
 	}
 	
 	public boolean login(String usernameOrEmail, String password) {
-		return false;
+		// Comprobamos en el repositorio si el usuario existe por nombre de usuario o email
+		user = userRepository.getUserByUsername(usernameOrEmail);
+		if (user == null)
+			user = userRepository.getUserByEmail(usernameOrEmail);
+		if (user == null) {
+			// TODO quitar el print
+			System.out.println("email o username incorrecto");
+			return false;
+		}
+
+		// Si no es null es porque existe. Vemos si la contraseña es correcta
+		if (!password.equals(user.getPassword())) {
+			System.out.println("contraseña incorrecta");
+			return false;
+		}
+	
+		// TODO quitar el print
+		System.out.println("El usuario " + usernameOrEmail + " se ha logeado con éxito");
+		return true;
 	}
 	
 	

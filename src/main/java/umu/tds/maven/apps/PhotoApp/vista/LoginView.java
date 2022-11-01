@@ -1,181 +1,116 @@
 package umu.tds.maven.apps.PhotoApp.vista;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.EventQueue;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.TitledBorder;
-
 import javax.swing.border.EmptyBorder;
 
-public class LoginView {
+import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 
-	private JFrame frmLogin;
-	private JTextField textUsuario;
-	private JPasswordField textPassword;
+import javax.swing.JTextField;
+import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class LoginView extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField txtUsernameOrEmail;
+	private JTextField txtPassword;
+
 
 	/**
-	 * Create the application.
+	 * Create the frame.
 	 */
 	public LoginView() {
-		initialize();
-	}
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-	public void mostrarVentana() {
-		frmLogin.setLocationRelativeTo(null);
-		frmLogin.setVisible(true);
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		txtUsernameOrEmail = new JTextField();
+		txtUsernameOrEmail.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		txtUsernameOrEmail.setText("username or email");
+		txtUsernameOrEmail.setBounds(125, 71, 176, 39);
+		contentPane.add(txtUsernameOrEmail);
+		txtUsernameOrEmail.setColumns(10);
+		
+		txtPassword = new JTextField();
+		txtPassword.setText("password");
+		txtPassword.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		txtPassword.setColumns(10);
+		txtPassword.setBounds(125, 122, 176, 39);
+		contentPane.add(txtPassword);
+		
+		JButton loginButton = new JButton("Login");
+		loginButton.setBounds(169, 175, 85, 21);
+
+		contentPane.add(loginButton);
+		
+		JButton registerButton = new JButton("Register");
+	
+		registerButton.setBounds(169, 221, 85, 21);
+		contentPane.add(registerButton);
+		
+		// Añadimos los manejadores de los botones
+		addLoginButtonHandler(loginButton);
+		addRegisterButtonHandler(registerButton);
+		
+		// Centramos la ventana
+		setLocationRelativeTo(null);
 	}
 	
-	/********************************************************************** 
-	 * Procurar organizar la creación de una ventana en varios métodos
-	 * con el fin de facilitar su comprensión. Esta clase muestra un ejemplo
-	 **********************************************************************/
+	private void addLoginButtonHandler(JButton loginButton) {
+		loginButton.addActionListener(new LoginButtonActionListener());
+	}
 	
-	private void initialize() {
-		frmLogin = new JFrame();
-		frmLogin.setTitle("Login AppVideo");
-		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmLogin.getContentPane().setLayout(new BorderLayout());
-
-		crearPanelTitulo();
-		crearPanelLogin();
-
-		frmLogin.setResizable(false);
-		frmLogin.pack();
+	private void addRegisterButtonHandler(JButton registerButton) {
+		registerButton.addActionListener(new RegisterButtonActionListener(this));
 	}
 
-	private void crearPanelTitulo() {
-		JPanel panel_Norte = new JPanel();
-		frmLogin.getContentPane().add(panel_Norte, BorderLayout.NORTH);
-		panel_Norte.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 15));
-
-		JLabel lblTitulo = new JLabel("AppVideo");
-		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblTitulo.setForeground(Color.DARK_GRAY);
-		panel_Norte.add(lblTitulo);
-	}
-
-	private void crearPanelLogin() {
-		JPanel panelLogin = new JPanel();
-		panelLogin.setBorder(new EmptyBorder(10, 10, 10, 10));
-		frmLogin.getContentPane().add(panelLogin, BorderLayout.CENTER);
-		panelLogin.setLayout(new BorderLayout(0, 0));
-
-		panelLogin.add(crearPanelUsuarioPassw(), BorderLayout.NORTH);
-		panelLogin.add(crearPanelBotones(), BorderLayout.SOUTH);
-	}
-
-	private JPanel crearPanelUsuarioPassw() {
-		JPanel panelCampos = new JPanel();
-		panelCampos.setBorder(new TitledBorder(null, "Login", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelCampos.setLayout(new BoxLayout(panelCampos, BoxLayout.Y_AXIS));
-
-		// Panel Campo Login
-		JPanel panelCampoUsuario = new JPanel();
-		panelCampos.add(panelCampoUsuario);
-		panelCampoUsuario.setLayout(new BorderLayout(0, 0));
-
-		JLabel lblUsuario = new JLabel("Usuario: ");
-		panelCampoUsuario.add(lblUsuario);
-		lblUsuario.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-		textUsuario = new JTextField();
-		panelCampoUsuario.add(textUsuario, BorderLayout.EAST);
-		textUsuario.setColumns(15);
-
-		// Panel Campo Password
-		JPanel panelCampoPassword = new JPanel();
-		panelCampos.add(panelCampoPassword);
-		panelCampoPassword.setLayout(new BorderLayout(0, 0));
-
-		JLabel lblPassword = new JLabel("Contrase\u00F1a: ");
-		panelCampoPassword.add(lblPassword);
-		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 12));
-
-		textPassword = new JPasswordField();
-		panelCampoPassword.add(textPassword, BorderLayout.EAST);
-		textPassword.setColumns(15);
+	
+	class RegisterButtonActionListener implements ActionListener {
 		
-		return panelCampos;
-	}
+		JFrame frame;
 
-	private JPanel crearPanelBotones() {
-		JPanel panelBotones = new JPanel();
-		panelBotones.setBorder(new EmptyBorder(5, 0, 5, 0));
-		panelBotones.setLayout(new BorderLayout(0, 0));
-
-		JPanel panelBotonesLoginRegistro = new JPanel();
-		panelBotones.add(panelBotonesLoginRegistro, BorderLayout.WEST);
-
-		JButton btnLogin = new JButton("Login");
-		panelBotonesLoginRegistro.add(btnLogin);
-
-		JButton btnRegistro = new JButton("Registro");
-		panelBotonesLoginRegistro.add(btnRegistro);
-
-		JPanel panelBotonSalir = new JPanel();
-		panelBotones.add(panelBotonSalir, BorderLayout.EAST);
-
-		JButton btnSalir = new JButton("Salir");
-		panelBotonSalir.add(btnSalir);
-
-		addManejadorBotonLogin(btnLogin);
-		addManejadorBotonRegistro(btnRegistro);
-		addManejadorBotonSalir(btnSalir);
+		public RegisterButtonActionListener(JFrame frame) {
+			this.frame = frame;
+		}
 		
-		return panelBotones;
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// Ocultamos la ventana de login que es la que hemos pasado al constructor
+			frame.setVisible(false);
+			// Creamos una ventana de registro y la mostramos
+			RegisterView registerFrame = new RegisterView();
+			registerFrame.setVisible(true);
+		}
+		
 	}
-
-	private void addManejadorBotonSalir(JButton btnSalir) {
-		btnSalir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frmLogin.dispose();
-				System.exit(0);
+	
+	class LoginButtonActionListener implements ActionListener {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// Si los campos no están vacíos, intentamos hacer un login con el controlador
+			if(!txtUsernameOrEmail.getText().isEmpty() && !txtPassword.getText().isEmpty()) {
+				boolean loginSuccessful = PhotoAppController.getInstance().login(txtUsernameOrEmail.getText(), getName());
+				if (!loginSuccessful) {
+					// Crear el JDialog
+					System.out.println("NOLOGIN");
+				}
+				
+				else
+					System.out.println("LOGIN");
+				
 			}
-		});
+		}
 	}
-
-	private void addManejadorBotonRegistro(JButton btnRegistro) {
-		btnRegistro.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				RegisterView registro = new RegisterView (frmLogin);
-				registro.setLocationRelativeTo(frmLogin);                              	
-				registro.setVisible(true);
-				frmLogin.dispose();
-			}
-		});
-	}
-
-	private void addManejadorBotonLogin(JButton btnLogin) {
-		/*
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				boolean login = Controlador.INSTANCE.loginUsuario(
-						textUsuario.getText(),
-						new String(textPassword.getPassword()));
-
-				if (login) {
-					VentanaPrincipal principal = new VentanaPrincipal();
-					principal.mostrarVentana();
-					frmLogin.dispose();
-				} else
-					JOptionPane.showMessageDialog(frmLogin, "Nombre de usuario o contraseña no valido",
-							"Error", JOptionPane.ERROR_MESSAGE);
-			}
-		});*/
-	}
-
 }

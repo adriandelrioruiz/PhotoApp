@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.util.Date;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
+import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.LoginView;
 
 
@@ -13,10 +14,8 @@ public class Launcher {
 			public void run() {
 				try {
 					LoginView ventana = new LoginView();
-					PhotoAppController.getInstance().registerUser("prepu", "awe", "awawd", "adaw", new Date(), "asd", "Awdaw");
-					
-					
-					ventana.mostrarVentana();
+					// Hacemos visible la ventana
+					ventana.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
