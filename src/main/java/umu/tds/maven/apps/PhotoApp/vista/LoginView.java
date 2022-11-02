@@ -1,6 +1,5 @@
 package umu.tds.maven.apps.PhotoApp.vista;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,13 +10,16 @@ import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class LoginView extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtUsernameOrEmail;
 	private JTextField txtPassword;

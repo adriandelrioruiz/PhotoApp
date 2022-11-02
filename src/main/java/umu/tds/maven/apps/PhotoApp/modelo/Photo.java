@@ -1,17 +1,8 @@
 package umu.tds.maven.apps.PhotoApp.modelo;
 
-public class Photo extends Publication{
+public class Photo extends Post{
 
-	private int code;
 	private String path;
-	
-	public int getCode() {
-		return code;
-	}
-	
-	public void setCode(int code) {
-		this.code = code;
-	}
 	
 	public String getPath() {
 		return path;

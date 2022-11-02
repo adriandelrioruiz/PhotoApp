@@ -9,4 +9,5 @@ public interface IUserAdapterDAO {
 	public User getUser(int code);
 	public void deleteUser(User user);
 	public List<User> getAllUsers();
+	public void updateUser(User user, String attribute);
 }

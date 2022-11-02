@@ -6,6 +6,7 @@ import java.util.List;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
+import umu.tds.maven.apps.PhotoApp.persistencia.PostAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 
 public class PruebasPersistencia {
@@ -29,12 +30,17 @@ public class PruebasPersistencia {
 	
 	public static void main(String[] args) {
 		
+
 		//PruebasPersistencia.deleteAllUsers();
-		PhotoAppController.getInstance().registerUser("asd", "awe", "awawd", "adaw", new Date(), "asd", "Awdaw");
-		PhotoAppController.getInstance().registerUser("asd", "awe", "as", "adaw", new Date(), "asd", "Awdaw");
+		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password", new Date(), "myPhoto", "myBio");
+		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan@gmail", "juanhdz", "password", new Date(), "PhotoJuan", "BioJuan");
+		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan2@gmail", "juanhdz2", "password", new Date(), "PhotoJuan", "BioJuan");
+		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan3@gmail", "juanhdz3", "password", new Date(), "PhotoJuan", "BioJuan");
+		PhotoAppController.getInstance().login("adri@gmail", "password");
+		PhotoAppController.getInstance().follow("juanhdz");
+		PhotoAppController.getInstance().follow("juanhdz2");
+		PhotoAppController.getInstance().follow("juanhdz3");
 		
-		PhotoAppController.getInstance().login("awe", "adaw");
-		PhotoAppController.getInstance().login("awe", "adaddaa");
 		
 	}
 }

@@ -3,7 +3,7 @@ package umu.tds.maven.apps.PhotoApp.modelo;
 import java.util.Collections;
 import java.util.List;
 
-public class Album extends Publication {
+public class Album extends Post {
 	
 	private List<Photo> photos;
 	

@@ -2,18 +2,9 @@ package umu.tds.maven.apps.PhotoApp.modelo;
 
 import java.util.Date;
 
-public class Notification {
+public class Notification extends DomainObject {
 
-	private int code;
 	private Date date;
-	
-	public int getCode() {
-		return code;
-	}
-	
-	public void setCode(int code) {
-		this.code = code;
-	}
 	
 	public Date getDate() {
 		return date;

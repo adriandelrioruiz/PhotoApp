@@ -1,7 +1,5 @@
 package umu.tds.maven.apps.PhotoApp.vista;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -10,6 +8,10 @@ import javax.swing.JButton;
 
 public class RegisterView extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtFullName;
 	private JTextField txtEmail;

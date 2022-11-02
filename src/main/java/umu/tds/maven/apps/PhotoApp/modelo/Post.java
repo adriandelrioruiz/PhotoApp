@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class Publication {
+// TODO Cambiar Post por Post
+public class Post extends DomainObject {
 
-	private int code;
 	private String title;
 	private Date date;
 	private String description;
@@ -14,13 +14,6 @@ public class Publication {
 	private List<String> hashtags;
 	private List<Comment> comments;
 	
-	public int getCode() {
-		return code;
-	}
-	
-	public void setCode(int code) {
-		this.code = code;
-	}
 
 	public String getTitle() {
 		return title;

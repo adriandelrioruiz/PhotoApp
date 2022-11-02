@@ -1,6 +1,6 @@
 package umu.tds.maven.apps.PhotoApp.modelo;
 
-public class Comment {
+public class Comment extends DomainObject {
 
 	private String text;
 

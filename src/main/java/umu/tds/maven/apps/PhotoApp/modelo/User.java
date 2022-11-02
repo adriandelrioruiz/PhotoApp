@@ -9,9 +9,8 @@ import java.util.List;
  * Clase del modelo de dominio para representar a un Usuario de la PhotoApp
  */
 
-public class User {
+public class User extends DomainObject {
 
-	private int code;
 	private String fullName;
 	private String userName;
 	private String email;
@@ -19,23 +18,25 @@ public class User {
 	private Date dateOfBirth;
 	private List<User> followers;
 	private List<User> followed;
+	private List<Post> posts;
 	private boolean isPremium;
 	private String profilePic;
 	private String bio;
 
 	public User(String fullName, String email, String userName, String password, Date dateOfBirth, boolean isPremium,
-			String profilePic, String bio, LinkedList<User> followers, LinkedList<User> followed) {
+			String profilePic, String bio) {
 		super();
 		this.fullName = fullName;
 		this.userName = userName;
 		this.email = email;
 		this.password = password;
-		this.bio = bio;
 		this.profilePic = profilePic;
 		this.dateOfBirth = dateOfBirth;
-		this.followers = followers;
-		this.followed = followed;
+		this.followers = new LinkedList<>();
+		this.followed = new LinkedList<>();
+		this.posts = new LinkedList<>();
 		this.isPremium = isPremium;
+		this.bio = bio;
 
 	}
 
@@ -53,14 +54,6 @@ public class User {
 
 	public void setBio(String bio) {
 		this.bio = bio;
-	}
-
-	public int getCode() {
-		return code;
-	}
-
-	public void setCode(int code) {
-		this.code = code;
 	}
 
 	public String getFullName() {
@@ -110,6 +103,10 @@ public class User {
 	public List<User> getFollowed() {
 		return Collections.unmodifiableList(followed);
 	}
+	
+	public List<Post> getPosts() {
+		return Collections.unmodifiableList(posts);
+	}
 
 	public boolean isPremium() {
 		return isPremium;
@@ -117,6 +114,30 @@ public class User {
 
 	public void setPremium(boolean isPremium) {
 		this.isPremium = isPremium;
+	}
+	
+	public void addFollower(User newFollower) {
+		followers.add(newFollower);
+	}
+	
+	public void addFollowed(User newFollowed) {
+		followed.add(newFollowed);
+	}
+	
+	public void addPost(Post post) {
+		posts.add(post);
+	}
+
+	public void setFollowers(List<User> followers) {
+		this.followers = followers;
+	}
+
+	public void setFollowed(List<User> followed) {
+		this.followed = followed;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
 
 	@Override

@@ -7,5 +7,10 @@ public class TDSFactoriaDAO extends FactoriaDAO {
 		return UserAdapterTDS.getInstance();
 	}
 	
+	@Override
+	public IPostAdapterDAO getPostDAO() {
+		return PostAdapterTDS.getInstance();
+	}
+	
 	
 }

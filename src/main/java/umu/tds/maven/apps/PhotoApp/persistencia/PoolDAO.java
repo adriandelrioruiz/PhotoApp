@@ -5,28 +5,28 @@ package umu.tds.maven.apps.PhotoApp.persistencia;
 import java.util.Hashtable;
 
 public class PoolDAO {
-	private static PoolDAO unicaInstancia;
+	private static PoolDAO instance;
 	private Hashtable<Integer, Object> pool;
 
 	private PoolDAO() {
 		pool = new Hashtable<Integer, Object>();
 	}
 
-	public static PoolDAO getUnicaInstancia() {
-		if (unicaInstancia == null) unicaInstancia = new PoolDAO();
-		return unicaInstancia;
+	public static PoolDAO getInstance() {
+		if (instance == null) instance = new PoolDAO();
+		return instance;
 		
 	}
 	
-	public Object getObjeto(int id) {
+	public Object getObject(int id) {
 		return pool.get(id);
 	} // devuelve null si no encuentra el objeto
 
-	public void addObjeto(int id, Object objeto) {
-		pool.put(id, objeto);
+	public void addObject(int id, Object obj) {
+		pool.put(id, obj);
 	}
 
-	public boolean contiene(int id) {
+	public boolean contains(int id) {
 		return pool.containsKey(id);
 	}
 }

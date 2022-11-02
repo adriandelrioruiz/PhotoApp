@@ -1,10 +1,7 @@
 package umu.tds.maven.apps.PhotoApp.main;
 
 import java.awt.EventQueue;
-import java.util.Date;
 
-import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
-import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.LoginView;
 
 

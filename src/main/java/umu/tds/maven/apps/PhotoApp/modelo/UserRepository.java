@@ -2,14 +2,11 @@ package umu.tds.maven.apps.PhotoApp.modelo;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 
-import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
-import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
+
 
 /** Usaremos esta clase para almacenar los usuarios de la base de datos al iniciar la aplicación, además
  * meteremos cada usuario nuevo que se registre aquí */
@@ -39,6 +36,7 @@ public class UserRepository {
 			
 			// Recuperamos todos los usuarios de la base de datos
 			List<User> users = factory.getUserDAO().getAllUsers();
+			//users.stream().forEach((u) -> UserAdapterTDS.getInstance().deleteUser(u));
 			
 			
 			// Los introducimos en nuestro mapa
@@ -76,6 +74,8 @@ public class UserRepository {
 		}
 		return user;
 	}
+	
+
 	
 	
 	
