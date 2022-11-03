@@ -1,10 +1,8 @@
 package umu.tds.maven.apps.PhotoApp.controlador;
 
 import java.util.Date;
-import java.util.LinkedList;
 
 import umu.tds.maven.apps.PhotoApp.modelo.User;
-import umu.tds.maven.apps.PhotoApp.modelo.Post;
 import umu.tds.maven.apps.PhotoApp.modelo.UserRepository;
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
@@ -79,8 +77,8 @@ public class PhotoAppController {
 
 		User user = new User(fullName, email, userName, password, date, DEFAULT_PREMIUM, profilePic, bio);
 
-		userAdapter.registerUser(user);
-		userRepository.registerUser(user);
+		userAdapter.addUser(user);
+		userRepository.addUser(user);
 
 		// TODO quitar el print
 		System.out.println("El usuario " + userName + " se ha registrado con éxito!");
@@ -132,6 +130,29 @@ public class PhotoAppController {
 		else
 			System.out.println("Ya sigues al usuario " + userNameFollowed);
 
+	}
+	
+	public void unFollow(String userNameUnfollowed) {
+		// Si se sigue ya al usuario se dejará de seguir
+		if (user.getFollowed().stream().anyMatch((u) -> u.getUserName().equals(userNameUnfollowed))) {
+			// Obtenemos el objeto user del usuario seguido
+			User userUnfollowed = userRepository.getUserByUsername(userNameUnfollowed);
+			// Añadimos seguido a nuestro usuario
+			user.removeFollowed(userUnfollowed);
+			// Añadimos seguidor al usuario seguido
+			userUnfollowed.removeFollower(user);
+
+			// Modificamos los datos en persistencia
+			userAdapter.updateUser(user, UserAdapterTDS.FOLLOWED);
+			userAdapter.updateUser(userUnfollowed, UserAdapterTDS.FOLLOWERS);
+
+			// No hace falta modificar los datos en el repositorio porque los objetos
+			// usuario son tomados del mismo, así que ya se han modificado en esta función
+			
+			System.out.println("Ya no sigues a " + userNameUnfollowed);
+		}
+		else
+			System.out.println("No sigues al usuario " + userNameUnfollowed);
 	}
 
 	// Obtener número de seguidores

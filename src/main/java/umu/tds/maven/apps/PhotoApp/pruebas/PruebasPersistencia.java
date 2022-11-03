@@ -6,7 +6,6 @@ import java.util.List;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
-import umu.tds.maven.apps.PhotoApp.persistencia.PostAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 
 public class PruebasPersistencia {
@@ -20,6 +19,7 @@ public class PruebasPersistencia {
 			List<User> users = factory.getUserDAO().getAllUsers();
 			// Los eliminamos a todos
 			users.stream().forEach((u) -> UserAdapterTDS.getInstance().deleteUser(u));
+			System.exit(0);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -39,6 +39,8 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().login("adri@gmail", "password");
 		PhotoAppController.getInstance().follow("juanhdz");
 		PhotoAppController.getInstance().follow("juanhdz2");
+		PhotoAppController.getInstance().follow("juanhdz3");
+		PhotoAppController.getInstance().unFollow("juanhdz3");
 		PhotoAppController.getInstance().follow("juanhdz3");
 		
 		

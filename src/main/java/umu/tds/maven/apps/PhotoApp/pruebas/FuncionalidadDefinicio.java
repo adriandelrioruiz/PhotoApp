@@ -18,8 +18,6 @@ public abstract class FuncionalidadDefinicio {
 		// Compartir foto, habrá que mandar una notificación a los seguidores. Desta
 		// foto habrá tb que extraer los hashtags. 
 		public abstract void sharePhoto(String photo, String comment);
-		// Follow user
-		public abstract void followUser(String userName);
 		// Darle me gusta a una foto de un usuario
 		public abstract void like(String photo, String userName);
 		// Obtener los hashtags que contienen una palabra

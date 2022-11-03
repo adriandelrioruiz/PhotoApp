@@ -1,12 +1,13 @@
 package umu.tds.maven.apps.PhotoApp.modelo;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Notification extends DomainObject {
 
-	private Date date;
+	private LocalDateTime date;
 	
-	public Date getDate() {
-		return date;
+	public Notification() {
+		this.date = LocalDateTime.now();
 	}
+
 }

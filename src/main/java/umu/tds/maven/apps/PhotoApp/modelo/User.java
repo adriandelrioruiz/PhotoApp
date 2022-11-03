@@ -127,6 +127,18 @@ public class User extends DomainObject {
 	public void addPost(Post post) {
 		posts.add(post);
 	}
+	
+	public void removeFollower(User followerUser) {
+		followers.remove(followerUser);
+	}
+	
+	public void removeFollowed(User followedUser) {
+		followed.remove(followedUser);
+	}
+	
+	public void removePost(Post post) {
+		posts.remove(post);
+	}
 
 	public void setFollowers(List<User> followers) {
 		this.followers = followers;

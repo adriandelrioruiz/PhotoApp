@@ -49,6 +49,18 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 	protected Entidad objectToEntity(DomainObject o) {
 		User user =(User) o;
 		Entidad eUser = new Entidad();
+		
+		//TODO Cambiar
+		DomainObject[] arrayPosts = new DomainObject[user.getPosts().size()];
+		arrayPosts = user.getPosts().toArray(arrayPosts);
+		AdapterTDS.getCodesFromObjects(Arrays.asList(arrayPosts));
+		DomainObject[] arrayFollowers = new DomainObject[user.getFollowers().size()];
+		arrayFollowers = user.getFollowers().toArray(arrayFollowers);
+		AdapterTDS.getCodesFromObjects(Arrays.asList(arrayFollowers));
+		DomainObject[] arrayFollowed = new DomainObject[user.getFollowed().size()];
+		arrayFollowed = user.getFollowed().toArray(arrayFollowed);
+		AdapterTDS.getCodesFromObjects(Arrays.asList(arrayFollowed));
+		
 
 		eUser.setNombre(USER);
 		eUser.setPropiedades(new ArrayList<Propiedad>(
@@ -57,9 +69,10 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 						new Propiedad(DATE, dateFormat.format(user.getDateOfBirth())),
 						new Propiedad(PREMIUM, String.valueOf(user.isPremium())),
 						new Propiedad(PROFILEPIC, user.getProfilePic()), new Propiedad(BIO, user.getBio()), 
-						new Propiedad(POSTS, PostAdapterTDS.getCodesFromAllPosts(user.getPosts())),
-						new Propiedad(FOLLOWERS, getCodesFromAllUsers(user.getFollowers())),
-						new Propiedad(FOLLOWED, getCodesFromAllUsers(user.getFollowed())))));
+						new Propiedad(POSTS, AdapterTDS.getCodesFromObjects(Arrays.asList(arrayPosts))),
+						new Propiedad(FOLLOWERS, AdapterTDS.getCodesFromObjects(Arrays.asList(arrayFollowers))),
+						new Propiedad(FOLLOWED, AdapterTDS.getCodesFromObjects(Arrays.asList(arrayFollowed))))));
+		
 
 		return eUser;
 	}
@@ -104,8 +117,8 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		PoolDAO.getInstance().addObject(en.getId(), user);
 		
 		// Recuperamos los atributos que son listas 
-		List<Post> posts = PostAdapterTDS.getAllPostsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, POSTS));
-		List<User> followers = getAllUsersFromCodes(servPersistencia.recuperarPropiedadEntidad(en, FOLLOWERS));
+		List<Post> posts = getObjectsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, POSTS));
+		List<User> followers = AdapterTDS.(servPersistencia.recuperarPropiedadEntidad(en, FOLLOWERS));
 		List<User> followed = getAllUsersFromCodes(servPersistencia.recuperarPropiedadEntidad(en, FOLLOWED));
 		
 		user.setPosts(posts);
@@ -117,7 +130,8 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 	}
 
 	
-	public void registerUser(User user) {
+	public void addUser(User user) {
+		// Si el usuario ya está registrado, no se registra
 		Entidad eUser = null;
 		try {
 			eUser = servPersistencia.recuperarEntidad(user.getCode());
@@ -126,7 +140,7 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		if (eUser != null)
 			return;
 
-		// Crear entidad venta
+		// Crear entidad user
 		eUser = objectToEntity(user);
 		// registrar entidad user
 		eUser = servPersistencia.registrarEntidad(eUser);
@@ -135,12 +149,12 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		user.setCode(eUser.getId());
 	}
 
-	public User getUser(int code) {
+	public User getUser(int id) {
 
 		Entidad eUser;
 
 		// Recuperamos la entidad
-		eUser = servPersistencia.recuperarEntidad(code);
+		eUser = servPersistencia.recuperarEntidad(id);
 		// Convertimos la entidad en un objeto usuario
 		User user = (User) entityToObject(eUser);
 
@@ -158,6 +172,14 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 	// TODO hacerlo así o un poco más eficiente
 	// Para modificar un usuario
 	public void updateUser(User user, String attribute) {
+		//TODO Cambiar
+				DomainObject[] arrayPosts = new DomainObject[user.getPosts().size()];
+				arrayPosts = user.getPosts().toArray(arrayPosts);
+				DomainObject[] arrayFollowers = new DomainObject[user.getFollowers().size()];
+				arrayFollowers = user.getFollowers().toArray(arrayFollowers);
+				DomainObject[] arrayFollowed = new DomainObject[user.getFollowed().size()];
+				arrayFollowed = user.getFollowed().toArray(arrayFollowed);
+		
 		Entidad eUser = servPersistencia.recuperarEntidad(user.getCode());
 		List<Propiedad> properties = new LinkedList<>();
 		for (Propiedad p : eUser.getPropiedades()) {
@@ -184,13 +206,13 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 			property.setValor(user.getPassword());
 			break;
 		case POSTS:
-			property.setValor(PostAdapterTDS.getCodesFromAllPosts(user.getPosts()));
+			property.setValor(AdapterTDS.getCodesFromObjects(Arrays.asList(arrayPosts)));
 			break;
 		case FOLLOWERS:
-			property.setValor(getCodesFromAllUsers(user.getFollowers()));
+			property.setValor(AdapterTDS.getCodesFromObjects(Arrays.asList(arrayFollowers)));
 			break;
 		case FOLLOWED:
-			property.setValor(getCodesFromAllUsers(user.getFollowed()));
+			property.setValor(AdapterTDS.getCodesFromObjects(Arrays.asList(arrayFollowed)));
 			break;
 			
 		}
@@ -212,28 +234,8 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		return users;
 	}
 	
-	// Usamos esta función para obtener users a través de un string con varios códigos
-	static List<User> getAllUsersFromCodes(String codes) {
-		List<User> usersList = new LinkedList<User>();
-		if (codes != null) {
-			StringTokenizer strTok = new StringTokenizer(codes, " ");
-			UserAdapterTDS adapter = getInstance();
-			while (strTok.hasMoreTokens()) {
-				usersList.add(adapter.getUser(Integer.valueOf((String) strTok.nextElement())));
-			}
-		}
-		return usersList;
+	protected DomainObject getObject(StringTokenizer strTok) {
+		return getInstance().getUser(Integer.valueOf((String) strTok.nextElement()));
 	}
-	
-	static String getCodesFromAllUsers(List<User> users) {
-		String codes = "";
-		for (User user : users) {
-			codes += user.getCode() + " ";
-		}
-		return codes.trim();
-	}
-	
-
-	
 
 }

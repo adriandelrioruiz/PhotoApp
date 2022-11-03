@@ -1,21 +1,20 @@
 package umu.tds.maven.apps.PhotoApp.persistencia;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
-import tds.driver.FactoriaServicioPersistencia;
-import tds.driver.ServicioPersistencia;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
 import umu.tds.maven.apps.PhotoApp.modelo.Post;
-import umu.tds.maven.apps.PhotoApp.modelo.User;
 
-public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
+public abstract class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 	
 	private static final String POST = "post";
 	private static final String TITLE = "title";
@@ -25,14 +24,8 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 	private static final String HASHTAGS = "hashtags";
 	private static final String COMMENTS = "comments";
 	
-	private static PostAdapterTDS instance;
+
 	private SimpleDateFormat dateFormat;
-	
-	public static PostAdapterTDS getInstance() {
-		if (instance == null)
-			instance = new PostAdapterTDS();
-		return instance;
-	}
 	
 	
 	public PostAdapterTDS() {	
@@ -56,17 +49,79 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 	
 	@Override
 	protected DomainObject entityToObject(Entidad en) {
-		// TODO Auto-generated method stub
-		return null;
+
+		// Si el objeto está en el Pool, lo devolvemos directamente
+		if (PoolDAO.getInstance().contains(en.getId()))
+			return (DomainObject) PoolDAO.getInstance().getObject(en.getId());
+
+		// Estos serán los atributos del Post que queremos recuperar
+		String title;
+		Date date;
+		String description;
+		int likes;
+		
+		
+		// Recuperamos los atributos de Post de la persistencia
+		title = servPersistencia.recuperarPropiedadEntidad(en, TITLE);
+		date = null;
+		try {
+			date = dateFormat.parse(servPersistencia.recuperarPropiedadEntidad(en, DATE));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		description = servPersistencia.recuperarPropiedadEntidad(en, DESCRIPTION);
+		likes = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, LIKES));
+		
+		// Creamos el objeto Post a partir de los atributos recuperados de la persistencia
+		Post post = new Post(title, date, description, likes);
+		// Le damos el código que le ha asignado la base de datos a nuestro post;
+		post.setCode(en.getId());
+		
+		PoolDAO.getInstance().addObject(en.getId(), post);
+		
+		// Recuperamos los atributos que son listas 
+		/*List<String> hashtags = getAllStringsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, HASHTAGS));
+		List<Comment> comments = getAllCommentsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, COMMENTS));
+	
+		
+		post.setHashtags(hashtags);
+		post.setComments(comments);*/
+
+		return post;
 	}
+	
+	
 
 	@Override
 	public Post getPost(int code) {
-		// TODO Auto-generated method stub
-		return null;
+		Entidad ePost;
+		Post post = null;
+
+		// Recuperamos la entidad
+		ePost = servPersistencia.recuperarEntidad(code);
+		// Convertimos la entidad en un objeto usuario
+		try {
+			post = (Post) entityToObject(ePost);
+			
+		} catch (NullPointerException e) {
+			System.out.println("El post con el id " + code + " no está registrado");
+		}
+		return post;
 	}
 	
-	// TODO ver si puedo reutilizar código y reescribir en AdapterTDS
+	@Override
+	public void addPost(Post post) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void deletePost(int code) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/*// TODO ver si puedo reutilizar código y reescribir en AdapterTDS
 	// Usamos esta función para obtener posts a través de un string con varios códigos
 	static List<Post> getAllPostsFromCodes(String codes) {
 		List<Post> postList = new LinkedList<Post>();
@@ -78,14 +133,19 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 			}
 		}
 		return postList;
-	}
+	}*/
 	
-	static String getCodesFromAllPosts(List<Post> posts) {
-		String codes = "";
-		for (Post post : posts) {
-			codes += post.getCode() + " ";
+
+
+	public List<Post> getAllPosts() {
+		List<Entidad> entities = servPersistencia.recuperarEntidades(POST);
+
+		List<Post> users = new LinkedList<Post>();
+		for (Entidad ePost : entities) {
+			users.add(getPost(ePost.getId()));
 		}
-		return codes.trim();
+
+		return users;
 	}
 
 }
