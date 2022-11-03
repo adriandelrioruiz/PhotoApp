@@ -12,21 +12,29 @@ import java.util.StringTokenizer;
 import beans.Entidad;
 import beans.Propiedad;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
+import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 import umu.tds.maven.apps.PhotoApp.modelo.Post;
 
-public abstract class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
+public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 	
-	private static final String POST = "post";
+	private static final String PHOTO = "photo";
 	private static final String TITLE = "title";
 	private static final String DATE = "date";
 	private static final String DESCRIPTION = "description";
 	private static final String LIKES = "likes";
 	private static final String HASHTAGS = "hashtags";
 	private static final String COMMENTS = "comments";
+	private static final String PHOTOS = "photos";
 	
 
+	private static PostAdapterTDS instance;
 	private SimpleDateFormat dateFormat;
 	
+	public static PostAdapterTDS getInstance() {
+		if (instance == null)
+			instance = new PostAdapterTDS();
+		return instance;
+	}
 	
 	public PostAdapterTDS() {	
 		super();
@@ -38,7 +46,7 @@ public abstract class PostAdapterTDS extends AdapterTDS implements IPostAdapterD
 		Entidad ePost = new Entidad();
 		Post post = (Post) o;
 
-		ePost.setNombre(POST);
+		setEntityName(ePost);
 		ePost.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad(TITLE, post.getTitle()), new Propiedad(DATE, dateFormat.format(post.getDate())),
 						new Propiedad(DESCRIPTION, post.getDescription()), new Propiedad(LIKES, String.valueOf(post.getLikes())))));
@@ -93,20 +101,20 @@ public abstract class PostAdapterTDS extends AdapterTDS implements IPostAdapterD
 	
 
 	@Override
-	public Post getPost(int code) {
-		Entidad ePost;
-		Post post = null;
+	public Photo getPhoto(int code) {
+		Entidad ePhoto;
+		Photo photo = null;
 
 		// Recuperamos la entidad
-		ePost = servPersistencia.recuperarEntidad(code);
+		ePhoto = servPersistencia.recuperarEntidad(code);
 		// Convertimos la entidad en un objeto usuario
 		try {
-			post = (Post) entityToObject(ePost);
+			photo = (Photo) entityToObject(ePhoto);
 			
 		} catch (NullPointerException e) {
 			System.out.println("El post con el id " + code + " no está registrado");
 		}
-		return post;
+		return photo;
 	}
 	
 	@Override
@@ -121,9 +129,9 @@ public abstract class PostAdapterTDS extends AdapterTDS implements IPostAdapterD
 		
 	}
 	
-	/*// TODO ver si puedo reutilizar código y reescribir en AdapterTDS
+	// TODO ver si puedo reutilizar código y reescribir en AdapterTDS
 	// Usamos esta función para obtener posts a través de un string con varios códigos
-	static List<Post> getAllPostsFromCodes(String codes) {
+	List<Post> getAllPostsFromCodes(String codes) {
 		List<Post> postList = new LinkedList<Post>();
 		if (codes != null) {
 			StringTokenizer strTok = new StringTokenizer(codes, " ");
@@ -133,7 +141,15 @@ public abstract class PostAdapterTDS extends AdapterTDS implements IPostAdapterD
 			}
 		}
 		return postList;
-	}*/
+	}
+	
+	String getCodesFromAllPosts(List<Post> posts) {
+		String codes = "";
+		for (Post post : posts) {
+			codes += post.getCode() + " ";
+		}
+		return codes.trim();
+	}
 	
 
 
@@ -146,6 +162,10 @@ public abstract class PostAdapterTDS extends AdapterTDS implements IPostAdapterD
 		}
 
 		return users;
+	}
+	
+	public void setEntityName(Entidad en) {
+		en.setNombre(PHOTO);
 	}
 
 }

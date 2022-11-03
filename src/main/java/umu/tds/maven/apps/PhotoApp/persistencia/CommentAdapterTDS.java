@@ -27,7 +27,7 @@ public class CommentAdapterTDS extends AdapterTDS implements ICommentAdapterDAO 
 		eComment.setNombre(COMMENT);
 		eComment.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad(TEXT, comment.getText()),
-						new Propiedad(USER, AdapterTDS.getCodesFromObjects(Arrays.asList(comment.getUser()))))));
+						new Propiedad(USER, UserAdapterTDS.getCodesFromAllUsers(Arrays.asList(comment.getUser()))))));
 
 		return eComment;
 	}

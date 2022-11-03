@@ -23,7 +23,7 @@ public abstract class AdapterTDS {
 	}
 	
 	
-	
+	/*
 	protected String getCodesFromObjects(List<DomainObject> objects) {
 		String codes = "";
 		for (DomainObject o : objects) {
@@ -46,7 +46,8 @@ public abstract class AdapterTDS {
 	}
 	
 	
-	protected abstract DomainObject getObject(StringTokenizer strTok);
+	protected abstract DomainObject getObject(StringTokenizer strTok);*/
+	
 	protected abstract Entidad objectToEntity(DomainObject o);
 	protected abstract DomainObject entityToObject(Entidad en);
 }
