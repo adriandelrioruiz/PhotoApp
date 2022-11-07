@@ -21,14 +21,16 @@ public class Post extends DomainObject implements Comparable<Post> {
 	private Date date;
 	private String description;
 	private int likes;
+	private User user;
 	private List<String> hashtags;
 	private List<Comment> comments;
 	
-	public Post(String title, Date date, String description, int likes) {
+	public Post(String title, Date date, String description, int likes, User user) {
 		this.title = title;
 		this.date = date;
 		this.description = description;
 		this.likes = likes;
+		this.user = user;
 		hashtags = new LinkedList<>();
 		comments = new LinkedList<>();
 	}
@@ -67,8 +69,20 @@ public class Post extends DomainObject implements Comparable<Post> {
 		this.likes = likes;
 	}
 	
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
 	public void like() {
 		likes++;
+	}
+	
+	public void unlike() {
+		likes--;
 	}
 
 	public List<Comment> getComments() {

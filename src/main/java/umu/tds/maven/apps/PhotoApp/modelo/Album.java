@@ -9,8 +9,8 @@ public class Album extends Post {
 	
 	private List<Photo> photos;
 	
-	public Album(String title, Date date, String description, int likes) {
-		super(title, date, description, likes);
+	public Album(String title, Date date, String description, int likes, User user) {
+		super(title, date, description, likes, user);
 		photos = new LinkedList<>();
 	}
 	

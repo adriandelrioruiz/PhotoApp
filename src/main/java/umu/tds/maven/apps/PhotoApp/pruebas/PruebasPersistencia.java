@@ -42,9 +42,16 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().follow("juanhdz3");
 		PhotoAppController.getInstance().unLogin();
 		PhotoAppController.getInstance().login("juan3@gmail", "password");
-		PhotoAppController.getInstance().addPhoto("fotoConComent", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
+		PhotoAppController.getInstance().addPhoto("fotoConComent1", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
+		PhotoAppController.getInstance().addPhoto("fotoConComent2", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
+		PhotoAppController.getInstance().addPhoto("fotoConComent3", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
+		PhotoAppController.getInstance().addPhoto("fotoConComent4", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
+		PhotoAppController.getInstance().addPhoto("fotoConComent5", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
 		//PhotoAppController.getInstance().comment(post, "hola soy juan comentando");
 		PhotoAppController.getInstance().search("hermana ines");
+		PhotoAppController.getInstance().unLogin();
+		PhotoAppController.getInstance().login("adri@gmail", "password");
+		PhotoAppController.getInstance().getFeed();
 
 		
 		

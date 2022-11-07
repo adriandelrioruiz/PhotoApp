@@ -16,6 +16,7 @@ import umu.tds.maven.apps.PhotoApp.modelo.Comment;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
 import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 import umu.tds.maven.apps.PhotoApp.modelo.Post;
+import umu.tds.maven.apps.PhotoApp.modelo.User;
 
 public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 	
@@ -26,6 +27,7 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 	public static final String LIKES = "likes";
 	public static final String HASHTAGS = "hashtags";
 	public static final String COMMENTS = "comments";
+	public static final String USER = "user";
 	public static final String PHOTOS = "photos";
 	
 
@@ -72,6 +74,7 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 		Date date;
 		String description;
 		int likes;
+		User user;
 		
 		
 		// Recuperamos los atributos de Post de la persistencia
@@ -84,6 +87,7 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 		}
 		description = servPersistencia.recuperarPropiedadEntidad(en, DESCRIPTION);
 		likes = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, LIKES));
+		//user = UserAdapterTDS.getInstance().getUser(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, USER))); 
 		
 		
 		// Recuperamos los atributos que son listas 
@@ -94,19 +98,18 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 		
 		// Si hay más de un path se trata de un álbum
 		if (paths.size() > 1) {
-			/*Album album = (Album) post;
+			Album album = new Album(title, date, description, likes, null);
 			List<Photo> photos = new LinkedList<>();
 			for (String path : paths) {
-				Photo photo = (Photo) post;
-				photo.setPath(path);
+				Photo photo = new Photo(title, date, description, likes, path, null);
 				photos.add(photo);
 			}
-			album.setPhotos(photos);*/
-			return null;
+			album.setPhotos(photos);
+			return album;
 		}
 		// En otro caso, se trata de una foto
 		else {
-			Photo photo = new Photo(title, date, description, likes, paths.get(0));
+			Photo photo = new Photo(title, date, description, likes, paths.get(0), null);
 			photo.setHashtags(hashtags);
 			photo.setComments(comments);
 			photo.setCode(en.getId());

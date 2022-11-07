@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
+import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 
 /**
  * Usaremos esta clase para almacenar los usuarios de la base de datos al
@@ -40,11 +41,11 @@ public class UserRepository {
 
 			// Recuperamos todos los usuarios de la base de datos
 			List<User> users = factory.getUserDAO().getAllUsers();
+			/*users.stream().forEach((u) -> UserAdapterTDS.getInstance().deleteUser(u));
+			 System.exit(0);*/
 			// Ordenamos sus posts por fecha
 			users.stream().forEach((u)->u.sortPosts());
 			
-			 /*users.stream().forEach((u) -> UserAdapterTDS.getInstance().deleteUser(u));
-			 System.exit(0);*/
 			 
 
 			// Los introducimos en nuestro mapa

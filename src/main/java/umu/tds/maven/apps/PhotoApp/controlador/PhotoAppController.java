@@ -55,8 +55,8 @@ public class PhotoAppController {
 
 	// Método para inicializar los repositorios (catálogos)
 	private void initializeRepositories() {
-		userRepository = UserRepository.getInstance();
 		postRepository = PostRepository.getInstance();
+		userRepository = UserRepository.getInstance();
 	}
 
 	// Método para inicializar los adaptadores
@@ -189,7 +189,7 @@ public class PhotoAppController {
 	// Método para añadir una foto TODO Hace falta q devuelva el post??????????
 	public Post addPhoto(String title, String description, String path) {
 		
-		Post photo = new Photo(title, new Date(), description, 0, path);
+		Post photo = new Photo(title, new Date(), description, 0, path, user);
 		
 		try {
 			// Extraer hashtags y meter en la foto
@@ -204,7 +204,6 @@ public class PhotoAppController {
 			user.addPost(photo);
 			// añadir la foto en la persistencia del usuario
 			userAdapter.updateUser(user, UserAdapterTDS.POSTS);
-			// TODO Notificaciones
 			// Habrá que mandar una notificación a todos los seguidores
 			user.getFollowers().stream().forEach((u)->notify(u,photo));
 			
@@ -279,6 +278,14 @@ public class PhotoAppController {
 		postAdapter.updatePost(post, PostAdapterTDS.LIKES);
 	}
 	
+	// Método para quitarle el like a un post
+	public void unlike(Post post) {
+		// Añadimos un like al objeto post que queremos dar like. No hay que cambiar nada en el repositorio pues este apunta al objeto y lo cambiamos desde aquí
+		post.unlike();
+		// Cambiamos el objeto en la persistencia
+		postAdapter.updatePost(post, PostAdapterTDS.LIKES);
+	}
+	
 	// Método para comentar en un post
 	public void comment(Post post, String commentText) {
 		// Creamos el objeto comentario, que tendrá como usuario comentador a nuestro usuario
@@ -302,6 +309,11 @@ public class PhotoAppController {
 		objetos.addAll(userRepository.getPostsByHashtagsContaining(search));
 		
 		return objetos;
+	}
+	
+	// Método para obtener los últimos 10 posts que han publicado los usuarios a los que sigues
+	public List<Post> getFeed() {
+		return postRepository.getFeed(user.getFollowed());
 	}
 
 	// Obtener número de seguidores
@@ -329,6 +341,7 @@ public class PhotoAppController {
 		return user.getProfilePic();
 	}
 	
+	
 	/* Funciones privadas */
 	// Función para extraer los hashtags
 	List<String> getHashtagsFromDescription(String description) {
@@ -343,5 +356,7 @@ public class PhotoAppController {
 		
 		return hashtags;
 	}
+	
+	
 
 }
