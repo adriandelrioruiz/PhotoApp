@@ -19,6 +19,7 @@ public class User extends DomainObject {
 	private List<User> followers;
 	private List<User> followed;
 	private List<Post> posts;
+	private List<Notification> notifications;
 	private boolean isPremium;
 	private String profilePic;
 	private String bio;
@@ -34,6 +35,7 @@ public class User extends DomainObject {
 		this.dateOfBirth = dateOfBirth;
 		this.followers = new LinkedList<>();
 		this.followed = new LinkedList<>();
+		this.notifications = new LinkedList<>();
 		this.posts = new LinkedList<>();
 		this.isPremium = isPremium;
 		this.bio = bio;
@@ -107,6 +109,10 @@ public class User extends DomainObject {
 	public List<Post> getPosts() {
 		return Collections.unmodifiableList(posts);
 	}
+	
+	public List<Notification> getNotifications() {
+		return Collections.unmodifiableList(notifications);
+	}
 
 	public boolean isPremium() {
 		return isPremium;
@@ -126,6 +132,10 @@ public class User extends DomainObject {
 	
 	public void addPost(Post post) {
 		posts.add(post);
+	}
+	
+	public void addNotification(Notification notification) {
+		notifications.add(notification);
 	}
 	
 	public void removeFollower(User followerUser) {
@@ -151,10 +161,16 @@ public class User extends DomainObject {
 	public void setPosts(List<Post> posts) {
 		this.posts = posts;
 	}
+	
+	// Método para ordenar los posts por fecha de publicación
+	public void sortPosts() {
+		Collections.sort(posts);
+	}
 
 	@Override
 	public String toString() {
 		return userName;
 	}
+	
 
 }

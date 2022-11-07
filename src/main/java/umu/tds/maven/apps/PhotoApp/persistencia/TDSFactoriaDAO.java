@@ -11,6 +11,16 @@ public class TDSFactoriaDAO extends FactoriaDAO {
 	public IPostAdapterDAO getPostDAO() {
 		return PostAdapterTDS.getInstance();
 	}
+
+	@Override
+	public ICommentAdapterDAO getCommentDAO() {
+		return CommentAdapterTDS.getInstance();
+	}
+
+	@Override
+	public INotificationAdapterDAO getNotificationDAO() {
+		return NotificationAdapterTDS.getInstance();
+	}
 	
 	
 }

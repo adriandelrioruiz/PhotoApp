@@ -14,11 +14,12 @@ public class Album extends Post {
 		photos = new LinkedList<>();
 	}
 	
+	
 	public List<Photo> getPhotos() {
 		return Collections.unmodifiableList(photos);
 	}
 	
-	public void addPhoto(Photo photo) {
-		photos.add(photo);
+	public void setPhotos(List<Photo> photos) {
+		this.photos = photos;
 	}
 }

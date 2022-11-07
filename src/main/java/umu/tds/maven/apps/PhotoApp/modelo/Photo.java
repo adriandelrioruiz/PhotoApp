@@ -11,6 +11,7 @@ public class Photo extends Post {
 		this.path = path;
 	}
 	
+	
 	public String getPath() {
 		return path;
 	}

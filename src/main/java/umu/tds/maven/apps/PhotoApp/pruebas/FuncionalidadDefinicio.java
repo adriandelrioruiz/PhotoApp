@@ -1,45 +1,21 @@
 package umu.tds.maven.apps.PhotoApp.pruebas;
 
-import java.util.List;
-import java.util.Map;
-
-import umu.tds.maven.apps.PhotoApp.modelo.Post;
-
 public abstract class FuncionalidadDefinicio {
 	
 	// CONTROLADOR
-	
-		// Cambiar foto de perfil
-		public abstract void changeProfilePic(String newPhoto);
-		// Cambiar bio
-		public abstract void changeBio(String newBio);
-		// Cambiar contraseña
-		public abstract void changePassword(String newPassword);
-		// Compartir foto, habrá que mandar una notificación a los seguidores. Desta
-		// foto habrá tb que extraer los hashtags. 
+		// TODO Compartir foto, habrá que mandar una notificación a los seguidores.
 		public abstract void sharePhoto(String photo, String comment);
-		// Darle me gusta a una foto de un usuario
-		public abstract void like(String photo, String userName);
-		// Obtener los hashtags que contienen una palabra
-		public abstract Map<String, Integer> getHashtags(String search);
-		// Comentar en una foto
-		public abstract void comment(String photo, String userName);
-		// Obtener últimas 10 fotos en las que te han dado me gusta
+		// TODO Obtener últimas 10 fotos en las que te han dado me gusta
 		public abstract void lastTenPhotos();
-		// Eliminar foto
-		public abstract void deletePhoto(String photo);
-		// Obtener publicaciones
-		public abstract List<Post> getPosts();
-		// Cambiar foto, presentación o contraseña
-		public abstract void changeUserInformation(String password, String profilePic, String bio);
 		
 	// MODELO
 		
 	// PERSISTENCIA
 		
-		// Eliminar foto de un usuario
-		public abstract void deletePhoto(String photo, String username);
-		
+	// GUI
+	/* Ver si es una buena idea que los add del controlador devuelvan el id. De este modo si quiero almacenar las fotos en la gui
+	 * solo necesito una lista de id NO HACER CREO */
+		// TODO cambiar los comentarios del copia pega
 		
 		
 		

@@ -1,16 +1,15 @@
 package umu.tds.maven.apps.PhotoApp.persistencia;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
 import umu.tds.maven.apps.PhotoApp.modelo.Comment;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
-import umu.tds.maven.apps.PhotoApp.modelo.Post;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 
 public class CommentAdapterTDS extends AdapterTDS implements ICommentAdapterDAO {
@@ -18,6 +17,18 @@ public class CommentAdapterTDS extends AdapterTDS implements ICommentAdapterDAO 
 	public static final String COMMENT = "comment";
 	public static final String TEXT = "text";
 	public static final String USER = "user";
+	
+	private static CommentAdapterTDS instance;
+	
+	public static CommentAdapterTDS getInstance() {
+		if (instance == null)
+			instance = new CommentAdapterTDS();
+		return instance;
+	}
+	
+	public CommentAdapterTDS() {
+		super();
+	}
 
 	@Override
 	protected Entidad objectToEntity(DomainObject o) {
@@ -27,7 +38,7 @@ public class CommentAdapterTDS extends AdapterTDS implements ICommentAdapterDAO 
 		eComment.setNombre(COMMENT);
 		eComment.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad(TEXT, comment.getText()),
-						new Propiedad(USER, UserAdapterTDS.getCodesFromAllUsers(Arrays.asList(comment.getUser()))))));
+						new Propiedad(USER, UserAdapterTDS.getInstance().getCodesFromAllUsers(Arrays.asList(comment.getUser()))))));
 
 		return eComment;
 	}
@@ -90,6 +101,26 @@ public class CommentAdapterTDS extends AdapterTDS implements ICommentAdapterDAO 
 	public void deleteComment(int id) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public String getCodesFromComments(List<Comment> comments) {
+		String codes = "";
+		for (Comment comment : comments) {
+			codes += comment.getCode() + " ";
+		}
+		return codes.trim();
+	}
+	
+	public List<Comment> getCommentsFromCodes(String codes) {
+		List<Comment> commentList = new LinkedList<>();
+		if (codes != null && !codes.isEmpty()) {
+			StringTokenizer strTok = new StringTokenizer(codes, " ");
+			CommentAdapterTDS adapter = getInstance();
+			while (strTok.hasMoreTokens()) {
+				commentList.add(adapter.getComment(Integer.valueOf((String) strTok.nextElement())));
+			}
+		}
+		return commentList;
 	}
 	
 

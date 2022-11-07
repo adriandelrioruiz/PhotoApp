@@ -5,8 +5,17 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import umu.tds.maven.apps.PhotoApp.controlador.InvalidHashtagException;
+import umu.tds.maven.apps.PhotoApp.controlador.TooLongHashtagException;
+import umu.tds.maven.apps.PhotoApp.controlador.TooManyHashtagsException;
+
 // TODO Cambiar Post por Post
-public class Post extends DomainObject {
+public class Post extends DomainObject implements Comparable<Post> {
+	
+	// Longitud máxima de caracteres de un hashtag
+	public static final byte MAX_HASHTAG_LENGTH = 15;
+	// Número máximo de hashtags
+	public static final byte MAX_HASHTAGS = 4;
 
 	private String title;
 	private Date date;
@@ -23,6 +32,7 @@ public class Post extends DomainObject {
 		hashtags = new LinkedList<>();
 		comments = new LinkedList<>();
 	}
+	
 	
 
 	public String getTitle() {
@@ -56,6 +66,10 @@ public class Post extends DomainObject {
 	public void setLikes(int likes) {
 		this.likes = likes;
 	}
+	
+	public void like() {
+		likes++;
+	}
 
 	public List<Comment> getComments() {
 		return comments;
@@ -63,6 +77,10 @@ public class Post extends DomainObject {
 
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+	
+	public void addComment(Comment comment) {
+		comments.add(comment);
 	}
 
 	public List<String> getHashtags() {
@@ -73,10 +91,23 @@ public class Post extends DomainObject {
 		this.hashtags = hashtags;
 	}
 	
+	public void addHashtag(String hashtag) throws InvalidHashtagException {
+		if (hashtag.length() > MAX_HASHTAG_LENGTH)
+			throw new TooLongHashtagException();
+		if (hashtags.size() > MAX_HASHTAGS)
+			throw new TooManyHashtagsException();
+		hashtags.add(hashtag);
+	}
+	
 	
 	@Override
 	public String toString() {
 		return title;
+	}
+
+	@Override
+	public int compareTo(Post o) {
+		return this.date.compareTo(o.date);
 	}
 
 }

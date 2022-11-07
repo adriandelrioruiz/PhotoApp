@@ -29,8 +29,8 @@ public class PostRepository {
 			
 			// Recuperamos todos los posts de la base de datos
 			List<Post> posts = factory.getPostDAO().getAllPosts();
-			//users.stream().forEach((u) -> UserAdapterTDS.getInstance().deleteUser(u));
-			//System.exit(0);
+			/*posts.stream().forEach((u) -> PostAdapterTDS.getInstance().deletePost(u));
+			System.exit(0);*/
 			
 			// Los introducimos en nuestro mapa
 			for (Post post : posts)
@@ -48,7 +48,8 @@ public class PostRepository {
 	}
 	
 	// Método para eliminar un post
-	public void removeUser(Post post) {
+	public void deletePost(Post post) {
 		postsById.remove(post.getCode());
 	}
+	
 }

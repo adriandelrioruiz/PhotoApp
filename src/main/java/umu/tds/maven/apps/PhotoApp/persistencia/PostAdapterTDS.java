@@ -11,20 +11,22 @@ import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
+import umu.tds.maven.apps.PhotoApp.modelo.Album;
+import umu.tds.maven.apps.PhotoApp.modelo.Comment;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
 import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 import umu.tds.maven.apps.PhotoApp.modelo.Post;
 
 public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 	
-	private static final String PHOTO = "photo";
-	private static final String TITLE = "title";
-	private static final String DATE = "date";
-	private static final String DESCRIPTION = "description";
-	private static final String LIKES = "likes";
-	private static final String HASHTAGS = "hashtags";
-	private static final String COMMENTS = "comments";
-	private static final String PHOTOS = "photos";
+	public static final String POST = "post";
+	public static final String TITLE = "title";
+	public static final String DATE = "date";
+	public static final String DESCRIPTION = "description";
+	public static final String LIKES = "likes";
+	public static final String HASHTAGS = "hashtags";
+	public static final String COMMENTS = "comments";
+	public static final String PHOTOS = "photos";
 	
 
 	private static PostAdapterTDS instance;
@@ -38,7 +40,7 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 	
 	public PostAdapterTDS() {	
 		super();
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		dateFormat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 	}
 	
 	@Override
@@ -46,10 +48,13 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 		Entidad ePost = new Entidad();
 		Post post = (Post) o;
 
-		setEntityName(ePost);
+		ePost.setNombre(POST);
 		ePost.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad(TITLE, post.getTitle()), new Propiedad(DATE, dateFormat.format(post.getDate())),
-						new Propiedad(DESCRIPTION, post.getDescription()), new Propiedad(LIKES, String.valueOf(post.getLikes())))));
+						new Propiedad(DESCRIPTION, post.getDescription()), new Propiedad(LIKES, String.valueOf(post.getLikes())),
+						new Propiedad(HASHTAGS, getStringFromHashtags(post.getHashtags())),
+						new Propiedad(COMMENTS, CommentAdapterTDS.getInstance().getCodesFromComments(post.getComments())),
+						new Propiedad(PHOTOS, getPathsFromPost(post)))));
 
 		return ePost;
 	}
@@ -80,60 +85,128 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 		description = servPersistencia.recuperarPropiedadEntidad(en, DESCRIPTION);
 		likes = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, LIKES));
 		
-		// Creamos el objeto Post a partir de los atributos recuperados de la persistencia
-		Post post = new Post(title, date, description, likes);
-		// Le damos el código que le ha asignado la base de datos a nuestro post;
-		post.setCode(en.getId());
-		
-		PoolDAO.getInstance().addObject(en.getId(), post);
 		
 		// Recuperamos los atributos que son listas 
-		/*List<String> hashtags = getAllStringsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, HASHTAGS));
-		List<Comment> comments = getAllCommentsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, COMMENTS));
+		List<String> hashtags = getHashtagsFromString(servPersistencia.recuperarPropiedadEntidad(en, HASHTAGS));
+		List<Comment> comments = CommentAdapterTDS.getInstance().getCommentsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, COMMENTS));
+		List<String> paths = getListOfPathsFromPaths(servPersistencia.recuperarPropiedadEntidad(en, PHOTOS)); 
 	
 		
-		post.setHashtags(hashtags);
-		post.setComments(comments);*/
+		// Si hay más de un path se trata de un álbum
+		if (paths.size() > 1) {
+			/*Album album = (Album) post;
+			List<Photo> photos = new LinkedList<>();
+			for (String path : paths) {
+				Photo photo = (Photo) post;
+				photo.setPath(path);
+				photos.add(photo);
+			}
+			album.setPhotos(photos);*/
+			return null;
+		}
+		// En otro caso, se trata de una foto
+		else {
+			Photo photo = new Photo(title, date, description, likes, paths.get(0));
+			photo.setHashtags(hashtags);
+			photo.setComments(comments);
+			photo.setCode(en.getId());
+			return photo;
+		}
 
-		return post;
 	}
 	
 	
 
 	@Override
-	public Photo getPhoto(int code) {
-		Entidad ePhoto;
-		Photo photo = null;
+	public Photo getPost(int code) {
+		Entidad ePost;
+		Photo post = null;
 
 		// Recuperamos la entidad
-		ePhoto = servPersistencia.recuperarEntidad(code);
+		ePost = servPersistencia.recuperarEntidad(code);
 		// Convertimos la entidad en un objeto usuario
 		try {
-			photo = (Photo) entityToObject(ePhoto);
+			post = (Photo) entityToObject(ePost);
 			
 		} catch (NullPointerException e) {
 			System.out.println("El post con el id " + code + " no está registrado");
 		}
-		return photo;
+		return post;
 	}
 	
 	@Override
 	public void addPost(Post post) {
-		// TODO Auto-generated method stub
+		// Si el post ya está registrado, no se registra
+		Entidad ePost = null;
+		try {
+			ePost = servPersistencia.recuperarEntidad(post.getCode());
+		} catch (NullPointerException e) {
+		}
+		if (ePost != null)
+			return;
+		
+		// Creamos entidad post
+		ePost = objectToEntity(post);
+		// registrar entidad post
+		ePost = servPersistencia.registrarEntidad(ePost);
+		// asignar identificador unico
+		// Se aprovecha el que genera el servicio de persistencia
+		post.setCode(ePost.getId());
 		
 	}
 	
 	@Override
-	public void deletePost(int code) {
-		// TODO Auto-generated method stub
+	public void deletePost(Post post) {
+		if (post != null ) {
+			Entidad ePost = servPersistencia.recuperarEntidad(post.getCode());
+			
+			servPersistencia.borrarEntidad(ePost);
+		}
+	}
+	
+	@Override
+	public void updatePost(Post post, String attribute) {
+		Entidad ePost = servPersistencia.recuperarEntidad(post.getCode());
+		List<Propiedad> properties = new LinkedList<>();
+		for (Propiedad p : ePost.getPropiedades()) {
+			if (p.getNombre().equals(attribute))
+				properties.add(p);
+		}
+		//List<Propiedad> properties = eUser.getPropiedades().stream().filter((p) -> p.getNombre().equals(attribute)).toList();
+		// si la lista es vacía es que no hay nada con esa propiedad
+		if (properties.isEmpty())
+			return;
+		
+		// En otro caso, modificamos la propiedad
+		Propiedad property = properties.get(0);
+		
+		switch (attribute) {
+		
+		case LIKES:
+			property.setValor(String.valueOf(post.getLikes()));
+			break;
+		case COMMENTS:
+			property.setValor(CommentAdapterTDS.getInstance().getCodesFromComments(post.getComments()));
+			break;
+		case TITLE:
+			property.setValor(post.getTitle());
+			break;
+		case DESCRIPTION:
+			property.setValor(post.getDescription());
+			break;
+			
+		}
+		
+		servPersistencia.modificarPropiedad(property);
+		
 		
 	}
 	
 	// TODO ver si puedo reutilizar código y reescribir en AdapterTDS
 	// Usamos esta función para obtener posts a través de un string con varios códigos
 	List<Post> getAllPostsFromCodes(String codes) {
-		List<Post> postList = new LinkedList<Post>();
-		if (codes != null) {
+		List<Post> postList = new LinkedList<>();
+		if (codes != null && !codes.isEmpty()) {
 			StringTokenizer strTok = new StringTokenizer(codes, " ");
 			PostAdapterTDS adapter = getInstance();
 			while (strTok.hasMoreTokens()) {
@@ -143,6 +216,25 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 		return postList;
 	}
 	
+	String getStringFromHashtags(List<String> listOfHashtags) {
+		String hashtags = "";
+		for (String hashtag : listOfHashtags) {
+			hashtags += hashtag + " ";
+		}
+		return hashtags.trim();
+	}
+	
+	List<String> getHashtagsFromString(String hashtags) {
+		List<String> listOfHashtags = new LinkedList<>();
+		if (hashtags != null) {
+			StringTokenizer strTok = new StringTokenizer(hashtags, " ");
+			while (strTok.hasMoreTokens()) {
+				listOfHashtags.add((String) strTok.nextElement());
+			}
+		}
+		return listOfHashtags;
+	}
+	
 	String getCodesFromAllPosts(List<Post> posts) {
 		String codes = "";
 		for (Post post : posts) {
@@ -150,22 +242,52 @@ public class PostAdapterTDS extends AdapterTDS implements IPostAdapterDAO {
 		}
 		return codes.trim();
 	}
+
+	String getPathsFromPost(Post post) {
+		Photo photo = null;
+		Album album = null;
+		List<String> listOfPaths = new LinkedList<>();
+		
+		if (post instanceof Photo) {
+			photo = (Photo) post;
+			listOfPaths = List.of(photo.getPath());
+		}
+		else {
+			album = (Album) post;
+			listOfPaths = album.getPhotos().stream().map((p) -> p.getPath()).toList();
+		}
+		
+		String codes = "";
+		for (String path : listOfPaths) {
+			codes += path + " ";
+		}
+		return codes.trim();
+		
+	}
+	
+	List<String> getListOfPathsFromPaths(String paths) {
+		List<String> pathList = new LinkedList<>();
+		if (paths != null) {
+			StringTokenizer strTok = new StringTokenizer(paths, " ");
+			while (strTok.hasMoreTokens()) {
+				pathList.add((String) strTok.nextElement());
+			}
+		}
+		return pathList;
+	}
 	
 
 
 	public List<Post> getAllPosts() {
 		List<Entidad> entities = servPersistencia.recuperarEntidades(POST);
 
-		List<Post> users = new LinkedList<Post>();
+		List<Post> posts = new LinkedList<Post>();
 		for (Entidad ePost : entities) {
-			users.add(getPost(ePost.getId()));
+			posts.add(getPost(ePost.getId()));
 		}
 
-		return users;
+		return posts;
 	}
 	
-	public void setEntityName(Entidad en) {
-		en.setNombre(PHOTO);
-	}
 
 }

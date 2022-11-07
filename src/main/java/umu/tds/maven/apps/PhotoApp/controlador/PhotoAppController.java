@@ -1,11 +1,24 @@
 package umu.tds.maven.apps.PhotoApp.controlador;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
 
+import umu.tds.maven.apps.PhotoApp.modelo.Comment;
+import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
+import umu.tds.maven.apps.PhotoApp.modelo.Notification;
+import umu.tds.maven.apps.PhotoApp.modelo.Photo;
+import umu.tds.maven.apps.PhotoApp.modelo.Post;
+import umu.tds.maven.apps.PhotoApp.modelo.PostRepository;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.modelo.UserRepository;
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
+import umu.tds.maven.apps.PhotoApp.persistencia.ICommentAdapterDAO;
+import umu.tds.maven.apps.PhotoApp.persistencia.INotificationAdapterDAO;
+import umu.tds.maven.apps.PhotoApp.persistencia.IPostAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
+import umu.tds.maven.apps.PhotoApp.persistencia.PostAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 
 public class PhotoAppController {
@@ -20,9 +33,13 @@ public class PhotoAppController {
 
 	// Repositorios (catálogos)
 	private UserRepository userRepository;
+	private PostRepository postRepository;
 
 	// Adaptadores
 	private IUserAdapterDAO userAdapter;
+	private IPostAdapterDAO postAdapter;
+	private ICommentAdapterDAO commentAdapter;
+	private INotificationAdapterDAO notificationAdapter;
 
 	public static PhotoAppController getInstance() {
 		if (onlyInstance == null)
@@ -39,6 +56,7 @@ public class PhotoAppController {
 	// Método para inicializar los repositorios (catálogos)
 	private void initializeRepositories() {
 		userRepository = UserRepository.getInstance();
+		postRepository = PostRepository.getInstance();
 	}
 
 	// Método para inicializar los adaptadores
@@ -51,6 +69,9 @@ public class PhotoAppController {
 		}
 
 		userAdapter = factory.getUserDAO();
+		postAdapter = factory.getPostDAO();
+		commentAdapter = factory.getCommentDAO();
+		notificationAdapter = factory.getNotificationDAO();
 	}
 
 	// Método para registrar a un usuario en la base de datos
@@ -107,12 +128,22 @@ public class PhotoAppController {
 		System.out.println("El usuario " + usernameOrEmail + " se ha logeado con éxito");
 		return true;
 	}
+	
+	// Método para unLogearse TODO ver si lo quito
+	public void unLogin() {
+		user = null;
+	}
+	
 
 	public void follow(String userNameFollowed) {
 		// Si no se sigue ya al usuario se seguirá
 		if (!user.getFollowed().stream().anyMatch((u) -> u.getUserName().equals(userNameFollowed))) {
 			// Obtenemos el objeto user del usuario seguido
 			User userFollowed = userRepository.getUserByUsername(userNameFollowed);
+			if (userFollowed == null) {
+				System.out.println("El usuario con el username " + userNameFollowed + " no existe");
+				return;
+			}
 			// Añadimos seguido a nuestro usuario
 			user.addFollowed(userFollowed);
 			// Añadimos seguidor al usuario seguido
@@ -154,6 +185,124 @@ public class PhotoAppController {
 		else
 			System.out.println("No sigues al usuario " + userNameUnfollowed);
 	}
+	
+	// Método para añadir una foto TODO Hace falta q devuelva el post??????????
+	public Post addPhoto(String title, String description, String path) {
+		
+		Post photo = new Photo(title, new Date(), description, 0, path);
+		
+		try {
+			// Extraer hashtags y meter en la foto
+			List<String> hashtags = getHashtagsFromDescription(description);
+			// Añadimos los hashtags al objeto Post
+			for(String hashtag : hashtags)
+				photo.addHashtag(hashtag);
+			
+			postAdapter.addPost(photo);
+			postRepository.addPost(photo);
+			
+			user.addPost(photo);
+			// añadir la foto en la persistencia del usuario
+			userAdapter.updateUser(user, UserAdapterTDS.POSTS);
+			// TODO Notificaciones
+			// Habrá que mandar una notificación a todos los seguidores
+			user.getFollowers().stream().forEach((u)->notify(u,photo));
+			
+			
+			System.out.println("El usuario " + user.getUserName() + " ha añadido el post " + title);
+		}
+		
+		catch (InvalidHashtagException e) {
+			e.showDialog();
+		}
+			
+			return photo;
+	}
+	
+	// Mandar una notificación a un usuario
+	private void notify(User user, Post post) {
+		// Creamos la notificación TODO ver si cambio la fecha
+		Notification notification = new Notification(new Date(), post);
+		// Añadimos la notificación a la persistencia
+		notificationAdapter.addNotification(notification);
+		// Añadimos la notificación al usuario
+		user.addNotification(notification);
+		// Volcamos los cambios del usuario en la persistencia del usuario
+		userAdapter.updateUser(user, UserAdapterTDS.NOTIFICATIONS);
+	}
+	
+	// Método para actualizar la bio
+	public void changeBio(String newBio) {
+		// Cambiamos nuestro objeto usuario
+		user.setBio(newBio);
+		// Actualizamos la persistencia
+		userAdapter.updateUser(user, UserAdapterTDS.BIO);
+	}
+	
+	public void changeProfilePic(String newProfilePicPath) {
+		// Cambiamos nuestro objeto usuario
+		user.setProfilePic(newProfilePicPath);
+		// Actualizamos la persistencia
+		userAdapter.updateUser(user, UserAdapterTDS.PROFILEPIC);
+	}
+	
+	public void changePassword(String newPassword) {
+		// Cambiamos nuestro objeto usuario
+		user.setPassword(newPassword);
+		// Actualizamos la persistencia
+		userAdapter.updateUser(user, UserAdapterTDS.PASSWORD);
+	}
+	
+	// Método para eliminar un post
+	public void deletePost(Post post) {
+		postAdapter.deletePost(post);
+		postRepository.deletePost(post);
+		
+		user.removePost(post);
+		// quitar el post de la persistencia del usuario
+		userAdapter.updateUser(user, UserAdapterTDS.POSTS);
+		
+		System.out.println("El usuario " + user.getUserName() + " ha eliminado el post " + post.getTitle());
+	}
+	
+	
+	
+	public List<Post> getAllPosts() {
+		return user.getPosts();
+	}
+	
+	// Método para darle like a un post
+	public void like(Post post) {
+		// Añadimos un like al objeto post que queremos dar like. No hay que cambiar nada en el repositorio pues este apunta al objeto y lo cambiamos desde aquí
+		post.like();
+		// Cambiamos el objeto en la persistencia
+		postAdapter.updatePost(post, PostAdapterTDS.LIKES);
+	}
+	
+	// Método para comentar en un post
+	public void comment(Post post, String commentText) {
+		// Creamos el objeto comentario, que tendrá como usuario comentador a nuestro usuario
+		Comment comment = new Comment(commentText, user);
+		// Modificamos nuestro objeto post
+		post.addComment(comment);
+		// Añadimos el comentario a la persistencia
+		commentAdapter.addComment(comment);
+		// Modificamos el post de la persistencia
+		postAdapter.updatePost(post, PostAdapterTDS.COMMENTS);
+	}
+	
+	// Método para hacer una búsqueda. Devuelve una lista de objetos de dominio
+	public List<DomainObject> search(String search) {
+		List<DomainObject> objetos = new LinkedList<>();
+		// Primero buscamos si hay usuarios a partir del userName
+		objetos.addAll(userRepository.getUsersByUserNameContaining(search));
+		// Luego buscamos si 
+		objetos.addAll(userRepository.getUsersByNameStartingWith(search));
+		objetos.addAll(userRepository.getUsersByEmailContaining(search));
+		objetos.addAll(userRepository.getPostsByHashtagsContaining(search));
+		
+		return objetos;
+	}
 
 	// Obtener número de seguidores
 	public int getFollowers() {
@@ -178,6 +327,21 @@ public class PhotoAppController {
 	// Obtener foto de perfil
 	public String getProfilePic() {
 		return user.getProfilePic();
+	}
+	
+	/* Funciones privadas */
+	// Función para extraer los hashtags
+	List<String> getHashtagsFromDescription(String description) {
+		List<String> hashtags = new LinkedList<>();
+		
+		StringTokenizer strTok = new StringTokenizer(description, " ");
+		while (strTok.hasMoreTokens()) {
+			String nxtElement = (String) strTok.nextElement();
+			if (nxtElement.startsWith("#"))
+				hashtags.add(nxtElement.substring(1));
+		}
+		
+		return hashtags;
 	}
 
 }

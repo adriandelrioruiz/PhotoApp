@@ -33,15 +33,21 @@ public class PruebasPersistencia {
 
 		//PruebasPersistencia.deleteAllUsers();
 		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password", new Date(), "myPhoto", "myBio");
-		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan@gmail", "juanhdz", "password", new Date(), "PhotoJuan", "BioJuan");
-		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan2@gmail", "juanhdz2", "password", new Date(), "PhotoJuan", "BioJuan");
+		/*PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan@gmail", "juanhdz", "password", new Date(), "PhotoJuan", "BioJuan");
+		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan2@gmail", "juanhdz2", "password", new Date(), "PhotoJuan", "BioJuan");*/
 		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan3@gmail", "juanhdz3", "password", new Date(), "PhotoJuan", "BioJuan");
 		PhotoAppController.getInstance().login("adri@gmail", "password");
-		PhotoAppController.getInstance().follow("juanhdz");
-		PhotoAppController.getInstance().follow("juanhdz2");
 		PhotoAppController.getInstance().follow("juanhdz3");
 		PhotoAppController.getInstance().unFollow("juanhdz3");
 		PhotoAppController.getInstance().follow("juanhdz3");
+		PhotoAppController.getInstance().unLogin();
+		PhotoAppController.getInstance().login("juan3@gmail", "password");
+		PhotoAppController.getInstance().addPhoto("fotoConComent", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
+		//PhotoAppController.getInstance().comment(post, "hola soy juan comentando");
+		PhotoAppController.getInstance().search("hermana ines");
+
+		
+		
 		
 		
 	}

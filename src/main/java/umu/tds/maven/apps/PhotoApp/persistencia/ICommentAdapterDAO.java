@@ -6,5 +6,4 @@ public interface ICommentAdapterDAO {
 	public Comment getComment(int id);
 	public void addComment(Comment comment);
 	public void deleteComment(int id);
-	
 }

@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 import beans.Entidad;
 import beans.Propiedad;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
+import umu.tds.maven.apps.PhotoApp.modelo.Notification;
 import umu.tds.maven.apps.PhotoApp.modelo.Post;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 
@@ -29,6 +30,7 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 	public static final String POSTS = "posts";
 	public static final String FOLLOWERS = "followers";
 	public static final String FOLLOWED = "followed";
+	public static final String NOTIFICATIONS = "notifications";
 
 	private static UserAdapterTDS instance;
 	
@@ -57,9 +59,10 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 						new Propiedad(DATE, dateFormat.format(user.getDateOfBirth())),
 						new Propiedad(PREMIUM, String.valueOf(user.isPremium())),
 						new Propiedad(PROFILEPIC, user.getProfilePic()), new Propiedad(BIO, user.getBio()), 
-						new Propiedad(POSTS, PostAdapterTDS.getCodesFromAllPosts(user.getPosts())),
+						new Propiedad(POSTS, PostAdapterTDS.getInstance().getCodesFromAllPosts(user.getPosts())),
 						new Propiedad(FOLLOWERS, getCodesFromAllUsers(user.getFollowers())),
-						new Propiedad(FOLLOWED, getCodesFromAllUsers(user.getFollowed())))));
+						new Propiedad(FOLLOWED, getCodesFromAllUsers(user.getFollowed())),
+						new Propiedad(NOTIFICATIONS, NotificationAdapterTDS.getInstance().getCodesFromAllNotifications(user.getNotifications())))));
 
 		return eUser;
 	}
@@ -104,13 +107,22 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		PoolDAO.getInstance().addObject(en.getId(), user);
 		
 		// Recuperamos los atributos que son listas 
-		List<Post> posts = PostAdapterTDS.getAllPostsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, POSTS));
+		List<Post> posts = PostAdapterTDS.getInstance().getAllPostsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, POSTS));
 		List<User> followers = getAllUsersFromCodes(servPersistencia.recuperarPropiedadEntidad(en, FOLLOWERS));
 		List<User> followed = getAllUsersFromCodes(servPersistencia.recuperarPropiedadEntidad(en, FOLLOWED));
+		List<Notification> notifications = NotificationAdapterTDS.getInstance().getAllNotificationsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, NOTIFICATIONS));
 		
-		user.setPosts(posts);
+		// TODO quitar o dejar
+		/*user.setPosts(posts);
 		user.setFollowers(followers);
-		user.setFollowed(followed);
+		user.setFollowed(followed);*/
+		
+		// Añadimos todos los posts, seguidores y seguidos al usuario
+		posts.stream().forEach((p)->user.addPost(p));
+		followers.stream().forEach((u)->user.addFollower(u));
+		followed.stream().forEach((u)->user.addFollowed(u));
+		notifications.stream().forEach((n)->user.addNotification(n));
+		
 
 		return user;
 
@@ -131,9 +143,9 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		eUser = objectToEntity(user);
 		// registrar entidad user
 		eUser = servPersistencia.registrarEntidad(eUser);
-		// asignar identificador unico
-		// Se aprovecha el que genera el servicio de persistencia
+		// Damos un código al usuario
 		user.setCode(eUser.getId());
+		
 	}
 
 	public User getUser(int code) {
@@ -185,13 +197,16 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 			property.setValor(user.getPassword());
 			break;
 		case POSTS:
-			property.setValor(PostAdapterTDS.getInstance() getCodesFromAllPosts(user.getPosts()));
+			property.setValor(PostAdapterTDS.getInstance().getCodesFromAllPosts(user.getPosts()));
 			break;
 		case FOLLOWERS:
 			property.setValor(getCodesFromAllUsers(user.getFollowers()));
 			break;
 		case FOLLOWED:
 			property.setValor(getCodesFromAllUsers(user.getFollowed()));
+			break;
+		case NOTIFICATIONS:
+			property.setValor(NotificationAdapterTDS.getInstance().getCodesFromAllNotifications(user.getNotifications()));
 			break;
 			
 		}
@@ -214,9 +229,9 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 	}
 	
 	// Usamos esta función para obtener users a través de un string con varios códigos
-	static List<User> getAllUsersFromCodes(String codes) {
+	public List<User> getAllUsersFromCodes(String codes) {
 		List<User> usersList = new LinkedList<User>();
-		if (codes != null) {
+		if (codes != null && !codes.isEmpty()) {
 			StringTokenizer strTok = new StringTokenizer(codes, " ");
 			UserAdapterTDS adapter = getInstance();
 			while (strTok.hasMoreTokens()) {
@@ -226,7 +241,7 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		return usersList;
 	}
 	
-	static String getCodesFromAllUsers(List<User> users) {
+	public String getCodesFromAllUsers(List<User> users) {
 		String codes = "";
 		for (User user : users) {
 			codes += user.getCode() + " ";
