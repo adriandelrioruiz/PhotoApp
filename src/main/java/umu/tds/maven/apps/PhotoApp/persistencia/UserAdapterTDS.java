@@ -168,13 +168,15 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 	}
 
 	// Para eliminar de la base de datos y el repositorio a un usuario concreto
-	public void deleteUser(User user) {
+	public void deleteUser(int code) {
 
-		Entidad eUser = servPersistencia.recuperarEntidad(user.getCode());
+		Entidad eUser = servPersistencia.recuperarEntidad(code);
+		servPersistencia.borrarEntidad(eUser);
+		/*
 		// Si eliminamos a un usuario, tenemos que eliminar todos sus posts
 		user.getPhotos().stream().forEach((p)->PhotoAdapterTDS.getInstance().deletePhoto(p.getCode()));
 		user.getAlbums().stream().forEach((a)->AlbumAdapterTDS.getInstance().deleteAlbum(a));
-		servPersistencia.borrarEntidad(eUser);
+		*/
 
 	}
 	
@@ -261,26 +263,15 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		}
 		return codes.trim();
 	}
-	/*
+	
 	// TODO para pruebas
 	@Override
 	public void deleteAllUsers() {
 		List<Entidad> entities = servPersistencia.recuperarEntidades(USER);
-		entities.stream().forEach((e)->deleteUser(u));
+		entities.stream().forEach((e)->deleteUser(e.getId()));
 	}
-	*/
+	
 
-	@Override
-	public void deleteUser(int code) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteAllUsers() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	
 

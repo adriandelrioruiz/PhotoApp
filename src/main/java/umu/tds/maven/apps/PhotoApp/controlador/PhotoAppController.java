@@ -303,7 +303,7 @@ public class PhotoAppController {
 		postRepository.deletePost(post);
 		
 		if (post instanceof Photo) {
-			photoAdapter.deletePhoto((Photo)post);
+			photoAdapter.deletePhoto(post.getCode());
 			user.removePhoto((Photo)post);
 			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
 		}

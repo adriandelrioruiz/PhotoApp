@@ -241,5 +241,11 @@ public class PhotoAdapterTDS extends AdapterTDS implements IPhotoAdapterDAO {
 		return photos;
 	}
 	
+	// TODO Pruebas
+	public void deleteAllPosts() {
+		List<Entidad> entities = servPersistencia.recuperarEntidades(PHOTO);
+		entities.stream().forEach((e)->deletePhoto(e.getId()));
+	}
+	
 
 }
