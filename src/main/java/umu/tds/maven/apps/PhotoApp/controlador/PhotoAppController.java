@@ -1,5 +1,8 @@
 package umu.tds.maven.apps.PhotoApp.controlador;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +30,18 @@ import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 public class PhotoAppController {
 
 	private static final boolean DEFAULT_PREMIUM = false;
-
+	
+	private static final double LIKES_DISCOUNT_FACTOR = 0.001;
+	
+	private static final int PREMIUM_PRICE = 10;
+	
+	private static final int YOUNG_AGE_DISCOUNT = 18;
+	private static final int OLD_AGE_DISCOUNT = 65;
+	
+	private static final double AGE_DISCOUNT = 0.25;
+	
+	private static final int NUMBER_OF_TOP_PHOTOS = 10;
+	
 	// única instancia (singleton)
 	private static PhotoAppController onlyInstance;
 
@@ -391,6 +405,59 @@ public class PhotoAppController {
 		return objetos;
 	}
 	
+	// Método para hacerse premium
+	public void changeToPremium() {
+		user.setPremium(true);
+	}
+	
+	private double getDiscountByLikes() {
+		int likes = 0;
+		for (Photo p : user.getPhotos())
+			likes += p.getLikes();
+		
+
+		if (likes > 500)
+			return 0.5 * PREMIUM_PRICE;
+		
+		return (1 - LIKES_DISCOUNT_FACTOR * likes) * PREMIUM_PRICE;
+		
+	}
+	
+	private double getDiscountByAge() {
+		LocalDate date = LocalDate.of(user.getDateOfBirth().getYear(), user.getDateOfBirth().getMonth(), user.getDateOfBirth().getDay());
+	    Period age = Period.between(date, LocalDate.now());
+	    int yearsOfUser = age.getYears();
+
+	    
+	    if (yearsOfUser <= YOUNG_AGE_DISCOUNT || yearsOfUser >= OLD_AGE_DISCOUNT)
+	    	return (1 - AGE_DISCOUNT) * PREMIUM_PRICE;
+	    
+	    return PREMIUM_PRICE;
+ 
+	}
+	
+	public double getDiscount() {
+		return Math.min(getDiscountByAge(), getDiscountByLikes());
+	}
+	
+	// -------------------- FUNCIONALIDAD PREMIUM ----------------
+	// TODO
+	public List<Photo> getTopPhotosByLikes() {
+		return user.getPhotos().stream().sorted(new PhotoComparatorByLikes()).limit(NUMBER_OF_TOP_PHOTOS).toList();
+	}
+	
+	// TODO
+	public void generatePDF() {
+		
+	}
+	
+	// TODO
+	public void generateExcel() {
+		
+	}
+	
+	// -------------------------------------------------------------
+	
 	// Método para obtener los últimos 10 posts que han publicado los usuarios a los que sigues
 	public List<Post> getFeed() {
 		return postRepository.getFeed(user.getFollowed());
@@ -421,6 +488,11 @@ public class PhotoAppController {
 		return user.getProfilePic();
 	}
 	
+	// Ver si un usuario es premium
+	public boolean isPremium() {
+		return user.isPremium();
+	}
+	
 	
 	/* Funciones privadas */
 	// Función para extraer los hashtags
@@ -437,6 +509,14 @@ public class PhotoAppController {
 		return hashtags;
 	}
 	
+	class PhotoComparatorByLikes implements Comparator<Photo> {
+
+		@Override
+		public int compare(Photo o1, Photo o2) {
+			return ((Integer)o1.getLikes()).compareTo((Integer)o2.getLikes());
+		}
+		
+	}
 	
 
 }

@@ -54,7 +54,7 @@ public class PhotoAdapterTDS extends AdapterTDS implements IPhotoAdapterDAO {
 						new Propiedad(DESCRIPTION, photo.getDescription()), new Propiedad(LIKES, String.valueOf(photo.getLikes())),
 						new Propiedad(HASHTAGS, getStringFromHashtags(photo.getHashtags())),
 						new Propiedad(COMMENTS, CommentAdapterTDS.getInstance().getCodesFromComments(photo.getComments())),
-						new Propiedad(PATH, photo.getPath()))));
+						new Propiedad(PATH, photo.getPath()), new Propiedad(USER, String.valueOf(photo.getUser().getCode())))));
 
 		return ePhoto;
 	}
@@ -143,10 +143,11 @@ public class PhotoAdapterTDS extends AdapterTDS implements IPhotoAdapterDAO {
 	@Override
 	public void deletePhoto(int code) {
 		Entidad ePhoto = servPersistencia.recuperarEntidad(code);
+		servPersistencia.borrarEntidad(ePhoto);
+		/*
 		Photo photo = (Photo) entityToObject(ePhoto);
 		// Si eliminamos una foto, tenemos que eliminar sus comentarios
-		photo.getComments().stream().forEach((c)->CommentAdapterTDS.getInstance().deleteComment(c));
-		servPersistencia.borrarEntidad(ePhoto);
+		photo.getComments().stream().forEach((c)->CommentAdapterTDS.getInstance().deleteComment(c));*/
 		
 	}
 	
@@ -246,6 +247,8 @@ public class PhotoAdapterTDS extends AdapterTDS implements IPhotoAdapterDAO {
 		List<Entidad> entities = servPersistencia.recuperarEntidades(PHOTO);
 		entities.stream().forEach((e)->deletePhoto(e.getId()));
 	}
+	
+	
 	
 
 }
