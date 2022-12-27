@@ -63,7 +63,11 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		post = PostAdapterTDS.getInstance().getPost(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, POST)));
+		
+		// Probamos a ver si es una foto
+		post = PhotoAdapterTDS.getInstance().getPhoto(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, POST)));
+		// Si no, será un álbum
+		post = AlbumAdapterTDS.getInstance().getAlbum(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, POST)));
 		
 		
 		Notification notification = new Notification(date, post);

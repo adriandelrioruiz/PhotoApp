@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
-import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 
 /**
  * Usaremos esta clase para almacenar los usuarios de la base de datos al
@@ -65,6 +64,9 @@ public class UserRepository {
 
 	// Método para eliminar un usuario
 	public void deleteUser(User user) {
+		// Si eliminamos un usuario, tenemos que eliminar todos sus posts
+		user.getPhotos().stream().forEach((p->PostRepository.getInstance().deletePost(p)));
+		user.getAlbums().stream().forEach((a->PostRepository.getInstance().deletePost(a)));
 		usersByUsername.remove(user.getUserName());
 	}
 
@@ -86,7 +88,8 @@ public class UserRepository {
 	// TODO QUITAR Método que devuelve todos los posts de todos los usuarios
 	List<Post> getAllPosts() {
 		List<Post> posts = new LinkedList<>();
-		usersByUsername.values().stream().map((u) -> u.getPosts()).toList().forEach((list) -> posts.addAll(list));
+		usersByUsername.values().stream().map((u) -> u.getPhotos()).toList().forEach((list) -> posts.addAll(list));
+		usersByUsername.values().stream().map((u) -> u.getAlbums()).toList().forEach((list) -> posts.addAll(list));
 		return posts;
 	}
 

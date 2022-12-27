@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import umu.tds.maven.apps.PhotoApp.modelo.Album;
 import umu.tds.maven.apps.PhotoApp.modelo.Comment;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
 import umu.tds.maven.apps.PhotoApp.modelo.Notification;
@@ -13,12 +14,14 @@ import umu.tds.maven.apps.PhotoApp.modelo.Post;
 import umu.tds.maven.apps.PhotoApp.modelo.PostRepository;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.modelo.UserRepository;
+import umu.tds.maven.apps.PhotoApp.persistencia.AlbumAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
+import umu.tds.maven.apps.PhotoApp.persistencia.IAlbumAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.ICommentAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.INotificationAdapterDAO;
-import umu.tds.maven.apps.PhotoApp.persistencia.IPostAdapterDAO;
+import umu.tds.maven.apps.PhotoApp.persistencia.IPhotoAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
-import umu.tds.maven.apps.PhotoApp.persistencia.PostAdapterTDS;
+import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 
 public class PhotoAppController {
@@ -37,9 +40,10 @@ public class PhotoAppController {
 
 	// Adaptadores
 	private IUserAdapterDAO userAdapter;
-	private IPostAdapterDAO postAdapter;
+	private IPhotoAdapterDAO photoAdapter;
 	private ICommentAdapterDAO commentAdapter;
 	private INotificationAdapterDAO notificationAdapter;
+	private IAlbumAdapterDAO albumAdapter;
 
 	public static PhotoAppController getInstance() {
 		if (onlyInstance == null)
@@ -69,7 +73,8 @@ public class PhotoAppController {
 		}
 
 		userAdapter = factory.getUserDAO();
-		postAdapter = factory.getPostDAO();
+		photoAdapter = factory.getPhotoDAO();
+		albumAdapter = factory.getAlbumDAO();
 		commentAdapter = factory.getCommentDAO();
 		notificationAdapter = factory.getNotificationDAO();
 	}
@@ -160,7 +165,6 @@ public class PhotoAppController {
 		}
 		else
 			System.out.println("Ya sigues al usuario " + userNameFollowed);
-
 	}
 	
 	public void unFollow(String userNameUnfollowed) {
@@ -187,9 +191,9 @@ public class PhotoAppController {
 	}
 	
 	// Método para añadir una foto TODO Hace falta q devuelva el post??????????
-	public Post addPhoto(String title, String description, String path) {
+	public Photo addPhoto(String title, String description, String path) {
 		
-		Post photo = new Photo(title, new Date(), description, 0, path, user);
+		Photo photo = new Photo(title, new Date(), description, path, user);
 		
 		try {
 			// Extraer hashtags y meter en la foto
@@ -198,12 +202,13 @@ public class PhotoAppController {
 			for(String hashtag : hashtags)
 				photo.addHashtag(hashtag);
 			
-			postAdapter.addPost(photo);
+			photoAdapter.addPhoto(photo);
 			postRepository.addPost(photo);
 			
-			user.addPost(photo);
+			user.addPhoto(photo);
 			// añadir la foto en la persistencia del usuario
-			userAdapter.updateUser(user, UserAdapterTDS.POSTS);
+			// TODO cambiar para que no se añada una foto individual cuando pertenece a un álbum
+			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
 			// Habrá que mandar una notificación a todos los seguidores
 			user.getFollowers().stream().forEach((u)->notify(u,photo));
 			
@@ -218,6 +223,46 @@ public class PhotoAppController {
 			return photo;
 	}
 	
+	
+	public Album addAlbum(String title, String description, List<String> paths) {
+		
+		List<Photo> photos = new LinkedList<>();
+		
+		// Vamos añadiendo cada foto
+		paths.stream().forEach((p) -> photos.add(addPhoto(title, description, p)));
+
+		// Creamos el álbum
+		Album album = new Album(title, null, description, user);
+		album.setPhotos(photos);
+		
+		try {
+			// Extraer hashtags y meter en la foto
+			List<String> hashtags = getHashtagsFromDescription(description);
+			// Añadimos los hashtags al objeto Post
+			for(String hashtag : hashtags)
+				album.addHashtag(hashtag);
+			
+			albumAdapter.addAlbum(album);
+			postRepository.addPost(album);
+			
+			user.addAlbum(album);
+			// añadir la foto en la persistencia del usuario
+			userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
+			// Habrá que mandar una notificación a todos los seguidores
+			user.getFollowers().stream().forEach((u)->notify(u,album));
+			
+			
+			System.out.println("El usuario " + user.getUserName() + " ha añadido el post " + title);
+		}
+		
+		catch (InvalidHashtagException e) {
+			e.showDialog();
+		}
+			
+			return album;
+	}	
+	
+
 	// Mandar una notificación a un usuario
 	private void notify(User user, Post post) {
 		// Creamos la notificación TODO ver si cambio la fecha
@@ -254,12 +299,19 @@ public class PhotoAppController {
 	
 	// Método para eliminar un post
 	public void deletePost(Post post) {
-		postAdapter.deletePost(post);
+
 		postRepository.deletePost(post);
 		
-		user.removePost(post);
-		// quitar el post de la persistencia del usuario
-		userAdapter.updateUser(user, UserAdapterTDS.POSTS);
+		if (post instanceof Photo) {
+			photoAdapter.deletePhoto((Photo)post);
+			user.removePhoto((Photo)post);
+			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
+		}
+		else {
+			albumAdapter.deleteAlbum((Album)post);
+			user.removeAlbum((Album)post);
+			userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
+		}
 		
 		System.out.println("El usuario " + user.getUserName() + " ha eliminado el post " + post.getTitle());
 	}
@@ -267,23 +319,44 @@ public class PhotoAppController {
 	
 	
 	public List<Post> getAllPosts() {
-		return user.getPosts();
+		LinkedList<Post> posts = new LinkedList<>();
+		posts.addAll(user.getPhotos());
+		posts.addAll(user.getAlbums());
+		
+		return posts;
 	}
 	
 	// Método para darle like a un post
 	public void like(Post post) {
-		// Añadimos un like al objeto post que queremos dar like. No hay que cambiar nada en el repositorio pues este apunta al objeto y lo cambiamos desde aquí
+		// Modificamos los likes en el objeto post, que será una foto o un álbum
 		post.like();
-		// Cambiamos el objeto en la persistencia
-		postAdapter.updatePost(post, PostAdapterTDS.LIKES);
+			
+		// Cambiamos el objeto en la persistencia según sea foto o álbum
+		if (post instanceof Photo)
+			photoAdapter.updatePhoto((Photo)post, PhotoAdapterTDS.LIKES);
+		else {
+			// Cambiamos los likes del álbum
+			albumAdapter.updateAlbum((Album)post, AlbumAdapterTDS.LIKES);
+			// Cambiamos los likes de todas sus fotos
+			((Album)post).getPhotos().stream().forEach((p) -> photoAdapter.updatePhoto(p, PhotoAdapterTDS.LIKES));
+		}
+			
 	}
 	
 	// Método para quitarle el like a un post
 	public void unlike(Post post) {
-		// Añadimos un like al objeto post que queremos dar like. No hay que cambiar nada en el repositorio pues este apunta al objeto y lo cambiamos desde aquí
+		// Modificamos los likes en el objeto post, que será una foto o un álbum
 		post.unlike();
-		// Cambiamos el objeto en la persistencia
-		postAdapter.updatePost(post, PostAdapterTDS.LIKES);
+			
+		// Cambiamos el objeto en la persistencia según sea foto o álbum
+		if (post instanceof Photo)
+			photoAdapter.updatePhoto((Photo)post, PhotoAdapterTDS.LIKES);
+		else {
+			// Cambiamos los likes del álbum
+			albumAdapter.updateAlbum((Album)post, AlbumAdapterTDS.LIKES);
+			// Cambiamos los likes de todas sus fotos
+			((Album)post).getPhotos().stream().forEach((p) -> photoAdapter.updatePhoto(p, PhotoAdapterTDS.LIKES));
+		}
 	}
 	
 	// Método para comentar en un post
@@ -294,8 +367,15 @@ public class PhotoAppController {
 		post.addComment(comment);
 		// Añadimos el comentario a la persistencia
 		commentAdapter.addComment(comment);
-		// Modificamos el post de la persistencia
-		postAdapter.updatePost(post, PostAdapterTDS.COMMENTS);
+		// Modificamos el post de la persistencia según sea foto o álbum
+		if (post instanceof Photo)
+			photoAdapter.updatePhoto((Photo)post, PhotoAdapterTDS.COMMENTS);
+		else {
+			// Cambiamos los comentarios del álbum
+			albumAdapter.updateAlbum((Album)post, AlbumAdapterTDS.COMMENTS);
+			// Cambiamos los comentarios de todas sus fotos
+			((Album)post).getPhotos().stream().forEach((p) -> photoAdapter.updatePhoto(p, PhotoAdapterTDS.COMMENTS));
+		}
 	}
 	
 	// Método para hacer una búsqueda. Devuelve una lista de objetos de dominio

@@ -11,9 +11,10 @@ import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
+import umu.tds.maven.apps.PhotoApp.modelo.Album;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
 import umu.tds.maven.apps.PhotoApp.modelo.Notification;
-import umu.tds.maven.apps.PhotoApp.modelo.Post;
+import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 
 public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
@@ -27,7 +28,8 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 	public static final String PREMIUM = "premium";
 	public static final String PROFILEPIC = "profilePic";
 	public static final String BIO = "bio";
-	public static final String POSTS = "posts";
+	public static final String PHOTOS = "photos";
+	public static final String ALBUMS = "albums";
 	public static final String FOLLOWERS = "followers";
 	public static final String FOLLOWED = "followed";
 	public static final String NOTIFICATIONS = "notifications";
@@ -51,6 +53,8 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 	protected Entidad objectToEntity(DomainObject o) {
 		User user =(User) o;
 		Entidad eUser = new Entidad();
+		
+		// Recuperamos los códigos de todos los posts del usuario, es decir, de sus fotos y álbumes
 
 		eUser.setNombre(USER);
 		eUser.setPropiedades(new ArrayList<Propiedad>(
@@ -59,7 +63,8 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 						new Propiedad(DATE, dateFormat.format(user.getDateOfBirth())),
 						new Propiedad(PREMIUM, String.valueOf(user.isPremium())),
 						new Propiedad(PROFILEPIC, user.getProfilePic()), new Propiedad(BIO, user.getBio()), 
-						new Propiedad(POSTS, PostAdapterTDS.getInstance().getCodesFromAllPosts(user.getPosts())),
+						new Propiedad(PHOTOS, PhotoAdapterTDS.getInstance().getCodesFromAllPhotos(user.getPhotos())),
+						new Propiedad(ALBUMS, AlbumAdapterTDS.getInstance().getCodesFromAllAlbums(user.getAlbums())),
 						new Propiedad(FOLLOWERS, getCodesFromAllUsers(user.getFollowers())),
 						new Propiedad(FOLLOWED, getCodesFromAllUsers(user.getFollowed())),
 						new Propiedad(NOTIFICATIONS, NotificationAdapterTDS.getInstance().getCodesFromAllNotifications(user.getNotifications())))));
@@ -107,7 +112,8 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		PoolDAO.getInstance().addObject(en.getId(), user);
 		
 		// Recuperamos los atributos que son listas 
-		List<Post> posts = PostAdapterTDS.getInstance().getAllPostsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, POSTS));
+		List<Photo> photos = PhotoAdapterTDS.getInstance().getAllPhotosFromCodes(servPersistencia.recuperarPropiedadEntidad(en, PHOTOS));
+		List<Album> albums = AlbumAdapterTDS.getInstance().getAllAlbumsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, ALBUMS));
 		List<User> followers = getAllUsersFromCodes(servPersistencia.recuperarPropiedadEntidad(en, FOLLOWERS));
 		List<User> followed = getAllUsersFromCodes(servPersistencia.recuperarPropiedadEntidad(en, FOLLOWED));
 		List<Notification> notifications = NotificationAdapterTDS.getInstance().getAllNotificationsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, NOTIFICATIONS));
@@ -117,8 +123,9 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		user.setFollowers(followers);
 		user.setFollowed(followed);*/
 		
-		// Añadimos todos los posts, seguidores y seguidos al usuario
-		posts.stream().forEach((p)->user.addPost(p));
+		// Añadimos todos las fotos, álbumes, seguidores y seguidos al usuario
+		photos.stream().forEach((p)->user.addPhoto(p));
+		albums.stream().forEach((a)->user.addAlbum(a));
 		followers.stream().forEach((u)->user.addFollower(u));
 		followed.stream().forEach((u)->user.addFollowed(u));
 		notifications.stream().forEach((n)->user.addNotification(n));
@@ -164,6 +171,9 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 	public void deleteUser(User user) {
 
 		Entidad eUser = servPersistencia.recuperarEntidad(user.getCode());
+		// Si eliminamos a un usuario, tenemos que eliminar todos sus posts
+		user.getPhotos().stream().forEach((p)->PhotoAdapterTDS.getInstance().deletePhoto(p.getCode()));
+		user.getAlbums().stream().forEach((a)->AlbumAdapterTDS.getInstance().deleteAlbum(a));
 		servPersistencia.borrarEntidad(eUser);
 
 	}
@@ -196,8 +206,11 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		case PASSWORD:
 			property.setValor(user.getPassword());
 			break;
-		case POSTS:
-			property.setValor(PostAdapterTDS.getInstance().getCodesFromAllPosts(user.getPosts()));
+		case PHOTOS:
+			property.setValor(PhotoAdapterTDS.getInstance().getCodesFromAllPhotos(user.getPhotos()));
+			break;	
+		case ALBUMS:
+			property.setValor(AlbumAdapterTDS.getInstance().getCodesFromAllAlbums(user.getAlbums()));
 			break;
 		case FOLLOWERS:
 			property.setValor(getCodesFromAllUsers(user.getFollowers()));
@@ -248,7 +261,26 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		}
 		return codes.trim();
 	}
-	
+	/*
+	// TODO para pruebas
+	@Override
+	public void deleteAllUsers() {
+		List<Entidad> entities = servPersistencia.recuperarEntidades(USER);
+		entities.stream().forEach((e)->deleteUser(u));
+	}
+	*/
+
+	@Override
+	public void deleteUser(int code) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAllUsers() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	
 

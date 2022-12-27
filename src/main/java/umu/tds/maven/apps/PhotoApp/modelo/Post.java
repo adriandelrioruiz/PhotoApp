@@ -9,8 +9,7 @@ import umu.tds.maven.apps.PhotoApp.controlador.InvalidHashtagException;
 import umu.tds.maven.apps.PhotoApp.controlador.TooLongHashtagException;
 import umu.tds.maven.apps.PhotoApp.controlador.TooManyHashtagsException;
 
-// TODO Cambiar Post por Post
-public class Post extends DomainObject implements Comparable<Post> {
+public abstract class Post extends DomainObject implements Comparable<Post> {
 	
 	// Longitud máxima de caracteres de un hashtag
 	public static final byte MAX_HASHTAG_LENGTH = 15;
@@ -20,21 +19,19 @@ public class Post extends DomainObject implements Comparable<Post> {
 	private String title;
 	private Date date;
 	private String description;
-	private int likes;
 	private User user;
+	private int likes;
 	private List<String> hashtags;
 	private List<Comment> comments;
 	
-	public Post(String title, Date date, String description, int likes, User user) {
+	public Post(String title, Date date, String description, User user) {
 		this.title = title;
 		this.date = date;
 		this.description = description;
-		this.likes = likes;
 		this.user = user;
 		hashtags = new LinkedList<>();
 		comments = new LinkedList<>();
 	}
-	
 	
 
 	public String getTitle() {
@@ -60,14 +57,6 @@ public class Post extends DomainObject implements Comparable<Post> {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public int getLikes() {
-		return likes;
-	}
-
-	public void setLikes(int likes) {
-		this.likes = likes;
-	}
 	
 	public User getUser() {
 		return user;
@@ -77,12 +66,12 @@ public class Post extends DomainObject implements Comparable<Post> {
 		this.user = user;
 	}
 	
-	public void like() {
-		likes++;
+	public int getLikes() {
+		return likes;
 	}
 	
-	public void unlike() {
-		likes--;
+	public void setLikes(int likes) {
+		this.likes = likes;
 	}
 
 	public List<Comment> getComments() {
@@ -122,6 +111,15 @@ public class Post extends DomainObject implements Comparable<Post> {
 	@Override
 	public int compareTo(Post o) {
 		return this.date.compareTo(o.date);
+	}
+	
+	// Para dar like y quitar like a un post
+	
+	public void like() {
+		likes++;
+	}
+	public void unlike() {
+		likes--;
 	}
 
 }

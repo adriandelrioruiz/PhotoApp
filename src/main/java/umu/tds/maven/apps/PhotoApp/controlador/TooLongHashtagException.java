@@ -5,6 +5,6 @@ public class TooLongHashtagException extends InvalidHashtagException {
 	
 	@Override
 	public void showDialog() {
-		System.out.println("to long hashtag");
+		System.out.println("too long hashtag");
 	}
 }

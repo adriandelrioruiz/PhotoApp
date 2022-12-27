@@ -31,14 +31,13 @@ public class PostRepository {
 		try {
 			factory = FactoriaDAO.getInstance();
 			
-			// Recuperamos todos los posts de la base de datos
-			List<Post> posts = factory.getPostDAO().getAllPosts();
-			/*posts.stream().forEach((u) -> PostAdapterTDS.getInstance().deletePost(u));
-			System.exit(0);*/
 			
-			// Los introducimos en nuestro mapa
-			for (Post post : posts)
-				postsById.put(post.getCode(), post);
+			// Recuperamos todas las fotos y las las introducimos en nuestro mapa
+			factory.getPhotoDAO().getAllPhotos().stream().forEach((p) -> postsById.put(p.getCode(), p));
+			
+			// postsById.values().stream().forEach((u) -> factory.getPhotoDAO().deletePhoto((Photo)u)); System.exit(0);
+			
+			// Recuperamos todos los álbumes
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -47,6 +46,7 @@ public class PostRepository {
 	}
 	
 	// Método para añadir un post al repositorio
+	// TODO cambiar por un metodo addAlbum y addPhoto
 	public void addPost(Post post) {
 		postsById.put(post.getCode(), post);
 	}

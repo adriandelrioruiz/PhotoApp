@@ -30,7 +30,7 @@ public class PruebasPersistencia {
 	
 	public static void main(String[] args) {
 		
-
+		UserAdapterTDS.getInstance().deleteAllUsers();
 		//PruebasPersistencia.deleteAllUsers();
 		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password", new Date(), "myPhoto", "myBio");
 		/*PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan@gmail", "juanhdz", "password", new Date(), "PhotoJuan", "BioJuan");

@@ -8,8 +8,13 @@ public class TDSFactoriaDAO extends FactoriaDAO {
 	}
 	
 	@Override
-	public IPostAdapterDAO getPostDAO() {
-		return PostAdapterTDS.getInstance();
+	public IPhotoAdapterDAO getPhotoDAO() {
+		return PhotoAdapterTDS.getInstance();
+	}
+	
+	@Override
+	public IAlbumAdapterDAO getAlbumDAO() {
+		return AlbumAdapterTDS.getInstance();
 	}
 
 	@Override

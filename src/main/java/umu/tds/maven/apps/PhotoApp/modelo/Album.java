@@ -9,8 +9,8 @@ public class Album extends Post {
 	
 	private List<Photo> photos;
 	
-	public Album(String title, Date date, String description, int likes, User user) {
-		super(title, date, description, likes, user);
+	public Album(String title, Date date, String description, User user) {
+		super(title, date, description, user);
 		photos = new LinkedList<>();
 	}
 	
@@ -21,5 +21,22 @@ public class Album extends Post {
 	
 	public void setPhotos(List<Photo> photos) {
 		this.photos = photos;
+	}
+	
+	public void addPhoto(Photo photo) {
+		photos.add(photo);
+	}
+	
+	public void removePhoto(Photo photo) {
+		photos.remove(photo);
+	}
+	
+	public void like() {
+		// Damos like al propio álbum
+		super.like();
+		
+		// Damos like a cada una de las fotos que lo conforman
+		photos.stream().forEach((p) -> p.like());
+		
 	}
 }

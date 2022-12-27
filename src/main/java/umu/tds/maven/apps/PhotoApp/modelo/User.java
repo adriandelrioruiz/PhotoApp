@@ -18,7 +18,8 @@ public class User extends DomainObject {
 	private Date dateOfBirth;
 	private List<User> followers;
 	private List<User> followed;
-	private List<Post> posts;
+	private List<Photo> photos;
+	private List<Album> albums;
 	private List<Notification> notifications;
 	private boolean isPremium;
 	private String profilePic;
@@ -36,7 +37,8 @@ public class User extends DomainObject {
 		this.followers = new LinkedList<>();
 		this.followed = new LinkedList<>();
 		this.notifications = new LinkedList<>();
-		this.posts = new LinkedList<>();
+		this.photos = new LinkedList<>();
+		this.albums = new LinkedList<>();
 		this.isPremium = isPremium;
 		this.bio = bio;
 
@@ -105,11 +107,15 @@ public class User extends DomainObject {
 	public List<User> getFollowed() {
 		return Collections.unmodifiableList(followed);
 	}
-	
-	public List<Post> getPosts() {
-		return Collections.unmodifiableList(posts);
+
+	public List<Photo> getPhotos() {
+		return Collections.unmodifiableList(photos);
 	}
 	
+	public List<Album> getAlbums() {
+		return Collections.unmodifiableList(albums);
+	}
+
 	public List<Notification> getNotifications() {
 		return Collections.unmodifiableList(notifications);
 	}
@@ -121,33 +127,41 @@ public class User extends DomainObject {
 	public void setPremium(boolean isPremium) {
 		this.isPremium = isPremium;
 	}
-	
+
 	public void addFollower(User newFollower) {
 		followers.add(newFollower);
 	}
-	
+
 	public void addFollowed(User newFollowed) {
 		followed.add(newFollowed);
 	}
-	
-	public void addPost(Post post) {
-		posts.add(post);
+
+	public void addPhoto(Photo photo) {
+		photos.add(photo);
 	}
 	
+	public void addAlbum(Album album) {
+		albums.add(album);
+	}
+
 	public void addNotification(Notification notification) {
 		notifications.add(notification);
 	}
-	
+
 	public void removeFollower(User followerUser) {
 		followers.remove(followerUser);
 	}
-	
+
 	public void removeFollowed(User followedUser) {
 		followed.remove(followedUser);
 	}
 	
-	public void removePost(Post post) {
-		posts.remove(post);
+	public void removePhoto(Photo photo) {
+		photos.remove(photo);
+	}
+
+	public void removeAlbum(Album album) {
+		albums.remove(album);
 	}
 
 	public void setFollowers(List<User> followers) {
@@ -158,19 +172,24 @@ public class User extends DomainObject {
 		this.followed = followed;
 	}
 
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
+	public void setPhotos(List<Photo> photos) {
+		this.photos = photos;
 	}
 	
-	// Método para ordenar los posts por fecha de publicación
+	public void setAlbums(List<Album> albums) {
+		this.albums = albums;
+	}
+
+	// Método para ordenar los photos por fecha de publicación
+	// TODO cambiar este método o no
 	public void sortPosts() {
-		Collections.sort(posts);
+		Collections.sort(photos);
+		Collections.sort(albums);
 	}
 
 	@Override
 	public String toString() {
 		return userName;
 	}
-	
 
 }

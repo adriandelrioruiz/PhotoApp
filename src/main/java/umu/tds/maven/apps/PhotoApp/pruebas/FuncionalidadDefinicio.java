@@ -21,6 +21,9 @@ public abstract class FuncionalidadDefinicio {
 		
 		
 		
-				
+	// TODO cambiar adaptador y repositorio de posts a albumes y fotos
+	// TODO funcionalidad premium
+	// TODO ventana login
+	// TODO ventana registro
 				
 }

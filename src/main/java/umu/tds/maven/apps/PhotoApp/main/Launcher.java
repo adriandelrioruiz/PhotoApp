@@ -1,5 +1,6 @@
 package umu.tds.maven.apps.PhotoApp.main;
 
+
 import java.awt.EventQueue;
 
 import umu.tds.maven.apps.PhotoApp.vista.LoginView;

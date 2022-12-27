@@ -98,8 +98,11 @@ public class CommentAdapterTDS extends AdapterTDS implements ICommentAdapterDAO 
 	}
 
 	@Override
-	public void deleteComment(int id) {
-		// TODO Auto-generated method stub
+	public void deleteComment(Comment comment) {
+		if (comment != null ) {
+			Entidad eComment = servPersistencia.recuperarEntidad(comment.getCode());
+			servPersistencia.borrarEntidad(eComment);
+		}
 		
 	}
 	
