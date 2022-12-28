@@ -2,7 +2,6 @@ package umu.tds.maven.apps.PhotoApp.controlador;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,17 +28,13 @@ import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 
 public class PhotoAppController {
 
+	// Premium
 	private static final boolean DEFAULT_PREMIUM = false;
-	
-	private static final double LIKES_DISCOUNT_FACTOR = 0.001;
-	
 	private static final int PREMIUM_PRICE = 10;
-	
+	private static final double LIKES_DISCOUNT_FACTOR = 0.001;
 	private static final int YOUNG_AGE_DISCOUNT = 18;
 	private static final int OLD_AGE_DISCOUNT = 65;
-	
 	private static final double AGE_DISCOUNT = 0.25;
-	
 	private static final int NUMBER_OF_TOP_PHOTOS = 10;
 	
 	// única instancia (singleton)
@@ -126,6 +121,8 @@ public class PhotoAppController {
 	}
 
 	public boolean login(String usernameOrEmail, String password) {
+		if (user != null)
+			return false;
 		// Comprobamos en el repositorio si el usuario existe por nombre de usuario o
 		// email
 		user = userRepository.getUserByUsername(usernameOrEmail);
@@ -155,6 +152,8 @@ public class PhotoAppController {
 	
 
 	public void follow(String userNameFollowed) {
+		if (user == null)
+			return;
 		// Si no se sigue ya al usuario se seguirá
 		if (!user.getFollowed().stream().anyMatch((u) -> u.getUserName().equals(userNameFollowed))) {
 			// Obtenemos el objeto user del usuario seguido
@@ -182,6 +181,8 @@ public class PhotoAppController {
 	}
 	
 	public void unFollow(String userNameUnfollowed) {
+		if (user == null)
+			return;
 		// Si se sigue ya al usuario se dejará de seguir
 		if (user.getFollowed().stream().anyMatch((u) -> u.getUserName().equals(userNameUnfollowed))) {
 			// Obtenemos el objeto user del usuario seguido
@@ -206,6 +207,8 @@ public class PhotoAppController {
 	
 	// Método para añadir una foto TODO Hace falta q devuelva el post??????????
 	public Photo addPhoto(String title, String description, String path) {
+		if (user == null)
+			return null;
 		
 		Photo photo = new Photo(title, new Date(), description, path, user);
 		
@@ -239,6 +242,8 @@ public class PhotoAppController {
 	
 	
 	public Album addAlbum(String title, String description, List<String> paths) {
+		if (user == null)
+			return null;
 		
 		List<Photo> photos = new LinkedList<>();
 		
@@ -276,21 +281,10 @@ public class PhotoAppController {
 			return album;
 	}	
 	
-
-	// Mandar una notificación a un usuario
-	private void notify(User user, Post post) {
-		// Creamos la notificación TODO ver si cambio la fecha
-		Notification notification = new Notification(new Date(), post);
-		// Añadimos la notificación a la persistencia
-		notificationAdapter.addNotification(notification);
-		// Añadimos la notificación al usuario
-		user.addNotification(notification);
-		// Volcamos los cambios del usuario en la persistencia del usuario
-		userAdapter.updateUser(user, UserAdapterTDS.NOTIFICATIONS);
-	}
-	
 	// Método para actualizar la bio
 	public void changeBio(String newBio) {
+		if (user == null)
+			return;
 		// Cambiamos nuestro objeto usuario
 		user.setBio(newBio);
 		// Actualizamos la persistencia
@@ -298,6 +292,8 @@ public class PhotoAppController {
 	}
 	
 	public void changeProfilePic(String newProfilePicPath) {
+		if (user == null)
+			return;
 		// Cambiamos nuestro objeto usuario
 		user.setProfilePic(newProfilePicPath);
 		// Actualizamos la persistencia
@@ -305,6 +301,8 @@ public class PhotoAppController {
 	}
 	
 	public void changePassword(String newPassword) {
+		if (user == null)
+			return;
 		// Cambiamos nuestro objeto usuario
 		user.setPassword(newPassword);
 		// Actualizamos la persistencia
@@ -313,6 +311,8 @@ public class PhotoAppController {
 	
 	// Método para eliminar un post
 	public void deletePost(Post post) {
+		if (user == null)
+			return;
 
 		postRepository.deletePost(post);
 		
@@ -333,6 +333,8 @@ public class PhotoAppController {
 	
 	
 	public List<Post> getAllPosts() {
+		if (user == null)
+			return null;
 		LinkedList<Post> posts = new LinkedList<>();
 		posts.addAll(user.getPhotos());
 		posts.addAll(user.getAlbums());
@@ -342,6 +344,8 @@ public class PhotoAppController {
 	
 	// Método para darle like a un post
 	public void like(Post post) {
+		if (user == null)
+			return;
 		// Modificamos los likes en el objeto post, que será una foto o un álbum
 		post.like();
 			
@@ -359,6 +363,8 @@ public class PhotoAppController {
 	
 	// Método para quitarle el like a un post
 	public void unlike(Post post) {
+		if (user == null)
+			return;
 		// Modificamos los likes en el objeto post, que será una foto o un álbum
 		post.unlike();
 			
@@ -375,6 +381,8 @@ public class PhotoAppController {
 	
 	// Método para comentar en un post
 	public void comment(Post post, String commentText) {
+		if (user == null)
+			return;
 		// Creamos el objeto comentario, que tendrá como usuario comentador a nuestro usuario
 		Comment comment = new Comment(commentText, user);
 		// Modificamos nuestro objeto post
@@ -394,6 +402,8 @@ public class PhotoAppController {
 	
 	// Método para hacer una búsqueda. Devuelve una lista de objetos de dominio
 	public List<DomainObject> search(String search) {
+		if (user == null)
+			return null;
 		List<DomainObject> objetos = new LinkedList<>();
 		// Primero buscamos si hay usuarios a partir del userName
 		objetos.addAll(userRepository.getUsersByUserNameContaining(search));
@@ -407,10 +417,15 @@ public class PhotoAppController {
 	
 	// Método para hacerse premium
 	public void changeToPremium() {
+		if (user == null)
+			return;
+		// Aquí es donde se realizaría el pago, pero esto queda fuera de los que se pide en la especificación
 		user.setPremium(true);
 	}
 	
 	private double getDiscountByLikes() {
+		if (user == null)
+			return -1;
 		int likes = 0;
 		for (Photo p : user.getPhotos())
 			likes += p.getLikes();
@@ -424,6 +439,8 @@ public class PhotoAppController {
 	}
 	
 	private double getDiscountByAge() {
+		if (user == null)
+			return -1;
 		LocalDate date = LocalDate.of(user.getDateOfBirth().getYear(), user.getDateOfBirth().getMonth(), user.getDateOfBirth().getDay());
 	    Period age = Period.between(date, LocalDate.now());
 	    int yearsOfUser = age.getYears();
@@ -437,12 +454,16 @@ public class PhotoAppController {
 	}
 	
 	public double getDiscount() {
+		if (user == null)
+			return -1;
 		return Math.min(getDiscountByAge(), getDiscountByLikes());
 	}
 	
 	// -------------------- FUNCIONALIDAD PREMIUM ----------------
 	// TODO
 	public List<Photo> getTopPhotosByLikes() {
+		if (user == null)
+			return null;
 		return user.getPhotos().stream().sorted(new PhotoComparatorByLikes()).limit(NUMBER_OF_TOP_PHOTOS).toList();
 	}
 	
@@ -460,36 +481,50 @@ public class PhotoAppController {
 	
 	// Método para obtener los últimos 10 posts que han publicado los usuarios a los que sigues
 	public List<Post> getFeed() {
+		if (user == null)
+			return null;
 		return postRepository.getFeed(user.getFollowed());
 	}
 
 	// Obtener número de seguidores
 	public int getFollowers() {
+		if (user == null)
+			return -1;
 		return user.getFollowers().size();
 	}
 
 	// Obtener número de seguidos
 	public int getFollowed() {
+		if (user == null)
+			return -1;
 		return user.getFollowed().size();
 	}
 
 	// Obtener nombre de usuario
 	public String getUsername() {
+		if (user == null)
+			return null;
 		return user.getUserName();
 	}
 
 	// Obtener nombre completo
 	public String getFullName() {
+		if (user == null)
+			return null;
 		return user.getFullName();
 	}
 
 	// Obtener foto de perfil
 	public String getProfilePic() {
+		if (user == null)
+			return null;
 		return user.getProfilePic();
 	}
 	
 	// Ver si un usuario es premium
 	public boolean isPremium() {
+		if (user == null)
+			return false;
 		return user.isPremium();
 	}
 	
@@ -509,14 +544,18 @@ public class PhotoAppController {
 		return hashtags;
 	}
 	
-	class PhotoComparatorByLikes implements Comparator<Photo> {
-
-		@Override
-		public int compare(Photo o1, Photo o2) {
-			return ((Integer)o1.getLikes()).compareTo((Integer)o2.getLikes());
-		}
-		
+	// Mandar una notificación a un usuario
+	private void notify(User user, Post post) {
+		if (user == null)
+			return;
+		// Creamos la notificación TODO ver si cambio la fecha
+		Notification notification = new Notification(new Date(), post);
+		// Añadimos la notificación a la persistencia
+		notificationAdapter.addNotification(notification);
+		// Añadimos la notificación al usuario
+		user.addNotification(notification);
+		// Volcamos los cambios del usuario en la persistencia del usuario
+		userAdapter.updateUser(user, UserAdapterTDS.NOTIFICATIONS);
 	}
-	
 
 }
