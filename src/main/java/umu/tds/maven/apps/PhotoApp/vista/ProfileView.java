@@ -29,7 +29,7 @@ import com.toedter.calendar.JCalendar;
 import umu.tds.maven.apps.PhotoApp.controlador.Codes;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 
-public class RegisterView extends JFrame {
+public class ProfileView extends JFrame {
 
 	/**
 	 * 
@@ -37,10 +37,12 @@ public class RegisterView extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 
+	private RegisterView frame;
 	private JTextField txUsername;
 	private JTextField txtPassword;
 	private PhotoAppController controller;
 	// TODO quitar atributos
+	private LoginView loginView;
 	private JTextField txtEmail;
 	private JTextField txtFullName;
 	private JCalendar calendar;
@@ -65,7 +67,7 @@ public class RegisterView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegisterView() {
+	public ProfileView() {
 		getContentPane().setBackground(Color.WHITE);
 		controller = PhotoAppController.getInstance();
 		fileChooser = new JFileChooser();
@@ -83,7 +85,6 @@ public class RegisterView extends JFrame {
 		createLoginPane();
 		createRegisterPane();
 
-		setVisible(true);
 	}
 
 	// Método para crear el panel que llevará el nombre de la aplicación
@@ -273,19 +274,19 @@ public class RegisterView extends JFrame {
 			// la mano
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				frame.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 
 			// Para que al clicar se abra la ventana de registro
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				setVisible(false);
-				new LoginView();
+				frame.setVisible(false);
+				loginView.setVisible(true);
 			}
 		});
 
@@ -348,13 +349,9 @@ public class RegisterView extends JFrame {
 				
 				
 				// Intentamos registrar el nuevo user con los datos
-				String bio = bioFrame.getBio();
-				if (bio.equals(ViewConstants.BIO_DEFAULT_TEXT))
-					bio = "";
-				
 				Codes code = controller.registerUser(txtFullName.getText(), txtEmail.getText(), 
 						txUsername.getText(), txtPassword.getText(), 
-						calendar.getDate(), fileChooser.getSelectedFile().getName(), bio);
+						calendar.getDate(), fileChooser.getSelectedFile().getName(), bioFrame.getBio());
 				
 				switch(code) {
 				
@@ -370,11 +367,6 @@ public class RegisterView extends JFrame {
 					lblInvalidEmail.setVisible(true);
 					txtEmail.setBorder(BorderFactory.createLineBorder(Color.RED));
 					break;
-				}
-				
-				case OK:
-				{
-					
 				}
 				
 				default:
