@@ -126,5 +126,12 @@ public class CommentAdapterTDS extends AdapterTDS implements ICommentAdapterDAO 
 		return commentList;
 	}
 	
+	
+	// TODO para pruebas
+		public void deleteAll() {
+			List<Entidad> entities = servPersistencia.recuperarEntidades(COMMENT);
+			entities.stream().forEach((e)->servPersistencia.borrarEntidad(e));
+		}
+		
 
 }

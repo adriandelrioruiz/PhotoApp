@@ -163,6 +163,14 @@ public class User extends DomainObject {
 	public void removeAlbum(Album album) {
 		albums.remove(album);
 	}
+	
+	public void removeNotification(int code) {
+		for (Notification n : notifications)
+			if (n.getCode() == code) {
+				notifications.remove(n);
+				return;
+			}
+	}
 
 	public void setFollowers(List<User> followers) {
 		this.followers = followers;

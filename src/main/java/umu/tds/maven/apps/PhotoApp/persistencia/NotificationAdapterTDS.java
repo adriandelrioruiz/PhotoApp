@@ -13,13 +13,13 @@ import beans.Entidad;
 import beans.Propiedad;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
 import umu.tds.maven.apps.PhotoApp.modelo.Notification;
-import umu.tds.maven.apps.PhotoApp.modelo.Post;
+import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 
 public class NotificationAdapterTDS extends AdapterTDS implements INotificationAdapterDAO {
 	
 	public static final String NOTIFICATION = "notification";
 	public static final String DATE = "date";
-	public static final String POST = "post";
+	public static final String PHOTO = "photo";
 	
 	private static NotificationAdapterTDS instance;
 	private SimpleDateFormat dateFormat;
@@ -44,7 +44,7 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		eNotification.setNombre(NOTIFICATION);
 		eNotification.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(new Propiedad(DATE, dateFormat.format(notification.getDate())),
-						new Propiedad(POST, String.valueOf(notification.getPost().getCode())))));
+						new Propiedad(PHOTO, String.valueOf(notification.getPhoto().getCode())))));
 
 		return eNotification;
 	}
@@ -54,7 +54,7 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 
 		// Estos serán los atributos del Post que queremos recuperar
 		Date date;
-		Post post;
+		Photo photo;
 		
 		// Recuperamos los atributos de la persistencia
 		date = null;
@@ -64,13 +64,9 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 			e.printStackTrace();
 		}
 		
-		// Probamos a ver si es una foto
-		post = PhotoAdapterTDS.getInstance().getPhoto(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, POST)));
-		// Si no, será un álbum
-		post = AlbumAdapterTDS.getInstance().getAlbum(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, POST)));
+		photo = PhotoAdapterTDS.getInstance().getPhoto(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, PHOTO)));
 		
-		
-		Notification notification = new Notification(date, post);
+		Notification notification = new Notification(date, photo);
 		
 		notification.setCode(en.getId());
 		
@@ -117,16 +113,24 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 	}
 
 	@Override
-	public void deleteNotification(Notification notification) {
-		// TODO Auto-generated method stub
-		
+	public void deleteNotification(int code) {
+		Entidad eNotification = servPersistencia.recuperarEntidad(code);
+		servPersistencia.borrarEntidad(eNotification);
 	}
 	
 	@Override
-	public void updateNotification(Notification notification, String attribute) {
-		// TODO Auto-generated method stub
-		
+	public int getNotificationCodeByPost(int postCode) {
+		List<Entidad> entities = servPersistencia.recuperarEntidades(NOTIFICATION);
+		for (Entidad entity : entities)
+			for (Propiedad p : entity.getPropiedades())
+				if (p.getNombre().equals(PHOTO)) {
+					if (p.getValor().equals(String.valueOf(postCode)))
+						return entity.getId();
+				}
+					
+		return 0;
 	}
+	
 	
 	// Usamos esta función para obtener notifications a través de un string con varios códigos
 	public List<Notification> getAllNotificationsFromCodes(String codes) {
@@ -148,5 +152,12 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		}
 		return codes.trim();
 	}
+	
+	// TODO para pruebas
+		public void deleteAll() {
+			List<Entidad> entities = servPersistencia.recuperarEntidades(NOTIFICATION);
+			entities.stream().forEach((e)->servPersistencia.borrarEntidad(e));
+		}
+		
 
 }

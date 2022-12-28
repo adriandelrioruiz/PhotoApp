@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.eclipse.persistence.internal.jpa.parsing.SetNode;
+
 import umu.tds.maven.apps.PhotoApp.modelo.Album;
 import umu.tds.maven.apps.PhotoApp.modelo.Comment;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
@@ -210,7 +212,10 @@ public class PhotoAppController {
 		if (user == null)
 			return null;
 		
-		Photo photo = new Photo(title, new Date(), description, path, user);
+		Date now = new Date();
+		Photo photo = new Photo(title, now, description, path, user);
+		Notification notification = new Notification(now, photo);
+		photo.setNotification(notification);
 		
 		try {
 			// Extraer hashtags y meter en la foto
@@ -227,7 +232,7 @@ public class PhotoAppController {
 			// TODO cambiar para que no se añada una foto individual cuando pertenece a un álbum
 			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
 			// Habrá que mandar una notificación a todos los seguidores
-			user.getFollowers().stream().forEach((u)->notify(u,photo));
+			user.getFollowers().stream().forEach((u)->notify(u,notification));
 			
 			
 			System.out.println("El usuario " + user.getUserName() + " ha añadido el post " + title);
@@ -267,9 +272,6 @@ public class PhotoAppController {
 			user.addAlbum(album);
 			// añadir la foto en la persistencia del usuario
 			userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
-			// Habrá que mandar una notificación a todos los seguidores
-			user.getFollowers().stream().forEach((u)->notify(u,album));
-			
 			
 			System.out.println("El usuario " + user.getUserName() + " ha añadido el post " + title);
 		}
@@ -415,12 +417,22 @@ public class PhotoAppController {
 		return objetos;
 	}
 	
+	
+	// -------------------- FUNCIONALIDAD PREMIUM ----------------
+	// TODO
+	
 	// Método para hacerse premium
 	public void changeToPremium() {
 		if (user == null)
 			return;
 		// Aquí es donde se realizaría el pago, pero esto queda fuera de los que se pide en la especificación
 		user.setPremium(true);
+	}
+	
+	public void changeToNotPremium() {
+		if (user == null)
+			return;
+		user.setPremium(false);
 	}
 	
 	private double getDiscountByLikes() {
@@ -459,8 +471,6 @@ public class PhotoAppController {
 		return Math.min(getDiscountByAge(), getDiscountByLikes());
 	}
 	
-	// -------------------- FUNCIONALIDAD PREMIUM ----------------
-	// TODO
 	public List<Photo> getTopPhotosByLikes() {
 		if (user == null)
 			return null;
@@ -545,11 +555,9 @@ public class PhotoAppController {
 	}
 	
 	// Mandar una notificación a un usuario
-	private void notify(User user, Post post) {
+	private void notify(User user, Notification notification) {
 		if (user == null)
 			return;
-		// Creamos la notificación TODO ver si cambio la fecha
-		Notification notification = new Notification(new Date(), post);
 		// Añadimos la notificación a la persistencia
 		notificationAdapter.addNotification(notification);
 		// Añadimos la notificación al usuario

@@ -13,6 +13,7 @@ import beans.Entidad;
 import beans.Propiedad;
 import umu.tds.maven.apps.PhotoApp.modelo.Comment;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
+import umu.tds.maven.apps.PhotoApp.modelo.Notification;
 import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 
@@ -85,8 +86,7 @@ public class PhotoAdapterTDS extends AdapterTDS implements IPhotoAdapterDAO {
 		description = servPersistencia.recuperarPropiedadEntidad(en, DESCRIPTION);
 		likes = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, LIKES));
 		String path = servPersistencia.recuperarPropiedadEntidad(en, PATH); 
-		user = UserAdapterTDS.getInstance().getUser(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, USER))); 
-		
+		user = UserAdapterTDS.getInstance().getUser(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, USER)));
 		
 		// Recuperamos los atributos que son listas 
 		List<String> hashtags = getHashtagsFromString(servPersistencia.recuperarPropiedadEntidad(en, HASHTAGS));
@@ -143,12 +143,24 @@ public class PhotoAdapterTDS extends AdapterTDS implements IPhotoAdapterDAO {
 	@Override
 	public void deletePhoto(int code) {
 		Entidad ePhoto = servPersistencia.recuperarEntidad(code);
-		servPersistencia.borrarEntidad(ePhoto);
-		/*
-		Photo photo = (Photo) entityToObject(ePhoto);
-		// Si eliminamos una foto, tenemos que eliminar sus comentarios
-		photo.getComments().stream().forEach((c)->CommentAdapterTDS.getInstance().deleteComment(c));*/
 		
+		Photo photo = (Photo) entityToObject(ePhoto);
+		// Si eliminamos una foto, tenemos que eliminar sus comentarios y notificaciones
+		photo.getComments().stream().forEach((c)->CommentAdapterTDS.getInstance().deleteComment(c));
+		
+		// Tenemos que eliminar la notificación y también la referencia a la misma en los seguidores del usuario que ha
+		// publicado el post
+		
+		int notificationCode = NotificationAdapterTDS.getInstance().getNotificationCodeByPost(code);
+		
+		for (User follower : photo.getUser().getFollowers()) {
+			follower.removeNotification(notificationCode);
+			UserAdapterTDS.getInstance().updateUser(follower, UserAdapterTDS.NOTIFICATIONS);
+		}
+		
+		NotificationAdapterTDS.getInstance().deleteNotification(notificationCode);
+		
+		servPersistencia.borrarEntidad(ePhoto);
 	}
 	
 	@Override
@@ -242,11 +254,12 @@ public class PhotoAdapterTDS extends AdapterTDS implements IPhotoAdapterDAO {
 		return photos;
 	}
 	
-	// TODO Pruebas
-	public void deleteAllPosts() {
-		List<Entidad> entities = servPersistencia.recuperarEntidades(PHOTO);
-		entities.stream().forEach((e)->deletePhoto(e.getId()));
-	}
+	// TODO para pruebas
+		public void deleteAll() {
+			List<Entidad> entities = servPersistencia.recuperarEntidades(PHOTO);
+			entities.stream().forEach((e)->servPersistencia.borrarEntidad(e));
+		}
+		
 	
 	
 	

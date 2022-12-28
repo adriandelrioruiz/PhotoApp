@@ -10,6 +10,4 @@ public interface IUserAdapterDAO {
 	public void deleteUser(int code);
 	public List<User> getAllUsers();
 	public void updateUser(User user, String attribute);
-	// TODO para pruebas
-	public void deleteAllUsers();
 }

@@ -16,10 +16,10 @@ public abstract class Post extends DomainObject implements Comparable<Post> {
 	// Número máximo de hashtags
 	public static final byte MAX_HASHTAGS = 4;
 
-	private String title;
-	private Date date;
+	private final String title;
+	private final Date date;
 	private String description;
-	private User user;
+	private final User user;
 	private int likes;
 	private List<String> hashtags;
 	private List<Comment> comments;
@@ -32,22 +32,13 @@ public abstract class Post extends DomainObject implements Comparable<Post> {
 		hashtags = new LinkedList<>();
 		comments = new LinkedList<>();
 	}
-	
 
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public Date getDate() {
 		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
 	}
 
 	public String getDescription() {
@@ -60,10 +51,6 @@ public abstract class Post extends DomainObject implements Comparable<Post> {
 	
 	public User getUser() {
 		return user;
-	}
-	
-	public void setUser(User user) {
-		this.user = user;
 	}
 	
 	public int getLikes() {
@@ -93,6 +80,7 @@ public abstract class Post extends DomainObject implements Comparable<Post> {
 	public void setHashtags(List<String> hashtags) {
 		this.hashtags = hashtags;
 	}
+
 	
 	public void addHashtag(String hashtag) throws InvalidHashtagException {
 		if (hashtag.length() > MAX_HASHTAG_LENGTH)

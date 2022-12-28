@@ -4,30 +4,20 @@ import java.util.Date;
 
 public class Notification extends DomainObject {
 
-	private Date date;
-	private Post post;
+	private final Date date;
+	private final Photo photo;
 	
-	public Notification(Date date, Post post) {
+	public Notification(Date date, Photo photo) {
 		this.date = date;
-		this.post = post;
+		this.photo = photo;
 	}
 	
 	public Date getDate() {
 		return date;
 	}
 
-	public Post getPost() {
-		return post;
-	}
-
-	public void setPost(Post post) {
-		this.post = post;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	
-	
+	public Photo getPhoto() {
+		return photo;
+	}	
 
 }

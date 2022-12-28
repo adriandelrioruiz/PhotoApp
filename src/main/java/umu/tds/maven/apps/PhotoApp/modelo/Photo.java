@@ -10,6 +10,7 @@ public class Photo extends Post {
 	public static final byte MAX_HASHTAGS = 4;
 
 	private String path;
+	private Notification notification;
 
 	public Photo(String title, Date date, String description, String path, User user) {
 		super(title, date, description, user);
@@ -22,6 +23,14 @@ public class Photo extends Post {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+	
+	public Notification getNotification() {
+		return notification;
+	}
+	
+	public void setNotification(Notification notification) {
+		this.notification = notification;
 	}
 
 }

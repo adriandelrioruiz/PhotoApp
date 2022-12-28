@@ -265,10 +265,9 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 	}
 	
 	// TODO para pruebas
-	@Override
-	public void deleteAllUsers() {
+	public void deleteAll() {
 		List<Entidad> entities = servPersistencia.recuperarEntidades(USER);
-		entities.stream().forEach((e)->deleteUser(e.getId()));
+		entities.stream().forEach((e)->servPersistencia.borrarEntidad(e));
 	}
 	
 

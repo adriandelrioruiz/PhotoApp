@@ -53,6 +53,9 @@ public class PostRepository {
 	
 	// Método para eliminar un post
 	public void deletePost(Post post) {
+		// Si es una foto, tenemos que eliminar las notificaciones que hacían referencia a ella
+		if (post instanceof Photo)
+			post.getUser().getFollowers().stream().forEach((u)->u.removeNotification(((Photo)post).getNotification().getCode()));
 		postsById.remove(post.getCode());
 	}
 	

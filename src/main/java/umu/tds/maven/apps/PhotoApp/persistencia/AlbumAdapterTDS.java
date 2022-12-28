@@ -146,7 +146,9 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 	public void deleteAlbum(Album album) {
 		if (album != null ) {
 			Entidad eAlbum = servPersistencia.recuperarEntidad(album.getCode());
-			
+			// Borramos todas las fotos del álbum
+			List<Photo> photos = PhotoAdapterTDS.getInstance().getAllPhotosFromCodes(servPersistencia.recuperarPropiedadEntidad(eAlbum, PHOTOS));
+			photos.stream().forEach((p)->PhotoAdapterTDS.getInstance().deletePhoto(p.getCode()));
 			servPersistencia.borrarEntidad(eAlbum);
 		}
 	}
