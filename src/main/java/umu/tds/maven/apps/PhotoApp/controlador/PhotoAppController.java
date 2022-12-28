@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.eclipse.persistence.internal.jpa.parsing.SetNode;
-
 import umu.tds.maven.apps.PhotoApp.modelo.Album;
 import umu.tds.maven.apps.PhotoApp.modelo.Comment;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
@@ -92,21 +90,21 @@ public class PhotoAppController {
 
 	// Método para registrar a un usuario en la base de datos
 
-	public boolean registerUser(String fullName, String email, String userName, String password, Date date,
+	public Code registerUser(String fullName, String email, String userName, String password, Date date,
 			String profilePic, String bio) {
 
 		// Miramos si el userName ya está cogido
 		if (userRepository.getUserByUsername(userName) != null) {
 			// TODO quitar el print
 			System.out.println("Fallo al Registrarse: El userName " + userName + " ya está cogido");
-			return false;
+			return Code.INVALID_EMAIL;
 		}
 
 		// Miramos si el email ya está cogido
 		if (userRepository.getUserByEmail(email) != null) {
 			// TODO quitar el print
 			System.out.println("Fallo al Registrarse: El email " + email + " ya está cogido");
-			return false;
+			return Code.INVALID_USERNAME;
 		}
 
 		// En otro caso, podremos registrar al usuario en la persistencia y en el
@@ -119,12 +117,12 @@ public class PhotoAppController {
 
 		// TODO quitar el print
 		System.out.println("El usuario " + userName + " se ha registrado con éxito!");
-		return true;
+		return Code.OK;
 	}
 
-	public boolean login(String usernameOrEmail, String password) {
+	public Code login(String usernameOrEmail, String password) {
 		if (user != null)
-			return false;
+			return null;
 		// Comprobamos en el repositorio si el usuario existe por nombre de usuario o
 		// email
 		user = userRepository.getUserByUsername(usernameOrEmail);
@@ -133,18 +131,18 @@ public class PhotoAppController {
 		if (user == null) {
 			// TODO quitar el print
 			System.out.println("email o username incorrecto");
-			return false;
+			return Code.INCORRECT_EMAIL_USERNAME;
 		}
 
 		// Si no es null es porque existe. Vemos si la contraseña es correcta
 		if (!password.equals(user.getPassword())) {
 			System.out.println("contraseña incorrecta");
-			return false;
+			return Code.INCORRECT_PASSWORD;
 		}
 
 		// TODO quitar el print
 		System.out.println("El usuario " + usernameOrEmail + " se ha logeado con éxito");
-		return true;
+		return Code.OK;
 	}
 	
 	// Método para unLogearse TODO ver si lo quito
