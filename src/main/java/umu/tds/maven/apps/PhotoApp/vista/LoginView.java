@@ -22,8 +22,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import org.h2.expression.ConcatenationOperation;
-
 import umu.tds.maven.apps.PhotoApp.controlador.Codes;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 
