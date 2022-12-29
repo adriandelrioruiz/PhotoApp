@@ -28,5 +28,6 @@ public abstract class FuncionalidadDefinicio {
 	// TODO crear constantes en las vistas
 	// TODO Reutilizar codigo del addTextFieldHandler
 	// TODO Cambiar el login y registro para que pueda usarse el texto por defecto
+	// TODO cambiar el momento en el que se crean las ventanas de login y registro
 				
 }

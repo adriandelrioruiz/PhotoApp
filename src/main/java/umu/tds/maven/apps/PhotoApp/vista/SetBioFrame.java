@@ -24,8 +24,8 @@ public class SetBioFrame extends JFrame {
 	
 	private JTextArea textArea;
 	
-	public SetBioFrame() {
-		textArea = new JTextArea(ViewConstants.BIO_DEFAULT_TEXT);
+	public SetBioFrame(String text) {
+		textArea = new JTextArea(text);
 		textArea.setColumns(10);
 		textArea.setForeground(Color.GRAY);
 		textArea.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
@@ -100,4 +100,5 @@ public class SetBioFrame extends JFrame {
 			return "";
 		return textArea.getText();
 	}
+
 }

@@ -560,12 +560,26 @@ public class PhotoAppController {
 			return null;
 		return user.getFullName();
 	}
+	
+	// Obtener contraseña
+	public String getPassword() {
+		if (user == null)
+			return null;
+		return user.getPassword();
+	}
 
 	// Obtener foto de perfil
 	public String getProfilePic() {
 		if (user == null)
 			return null;
 		return user.getProfilePic();
+	}
+	
+	// Obtener foto de perfil
+	public String getBio() {
+		if (user == null)
+			return null;
+		return user.getBio();
 	}
 	
 	// Ver si un usuario es premium

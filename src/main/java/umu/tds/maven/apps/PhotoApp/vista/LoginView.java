@@ -258,7 +258,7 @@ public class LoginView extends JFrame {
 					// Cerramos la ventana de login
 					dispose();
 					// Abrimos el perfil
-					ProfileView profileView = new ProfileView();
+					new ProfileView();
 					break;
 					
 				}
