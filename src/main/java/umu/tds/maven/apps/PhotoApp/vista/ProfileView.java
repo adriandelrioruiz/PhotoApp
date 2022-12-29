@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
-import javax.swing.text.View;
 
 import com.toedter.calendar.JCalendar;
 
@@ -85,6 +84,7 @@ public class ProfileView extends JFrame {
 		createLoginPane();
 		createRegisterPane();
 
+		setVisible(true);
 	}
 
 	// Método para crear el panel que llevará el nombre de la aplicación

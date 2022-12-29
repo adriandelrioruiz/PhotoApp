@@ -3,6 +3,7 @@ package umu.tds.maven.apps.PhotoApp.vista;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -26,6 +27,8 @@ public class SetBioFrame extends JFrame {
 	public SetBioFrame() {
 		textArea = new JTextArea(ViewConstants.BIO_DEFAULT_TEXT);
 		textArea.setColumns(10);
+		textArea.setForeground(Color.GRAY);
+		textArea.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
 		textArea.setFocusable(false);
 		addTextFieldHandler(textArea, ViewConstants.BIO_DEFAULT_TEXT);
 		// La hacemos scrollable
@@ -85,12 +88,16 @@ public class SetBioFrame extends JFrame {
 			public void focusLost(FocusEvent e) {
 				if (textField.getText().equals("")) {
 					textField.setText(defaultText);
+					textField.setFocusable(false);
 				}
 			}
 		});
 	}
 	
 	public String getBio() {
+		// Si está puesto el texto por defecto, devolvemos la cadena vacía
+		if (textArea.getText().equals(ViewConstants.BIO_DEFAULT_TEXT))
+			return "";
 		return textArea.getText();
 	}
 }

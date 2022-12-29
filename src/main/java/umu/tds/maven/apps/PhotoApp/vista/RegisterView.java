@@ -18,11 +18,11 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
-import javax.swing.text.View;
 
 import com.toedter.calendar.JCalendar;
 
@@ -374,7 +374,11 @@ public class RegisterView extends JFrame {
 				
 				case OK:
 				{
-					
+					// TODO meter constantes?
+					JButton btnGoToLogin = new JButton("Volver al login");
+					JOptionPane.showMessageDialog(btnGoToLogin, "El registro se ha completado con éxito");
+					dispose();
+					LoginView loginView = new LoginView();
 				}
 				
 				default:

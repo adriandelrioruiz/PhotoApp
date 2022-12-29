@@ -9,17 +9,15 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class ProfilePicPane extends JPanel {
 	
-	private JFrame frame;
 	private BufferedImage image;
 	
 	public ProfilePicPane(JFrame frame, String imagePath) {
-		this.frame = frame;
 		try {
 		  image = ImageIO.read(new File(imagePath));
 		} catch (IOException e) {
