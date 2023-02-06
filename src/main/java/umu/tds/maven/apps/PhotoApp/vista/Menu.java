@@ -5,119 +5,161 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.awt.Cursor;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 public class Menu extends JPanel {
 	/**
-	 * 
+	 * jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton2MouseEntered(evt);
+            }
+        });
+private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
+        //Acciones
+    }
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final int TITULO_WIDTH=250;
 	private static final int ESPACIO1_WIDTH=20;
-	private static final int ESPACIO2_WIDTH=150;
+	private static final int ESPACIO2_WIDTH=250;
 	private static final int ESPACIO3_WIDTH=20;
 	private static final int BUTTON_WIDTH=30;
 	private static final int BUTTON_HEIGHT=30;
 	private static final int USER_PHOTO_HEIGHT=50;
 	private static final int USER_PHOTO_WIDTH=50;
-	private static final int MENU_HEIGHT=60;
+	public static final int MENU_HEIGHT=90 ;
 	private static final int SEARCH_HEIGHT=25;
 	private static final int SEARCH_WIDTH=100;
 	private JTextField txtTexto;
-	
+	private JButton uploadButton,lupaButton,userButton,premiumButton,titulo;
+	private ImageIcon image;
 	//PARTE DE ARRIBA DE LA PANTALLA
 	public Menu(JFrame ventana,JPanel contenedor) {
-			VentanaPrincipal.fixSize(this,contenedor.getWidth(),MENU_HEIGHT);
-			this.setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
+			VentanaPrincipal.fixSize(this,VentanaPrincipal.WINDOW_WIDTH,MENU_HEIGHT);
+			//this.setLayout(new BoxLayout(this));
 			this.setBackground(Color.WHITE);
 			//NOMBRE DE LA APLICACION
-			JLabel titulo=new JLabel("PhotoTDS");
+			titulo=new JButton("PhotoTDS");
 			titulo.setFont(new Font("Book Antiqua",Font.BOLD,22));
-			VentanaPrincipal.fixSize(titulo,TITULO_WIDTH,MENU_HEIGHT);
-			this.add(titulo,BorderLayout.WEST);//PONER A LA IZQUIERDA DE LA CAJA
+			 this.setButton(titulo,0, TITULO_WIDTH, MENU_HEIGHT);;
 			//BOTON PARA SUBIR FOTO
-			JButton uploadButton = new JButton(this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, "iconUploadPhoto.png"));
-			VentanaPrincipal.fixSize(uploadButton,BUTTON_WIDTH,BUTTON_HEIGHT);
-			this.add(uploadButton);//PONER EN EL CENTRO
-			//ESPACIO1	
-			JLabel espacio1=new JLabel();
-			VentanaPrincipal.fixSize(espacio1,ESPACIO1_WIDTH,MENU_HEIGHT);
-			this.add(espacio1);
+			uploadButton = new JButton(this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, "iconUploadPhoto.png"));
+			this.setButton(uploadButton, VentanaPrincipal.WINDOW_WIDTH/2 -100, BUTTON_WIDTH, BUTTON_HEIGHT);
 			//PARTE DE BUSCAR 
 			txtTexto=new JTextField();
+			txtTexto.setAlignmentX(VentanaPrincipal.WINDOW_WIDTH/2 - 50);
 			VentanaPrincipal.fixSize(txtTexto,SEARCH_WIDTH,SEARCH_HEIGHT);
 			txtTexto.setText("Search");
 			txtTexto.setFont(new Font("Book Antiqua",Font.BOLD,12));
 			txtTexto.setEditable(true);
 			txtTexto.setOpaque(true);
-			//this.add(Box.createHorizontalStrut(10));
-			this.add(txtTexto, BorderLayout.CENTER);//PONER EN EL CENTRO
+			this.add(txtTexto);
 			txtTexto.setColumns(10);
-			JButton lupaButton = new JButton(this.getIcon(BUTTON_WIDTH, SEARCH_HEIGHT, "icon_lupa.png"));
-			VentanaPrincipal.fixSize(lupaButton,BUTTON_WIDTH,SEARCH_HEIGHT);
-			this.add(lupaButton,BorderLayout.WEST);
-			
-			//ESPACIO ENTRE LUPA Y FOTOUSER
-			JLabel espacio2=new JLabel();
-			VentanaPrincipal.fixSize(espacio2,ESPACIO2_WIDTH,MENU_HEIGHT);
-			this.add(espacio2);
-			
-			//FOTO USER Y BOTON PREMIUM
-			JLabel fotoUser=new JLabel(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "raro.png"));
-			VentanaPrincipal.fixSize(fotoUser,USER_PHOTO_WIDTH,USER_PHOTO_HEIGHT);
-			this.add(fotoUser,BorderLayout.EAST);
-			
-			//ESPACIO ENTRE USER Y BOTON 
-			JLabel espacio3=new JLabel();
-			VentanaPrincipal.fixSize(espacio3,ESPACIO3_WIDTH,MENU_HEIGHT);
-			this.add(espacio3);
-			JButton premiumButton = new JButton(this.getIcon(BUTTON_WIDTH,BUTTON_HEIGHT,"icon_tres_lineas.png"));
-			VentanaPrincipal.fixSize(premiumButton,BUTTON_WIDTH,BUTTON_HEIGHT);
-			this.add(premiumButton,BorderLayout.WEST);
+			//Bonton lupa
+			 lupaButton = new JButton(this.getIcon(BUTTON_WIDTH, SEARCH_HEIGHT, "icon_lupa.png"));
+			 this.setButton(lupaButton, VentanaPrincipal.WINDOW_WIDTH/2 +50, BUTTON_WIDTH, BUTTON_HEIGHT);
+			//FOTO USER 
+			//image=this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "raro.png");
+			 userButton = new JButton(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "raro.png"));
+			 this.setButton(userButton,VentanaPrincipal.WINDOW_WIDTH-100,USER_PHOTO_WIDTH,USER_PHOTO_HEIGHT);
+			//BOTON PREMIUN
+			 premiumButton = new JButton(this.getIcon(BUTTON_WIDTH,BUTTON_HEIGHT,"icon_tres_lineas.png"));
+			setButton(premiumButton,VentanaPrincipal.WINDOW_WIDTH-50,BUTTON_WIDTH,BUTTON_HEIGHT);
 			contenedor.add(this,BorderLayout.NORTH);
 			uploadButton.addActionListener(new ActionListener() {
-			      @Override
 			      public void actionPerformed(ActionEvent e) {
-			        // Mostrar una ventana de di·logo para SUBIR FOTO
-			        String comment = JOptionPane.showInputDialog(ventana, "Ingrese un comentario:");
-			        System.out.println("Comentario: " + comment);
+			        // Mostrar una ventana de di√°logo para SUBIR FOTO
+			    	//PhotoBean photo=new PhotoBean();
 			      }
 			    });
-			lupaButton.addActionListener(new ActionListener() {
+			/*lupaButton.addActionListener(new ActionListener() {
 			      @Override
 			      public void actionPerformed(ActionEvent e) {
-			        // COGER EL STRING DE TXT Y LLAMAR A CONTROLADOR PARA BUSCAR
-			        String comment = JOptionPane.showInputDialog(ventana, "Ingrese un comentario:");
-			        System.out.println("Comentario: " + comment);
+			        // COGER EL STRING DE TXT Y
+			    	  String query=txtTexto.getText();
+			    	  // LLAMAR A CONTROLADOR PARA BUSCAR y cambiar el panel de abajo
+			       // String comment = JOptionPane.showInputDialog(ventana, "Ingrese un comentario:");
+			        System.out.println("query: " + query);
+			       
 			      }
 			    });
+			userButton.addActionListener(new ActionListener() {
+			      @Override
+			      public void actionPerformed(ActionEvent e) {
+			        //LLAMAR A CONTROLADOR PARA IR A LA PAGINA DE USER
+			    	  //image=this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "raro.png");
+			    	  JFrame frame = new JFrame();
+			    	  frame.setSize(100,200);
+				        //frame.setIconImage(image.getImage());
+				       JLabel label = new JLabel();
+				       label.setIcon(image);
+				       frame.getContentPane().add(label);
+				        // Mostrar la ventana
+				        frame.setVisible(true);
+			      }
+			    });
+			
+			
 			premiumButton.addActionListener(new ActionListener() {
 			      @Override
 			      public void actionPerformed(ActionEvent e) {
-			        // Mostrar una ventana de di·logo CON LA FUNCIONALIDAD PREMIUM
+			        // Mostrar una ventana de di√°logo CON LA FUNCIONALIDAD PREMIUM
 			    	  //llamar a la clase ventana premium
 			    	  //
 			    	  PremiumWindow premium=new PremiumWindow("Miguel");
+			    	  mostrarMenu(e);
 			      }
-			    });
+			    });*/
+			
+			
 	
 	}
-	private ImageIcon getIcon(int width,int height,String filename ) {
+	private   ImageIcon getIcon(int width,int height,String filename ) {
 		Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/"+filename));
-		// Escalar la imagen a un tamaÒo especÌfico
+		// Escalar la imagen a un tama√±o espec√≠fico
 		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		// Crear un ImageIcon a partir de la imagen escalada
 		return new ImageIcon(image);
 
 		
 	}
-	
+	private void setComponent(JComponent component,int x,int y,int width,int height) {
+		component.setAlignmentX(x);
+		VentanaPrincipal.fixSize(component,TITULO_WIDTH,MENU_HEIGHT);
+		this.add(component);
+	}
+	private void mostrarMenu(ActionEvent e) {
+		// PopupMenu menu = new PopupMenu();
+		 JPopupMenu menu = new JPopupMenu();
+	        JMenuItem cut = new JMenuItem("Cut");
+	        JMenuItem copy = new JMenuItem("Copy");
+	        JMenuItem paste = new JMenuItem("Paste");
+
+	        //menu.add(open);
+	        menu.add(cut);
+	        menu.add(copy);
+	        menu.add(paste); 
+	        //menu.show(e.getComponent(), e.getX(), e.getY());
+		 } 
+	private void setButton(JButton boton,int x,int width,int height) {
+		this.add(boton);
+		boton.setBounds(x,150,width,height);
+		boton.setAlignmentX(x);
+		//VentanaPrincipal.fixSize(boton,width,height);
+		boton.setBackground(null);
+		boton.setBorderPainted(false);
+		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		
+	}
 }
