@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.Cursor;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -17,6 +18,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+
+import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
+import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
 
 public class Menu extends JPanel {
 	/**
@@ -70,20 +74,22 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 			 lupaButton = new JButton(this.getIcon(BUTTON_WIDTH, SEARCH_HEIGHT, "icon_lupa.png"));
 			 this.setButton(lupaButton, VentanaPrincipal.WINDOW_WIDTH/2 +50, BUTTON_WIDTH, BUTTON_HEIGHT);
 			//FOTO USER 
+			 PhotoAppController.getInstance().getProfilePic();
 			//image=this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "raro.png");
-			 userButton = new JButton(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "raro.png"));
+			 userButton = new JButton(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, PhotoAppController.getInstance().getProfilePic()));
 			 this.setButton(userButton,VentanaPrincipal.WINDOW_WIDTH-100,USER_PHOTO_WIDTH,USER_PHOTO_HEIGHT);
 			//BOTON PREMIUN
 			 premiumButton = new JButton(this.getIcon(BUTTON_WIDTH,BUTTON_HEIGHT,"icon_tres_lineas.png"));
 			setButton(premiumButton,VentanaPrincipal.WINDOW_WIDTH-50,BUTTON_WIDTH,BUTTON_HEIGHT);
 			contenedor.add(this,BorderLayout.NORTH);
+			
 			uploadButton.addActionListener(new ActionListener() {
 			      public void actionPerformed(ActionEvent e) {
 			        // Mostrar una ventana de diálogo para SUBIR FOTO
 			    	//PhotoBean photo=new PhotoBean();
 			      }
 			    });
-			/*lupaButton.addActionListener(new ActionListener() {
+			lupaButton.addActionListener(new ActionListener() {
 			      @Override
 			      public void actionPerformed(ActionEvent e) {
 			        // COGER EL STRING DE TXT Y
@@ -91,6 +97,10 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 			    	  // LLAMAR A CONTROLADOR PARA BUSCAR y cambiar el panel de abajo
 			       // String comment = JOptionPane.showInputDialog(ventana, "Ingrese un comentario:");
 			        System.out.println("query: " + query);
+			       // if(query.charAt(0)=='#') {
+			        	List<DomainObject> search= PhotoAppController.getInstance().search(query);
+			        	
+			        //}
 			       
 			      }
 			    });
@@ -117,11 +127,11 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 			        // Mostrar una ventana de diálogo CON LA FUNCIONALIDAD PREMIUM
 			    	  //llamar a la clase ventana premium
 			    	  //
+			    	   if(PhotoAppController.getInstance()
 			    	  PremiumWindow premium=new PremiumWindow("Miguel");
 			    	  mostrarMenu(e);
 			      }
 			    });*/
-			
 			
 	
 	}
