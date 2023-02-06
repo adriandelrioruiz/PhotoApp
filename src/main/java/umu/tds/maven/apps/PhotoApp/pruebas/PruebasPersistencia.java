@@ -14,7 +14,7 @@ import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.vista.Menu;
 import umu.tds.maven.apps.PhotoApp.vista.ScrollScreen;
-import umu.tds.maven.apps.PhotoApp.vista.VentanaPrincipal;
+import umu.tds.maven.apps.PhotoApp.vista.*;
 
 public class PruebasPersistencia {
 	
@@ -32,6 +32,8 @@ public class PruebasPersistencia {
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		ventana.setVisible(true);
+		VentanaPrincipal ini= new VentanaPrincipal();
+		ini.setVisible(true);
 		deleteAllDatabase();
 		//System.exit(0);
 		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password", new Date(), "myPhoto", "myBio");
@@ -57,7 +59,7 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().unLogin();
 		PhotoAppController.getInstance().login("adri@gmail", "password");
 		PhotoAppController.getInstance().getFeed();	
-		VentanaPrincipal ini=new VentanaPrincipal();
+		//VentanaPrincipal ini=new VentanaPrincipal();
 		
 		
 	}

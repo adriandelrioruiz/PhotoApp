@@ -13,6 +13,7 @@ public class VentanaPrincipal extends JFrame {
 	private Menu menu;
 	protected PhotoAppController controller;
 	public VentanaPrincipal() {
+		 System.out.println("query: ");
 		this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
