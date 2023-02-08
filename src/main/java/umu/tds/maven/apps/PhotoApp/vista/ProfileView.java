@@ -70,7 +70,7 @@ public class ProfileView extends JFrame {
 		getContentPane().setBackground(Color.WHITE);
 		controller = PhotoAppController.getInstance();
 		fileChooser = new JFileChooser();
-		bioFrame = new SetBioFrame();
+		bioFrame = new SetBioFrame(PhotoAppController.getInstance().getBio());
 		initialize();
 	}
 

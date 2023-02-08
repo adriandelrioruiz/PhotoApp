@@ -18,12 +18,12 @@ public class VentanaPrincipal extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		contenedor=(JPanel) this.getContentPane();
-		controller = PhotoAppController.getInstance();
+		//controller = PhotoAppController.getInstance();
 		//Menu
 		menu=new Menu(this,contenedor);
 		/*--pantalla de abajo---*/
 		
-		controller.getProfilePic();
+		//controller.getProfilePic();
 		ScrollScreen scroll= new ScrollScreen();
 		this.add(scroll);
 		this.setVisible(true);

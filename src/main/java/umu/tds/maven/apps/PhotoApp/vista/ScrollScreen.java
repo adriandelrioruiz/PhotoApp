@@ -29,14 +29,14 @@ public class ScrollScreen extends JScrollPane{
 		
 		//REQUEST THE LAST POST TO THE CONTROLLER
 		//ADD THE PUBLICATIONS TO THE PANEL
-		List<Post> feed =PhotoAppController.getInstance().getFeed();
+		//List<Post> feed =PhotoAppController.getInstance().getFeed();
 		//PASAR DE lIST A SCROLL PANEL
-		panel.add(new Publicacion("SPK.png", "Pikachu", 15));
-		panel.add(new Publicacion("SMV.png", "Mujer maravilla", 50));
-		panel.add(new Publicacion("SSH.png", "Shongoku", 100));
-		panel.add(new Publicacion("raro.png", "Emoji", 10));
-		panel.add(new Publicacion("SPK.png", "Pikachu", 15));
-		panel.add(new Publicacion("SMV.png", "Mujer maravilla", 50));
-		panel.add(new Publicacion("SSH.png", "Shongoku", 100));
+		panel.add(new Publicacion("icono_comentario.png", "Pikachu", 15));
+		panel.add(new Publicacion("icono_comentario.png", "Mujer maravilla", 50));
+		panel.add(new Publicacion("icono_comentario.png", "Shongoku", 100));
+		panel.add(new Publicacion("icono_comentario.png", "Emoji", 10));
+		panel.add(new Publicacion("icono_comentario.png", "Pikachu", 15));
+		panel.add(new Publicacion("icono_comentario.png", "Mujer maravilla", 50));
+		panel.add(new Publicacion("icono_comentario.png", "Shongoku", 100));
 	}
 }

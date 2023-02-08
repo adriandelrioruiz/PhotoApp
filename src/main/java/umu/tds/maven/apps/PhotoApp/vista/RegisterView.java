@@ -285,6 +285,7 @@ public class RegisterView extends AbstractRegisterView {
 				}	
 				
 			}
+
 		});
 	}
 

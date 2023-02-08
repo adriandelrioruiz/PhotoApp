@@ -34,16 +34,15 @@ public class Atributos extends JPanel {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setOpaque(true);
 		//TOP PANEL
-		ImagenIconTDS image=new ImagenIconTDS();
 		JPanel topPanel = new JPanel();
 		fixSize(topPanel,VentanaPrincipal.WINDOW_WIDTH-Publicacion.IMAGE_WIDTH,Publicacion.PUBLICACION_HEIGHT / 2);
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-		JButton likeButton = new JButton(image.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, LIKE_ICON));
+		JButton likeButton = new JButton(ViewConstants.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, LIKE_ICON));
 		//likeButton.setPreferredSize(new Dimension(60,BUTTON_HEIGHT));
 		fixSize(likeButton,BUTTON_WIDTH,BUTTON_HEIGHT);
 		VentanaPrincipal.setButton(likeButton);
 		topPanel.add(likeButton);
-		JButton commentButton = new JButton(image.getIcon(BUTTON_WIDTH,BUTTON_HEIGHT,COMMENT_ICON));
+		JButton commentButton = new JButton(ViewConstants.getIcon(BUTTON_WIDTH,BUTTON_HEIGHT,COMMENT_ICON));
 		fixSize(commentButton,BUTTON_WIDTH,BUTTON_HEIGHT);
 		VentanaPrincipal.setButton(commentButton);
 		topPanel.add(commentButton);
@@ -54,12 +53,13 @@ public class Atributos extends JPanel {
 		JPanel bottomPanel = new JPanel();
 		fixSize(bottomPanel,VentanaPrincipal.WINDOW_WIDTH-Publicacion.IMAGE_WIDTH,Publicacion.PUBLICACION_HEIGHT / 2);
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
-		userimagen = new JLabel(image.getIcon(BUTTON_WIDTH,BUTTON_HEIGHT,COMMENT_ICON));
+		
+		userimagen = new JLabel(ViewConstants.getIcon(BUTTON_WIDTH,BUTTON_HEIGHT,COMMENT_ICON));
 		userimagen.setText(usuario);
 		bottomPanel.add(userimagen);
 		this.add(bottomPanel, BorderLayout.SOUTH);
 		  
-		  likeButton.addActionListener(new ActionListener() {
+		 likeButton.addActionListener(new ActionListener() {
 		      @Override
 		      public void actionPerformed(ActionEvent e) {
 		    	  sumarLikes();

@@ -31,7 +31,6 @@ public class Publicacion extends JPanel{
 	private static final long serialVersionUID = 1L;
 	public static final int IMAGE_WIDTH = 220;
 	public static final int PUBLICACION_HEIGHT = 100;
-	private JLabel megustas;
 	//private Image image;
 	//Es necesario saber foto,me gustas,propietario
 	public Publicacion(String filename, String propietario, int likes) {
@@ -40,8 +39,8 @@ public class Publicacion extends JPanel{
 		this.setBackground(Color.WHITE);
 		this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
 		//this.setBorder(new TitledBorder(nombre));
-		ImageIcon foto = new ImageIcon(getClass().getResource("/"+filename));
-		JLabel lbimagen = new JLabel(new ImageIcon(getClass().getResource("/"+filename)));
+		
+		JLabel lbimagen = new JLabel();
 		fixSize(lbimagen, IMAGE_WIDTH, PUBLICACION_HEIGHT);
 		lbimagen.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -66,21 +65,13 @@ public class Publicacion extends JPanel{
 	        frame.setVisible(true);
 		
 	}
-	public void sumarLikes(int likes) {	
-		megustas.setText(likes+" Me gustas");
-	}
 	private void mostrarMenu(java.awt.event.MouseEvent e) {
-		// PopupMenu menu = new PopupMenu();
 		 JPopupMenu menu = new JPopupMenu();
-	        JMenuItem cut = new JMenuItem("Cut");
-	        JMenuItem copy = new JMenuItem("Copy");
-	        JMenuItem paste = new JMenuItem("Paste");
-
-	        //menu.add(open);
-	        menu.add(cut);
-	        menu.add(copy);
-	        menu.add(paste); 
-	        menu.show(e.getComponent(), e.getX(), e.getY());
+	      JLabel label = new JLabel();
+		  label.setIcon(ViewConstants.getIcon(300,300,"icon_lupa.png"));
+	      menu.add(label);
+	      menu.show(e.getComponent(), 5, -5);
+	      //menu.show(e.getComponent(), e.getX()-50, e.getY()-50);
 		 }
 	private void fixSize(JComponent c , int x, int y) {
 		c.setMinimumSize(new Dimension(x,y));
@@ -88,7 +79,7 @@ public class Publicacion extends JPanel{
 		c.setPreferredSize(new Dimension(x,y));
 	}
 	
-	private void addLikesButtonHandler(JButton likeButton) {
+	/*private void addLikesButtonHandler(JButton likeButton) {
 		likeButton.addActionListener(new LikesButtonActionListener(this));
 	}
 	
@@ -111,7 +102,7 @@ public class Publicacion extends JPanel{
 			frame.setVisible(false);
 			// Creamos una ventana de registro y la mostramos
 			RegisterView registerFrame = new RegisterView();
-			registerFrame.setVisible(true);*/
+			registerFrame.setVisible(true);
 		}
 		
 	}
@@ -123,7 +114,7 @@ public class Publicacion extends JPanel{
 			//SALTA UNA VENTANA DE DIALOGO PARA ESCRIBIR COMENTARIO
 			System.out.println("Se ha hecho clic en comment");
 			}
-		}
+		}*/
 	
 }
 

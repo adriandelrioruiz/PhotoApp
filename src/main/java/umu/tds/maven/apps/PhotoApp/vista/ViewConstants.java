@@ -1,6 +1,10 @@
 package umu.tds.maven.apps.PhotoApp.vista;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
+
+import javax.swing.ImageIcon;
 
 public class ViewConstants {
 	
@@ -30,8 +34,18 @@ public class ViewConstants {
 	static final int BIO_LENGTH = 200;
 	static final String BIO_DIALOG_LENGHT_EXCEEDED = "Máximo " + String.valueOf(BIO_LENGTH)+" caracteres";
 	static final String BIO_DEFAULT_TEXT = "Descríbete (" + BIO_DIALOG_LENGHT_EXCEEDED + ")";
-			
-			
+	
+	//
+	static final String RUTA_FOTOS="C:\\Users\\elcrio\\git\\PhotoApp\\img\\";
+	 static ImageIcon getIcon(int width,int height,String filename ) {
+		Image image;
+		image = Toolkit.getDefaultToolkit().getImage("C:\\Users\\elcrio\\git\\PhotoApp\\img\\"+filename);
+		image = Toolkit.getDefaultToolkit().getImage(ViewConstants.RUTA_FOTOS+filename);
+		// Escalar la imagen a un tamaño específico
+		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		// Crear un ImageIcon a partir de la imagen escalada
+		return new ImageIcon(image);
+	}		
 	
 	
 }
