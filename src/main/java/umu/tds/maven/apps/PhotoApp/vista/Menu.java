@@ -92,15 +92,13 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 			uploadButton.addActionListener(new ActionListener() {
 			      public void actionPerformed(ActionEvent e) {
 			        // Mostrar una ventana de diálogo para SUBIR FOTO
-			    	//PhotoBean photo=new PhotoBean();
-			    	  
-			    	 CargarFoto cargar=new CargarFoto();
+			    	 SubirFoto cargar=new SubirFoto();
 			      }
 			    });
 			lupaButton.addActionListener(new ActionListener() {
 			      public void actionPerformed(ActionEvent e) {
-			        // COGER EL STRING DE TXT Y
 			    	  String query=txtTexto.getText();
+			    	  
 			    	  // LLAMAR A CONTROLADOR PARA BUSCAR y cambiar el panel de abajo
 			       // String comment = JOptionPane.showInputDialog(ventana, "Ingrese un comentario:");
 			        System.out.println("query: " + query);
@@ -114,8 +112,7 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 			userButton.addActionListener(new ActionListener() {
 			      @Override
 			      public void actionPerformed(ActionEvent e) {
-			        //LLAMAR A CONTROLADOR PARA IR A LA PAGINA DE USER
-			    	  //image=this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "raro.png");
+			        //IR A LA PAGINA DE USER
 			    	  JFrame frame = new JFrame();
 			    	  frame.setSize(100,200);
 				        //frame.setIconImage(image.getImage());
@@ -134,7 +131,7 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 			        // Mostrar una ventana de diálogo CON LA FUNCIONALIDAD PREMIUM
 			    	  //llamar a la clase ventana premium
 			    	  //
-			    	  PremiumWindow premium=new PremiumWindow("Miguel");
+			    	  PremiumWindow premium=new PremiumWindow();
 			    	 /* if(PhotoAppController.getInstance()
 			    	  PremiumWindow premium=new PremiumWindow("Miguel");
 			    	  mostrarMenu(e);*/

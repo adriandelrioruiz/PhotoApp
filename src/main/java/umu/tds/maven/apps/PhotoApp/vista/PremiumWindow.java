@@ -16,7 +16,7 @@ public class PremiumWindow extends JFrame{
 	private static final int FRAME_PREMIUM_HEIGHT=150;
 	private static final int FRAME_WIDTH=150;
 	private static final int BUTTON_HEIGHT=20;
-	public PremiumWindow(String usuario) {
+	public PremiumWindow() {
 		if(PhotoAppController.getInstance().isPremium()) {
 			this.setSize(FRAME_WIDTH,FRAME_PREMIUM_HEIGHT);
 			//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,12 +33,12 @@ public class PremiumWindow extends JFrame{
 			contenedor.add(topLikes);
 			
 		}else {
-			this.setSize(FRAME_WIDTH,FRAME_HEIGHT);
+			this.setSize(FRAME_WIDTH,FRAME_HEIGHT+30);
 			//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			JPanel contenedor=(JPanel) this.getContentPane();
 			contenedor.setLayout(new BoxLayout(contenedor, BoxLayout.Y_AXIS));
-			JButton premium=new JButton("Premium");
-			VentanaPrincipal.fixSize(premium,FRAME_WIDTH,BUTTON_HEIGHT);
+			JButton premium=new JButton("Hazte Premium");
+			VentanaPrincipal.fixSize(premium,FRAME_WIDTH,BUTTON_HEIGHT+20);
 			contenedor.add(premium);
 		}
 		this.setLocation(VentanaPrincipal.WINDOW_WIDTH-FRAME_WIDTH, 0);

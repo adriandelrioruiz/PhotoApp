@@ -39,7 +39,7 @@ public class ViewConstants {
 	static final String RUTA_FOTOS="C:\\Users\\elcrio\\git\\PhotoApp\\img\\";
 	 static ImageIcon getIcon(int width,int height,String filename ) {
 		Image image;
-		image = Toolkit.getDefaultToolkit().getImage("C:\\Users\\elcrio\\git\\PhotoApp\\img\\"+filename);
+		//image = Toolkit.getDefaultToolkit().getImage("C:\\Users\\elcrio\\git\\PhotoApp\\img\\"+filename);
 		image = Toolkit.getDefaultToolkit().getImage(ViewConstants.RUTA_FOTOS+filename);
 		// Escalar la imagen a un tamaño específico
 		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
