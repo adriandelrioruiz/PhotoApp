@@ -418,7 +418,7 @@ public class PhotoAppController {
 		// Luego buscamos si 
 		objetos.addAll(userRepository.getUsersByNameStartingWith(search));
 		objetos.addAll(userRepository.getUsersByEmailContaining(search));
-		objetos.addAll(userRepository.getPostsByHashtagsContaining(search));
+		//objetos.addAll(userRepository.getPostsByHashtagsContaining(search));
 		
 		return objetos;
 	}
@@ -553,7 +553,12 @@ public class PhotoAppController {
 			return null;
 		return user.getUserName();
 	}
-
+	// Obtener nombre de usuario
+	public String getUsername(User user) {
+			if (user == null)
+				return null;
+			return user.getUserName();
+		}
 	// Obtener nombre completo
 	public String getFullName() {
 		if (user == null)
@@ -574,7 +579,12 @@ public class PhotoAppController {
 			return null;
 		return user.getProfilePic();
 	}
-	
+	// Obtener foto de perfil
+		public String getProfilePic(User user) {
+			if (user == null)
+				return null;
+			return user.getProfilePic();
+		}
 	// Obtener foto de perfil
 	public String getBio() {
 		if (user == null)
