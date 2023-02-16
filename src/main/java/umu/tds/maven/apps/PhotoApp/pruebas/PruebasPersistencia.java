@@ -42,7 +42,7 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().follow("juanhdz3");
 		PhotoAppController.getInstance().unLogin();
 		PhotoAppController.getInstance().login("juan3@gmail", "password");
-		PhotoAppController.getInstance().generateExcel("C:\\Users\\adria\\OneDrive\\Escritorio");
+		//PhotoAppController.getInstance().generateExcel("C:\\Users\\adria\\OneDrive\\Escritorio");
 		Photo photo = PhotoAppController.getInstance().addPhoto("fotoConComent1", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
 		PhotoAppController.getInstance().addPhoto("fotoConComent2", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
 		PhotoAppController.getInstance().addPhoto("fotoConComent3", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");

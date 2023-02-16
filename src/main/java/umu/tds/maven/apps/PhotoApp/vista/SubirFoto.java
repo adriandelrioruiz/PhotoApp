@@ -59,6 +59,7 @@ public class SubirFoto {
 		      @Override
 		      public void actionPerformed(ActionEvent e) {
 		    	  SubirFoto(path,description.getText(),titulo.getText());
+		    	  frame.setVisible(false);
 		      }
 		    });
      }

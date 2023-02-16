@@ -98,15 +98,8 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 			lupaButton.addActionListener(new ActionListener() {
 			      public void actionPerformed(ActionEvent e) {
 			    	  String query=txtTexto.getText();
-			    	  
-			    	  // LLAMAR A CONTROLADOR PARA BUSCAR y cambiar el panel de abajo
-			       // String comment = JOptionPane.showInputDialog(ventana, "Ingrese un comentario:");
-			        System.out.println("query: " + query);
-			       // if(query.charAt(0)=='#') {
-			        	//List<DomainObject> search= PhotoAppController.getInstance().search(query);
-			        	
-			        //}
-			       
+			    	  System.out.println("query: " + query);
+			    	  new BusquedaFrame(query);
 			      }
 			    });
 			userButton.addActionListener(new ActionListener() {
@@ -128,13 +121,12 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 			premiumButton.addActionListener(new ActionListener() {
 			      @Override
 			      public void actionPerformed(ActionEvent e) {
-			        // Mostrar una ventana de diálogo CON LA FUNCIONALIDAD PREMIUM
-			    	  //llamar a la clase ventana premium
-			    	  //
-			    	  PremiumWindow premium=new PremiumWindow();
-			    	 /* if(PhotoAppController.getInstance()
-			    	  PremiumWindow premium=new PremiumWindow("Miguel");
-			    	  mostrarMenu(e);*/
+			    	  if(PhotoAppController.getInstance().isPremium()) {
+			    		  new PremiumWindow();//llamar a la clase ventana premium para mostrar frame
+			    	  }else {
+			    		  new DescuentoFrame();
+			    	  }
+			    	  
 			      }
 			    });
 			
@@ -177,4 +169,5 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 	}
+	
 }

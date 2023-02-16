@@ -24,7 +24,9 @@ public class VentanaPrincipal extends JFrame {
 		/*--pantalla de abajo---*/
 		
 		//controller.getProfilePic();
+		
 		ScrollScreen scroll= new ScrollScreen();
+		this.SetBottomPanel(scroll);
 		this.add(scroll);
 		this.setVisible(true);
 	}
@@ -37,7 +39,9 @@ public class VentanaPrincipal extends JFrame {
 		c.setMaximumSize(new Dimension(x,y));
 		c.setPreferredSize(new Dimension(x,y));
 	}
-
+	public void SetBottomPanel(JComponent component) {
+		this.add(component);	
+	}
 	public static void setButton(JButton boton) {
 		boton.setBackground(null);
 		boton.setBorderPainted(false);
