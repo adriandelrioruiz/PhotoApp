@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
@@ -36,6 +37,25 @@ public class PremiumWindow extends JFrame{
 			this.setLocation(VentanaPrincipal.WINDOW_WIDTH-FRAME_WIDTH, 0);
 			this.setVisible(true);
 	
+			pdf.addActionListener(new ActionListener() {
+			      @Override
+			      public void actionPerformed(ActionEvent e) {
+			    	  PhotoAppController.getInstance().generatePDF();
+			      }
+			    });
+			excel.addActionListener(new ActionListener() {
+			      @Override
+			      public void actionPerformed(ActionEvent e) {
+			        PhotoAppController.getInstance().generateExcel("C://");
+			      }
+			    });
+			topLikes.addActionListener(new ActionListener() {
+			      @Override
+			      public void actionPerformed(ActionEvent e) {
+			        ScrollScreen scroll=new ScrollScreen();
+			        
+			      }
+			    });
 	}
 	
 	

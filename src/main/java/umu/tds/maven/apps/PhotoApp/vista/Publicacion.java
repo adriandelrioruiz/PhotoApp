@@ -22,6 +22,8 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.w3c.dom.events.MouseEvent;
 
+import umu.tds.maven.apps.PhotoApp.modelo.Post;
+
 
 
 public class Publicacion extends JPanel{
@@ -33,7 +35,7 @@ public class Publicacion extends JPanel{
 	public static final int PUBLICACION_HEIGHT = 100;
 	//private Image image;
 	//Es necesario saber foto,me gustas,propietario
-	public Publicacion(String filename, String propietario, int likes) {
+	public Publicacion(Post post) {
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		fixSize(this,VentanaPrincipal.WINDOW_WIDTH,PUBLICACION_HEIGHT);
 		this.setBackground(Color.WHITE);
@@ -48,7 +50,7 @@ public class Publicacion extends JPanel{
             	mostrarMenu(e);
             }
         });
-		JPanel atributos = new Atributos(propietario,likes);
+		JPanel atributos = new Atributos(post.getUser(),post.getLikes());
 		this.add(lbimagen);
 		this.add(atributos,BorderLayout.WEST);
 		
@@ -70,7 +72,7 @@ public class Publicacion extends JPanel{
 	      JLabel label = new JLabel();
 		  label.setIcon(ViewConstants.getIcon(300,300,"icon_lupa.png"));
 	      menu.add(label);
-	      menu.show(e.getComponent(), 5, -5);
+	      menu.show(this, 5, -5);
 	      //menu.show(e.getComponent(), e.getX()-50, e.getY()-50);
 		 }
 	private void fixSize(JComponent c , int x, int y) {

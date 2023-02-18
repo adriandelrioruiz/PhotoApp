@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.modelo.Photo;
+import umu.tds.maven.apps.PhotoApp.modelo.Post;
 import umu.tds.maven.apps.PhotoApp.persistencia.CommentAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.NotificationAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
@@ -32,7 +33,7 @@ public class PruebasPersistencia {
 	public static void main(String[] args) {
 		deleteAllDatabase();
 		//System.exit(0);
-		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password", new Date(), "myPhoto", "myBio");
+		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password", new Date(), "default-profpic.png", "myBio");
 		/*PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan@gmail", "juanhdz", "password", new Date(), "PhotoJuan", "BioJuan");
 		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan2@gmail", "juanhdz2", "password", new Date(), "PhotoJuan", "BioJuan");*/
 		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan3@gmail", "juanhdz3", "password", new Date(), "PhotoJuan", "BioJuan");
@@ -48,12 +49,15 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().addPhoto("fotoConComent3", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
 		PhotoAppController.getInstance().addPhoto("fotoConComent4", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
 		PhotoAppController.getInstance().addPhoto("fotoConComent5", "hola me llamo #juan y mi #hermana se llama #ines", "pathconcomment");
-		PhotoAppController.getInstance().deletePost(photo);
+		//PhotoAppController.getInstance().deletePost(photo);
 		List<Photo> top = PhotoAppController.getInstance().getTopPhotosByLikes();
 		//PhotoAppController.getInstance().comment(post, "hola soy juan comentando");
 		PhotoAppController.getInstance().search("hermana ines");
 		PhotoAppController.getInstance().unLogin();
 		PhotoAppController.getInstance().login("adri@gmail", "password");
+		List<Post> feed = PhotoAppController.getInstance().getFeed();
+		
+		System.out.println("---- "+feed.get(0).getTitle());
 		//PhotoAppController.getInstance().getFeed();	
 		VentanaPrincipal ini=new VentanaPrincipal();
 		

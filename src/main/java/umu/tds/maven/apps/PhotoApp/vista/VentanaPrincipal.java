@@ -10,6 +10,7 @@ public class VentanaPrincipal extends JFrame {
 	public static final int WINDOW_WIDTH=800;
 	public static final int WINDOW_HEIGHT=800;
 	private JPanel contenedor;
+	private JPanel bottomPanel=new JPanel();
 	private Menu menu;
 	protected PhotoAppController controller;
 	public VentanaPrincipal() {
@@ -26,8 +27,9 @@ public class VentanaPrincipal extends JFrame {
 		//controller.getProfilePic();
 		
 		ScrollScreen scroll= new ScrollScreen();
-		this.SetBottomPanel(scroll);
-		this.add(scroll);
+		SetBottomPanel(scroll);
+		contenedor.add(bottomPanel);
+		//this.add(scroll);
 		this.setVisible(true);
 	}
 	public static void main(String[] args) {
@@ -40,7 +42,8 @@ public class VentanaPrincipal extends JFrame {
 		c.setPreferredSize(new Dimension(x,y));
 	}
 	public void SetBottomPanel(JComponent component) {
-		this.add(component);	
+		bottomPanel.removeAll();
+		bottomPanel.add(component);	
 	}
 	public static void setButton(JButton boton) {
 		boton.setBackground(null);

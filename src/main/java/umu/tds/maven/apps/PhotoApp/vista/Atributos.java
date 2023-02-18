@@ -10,6 +10,8 @@ import javax.swing.event.MouseInputAdapter;
 
 import org.w3c.dom.events.MouseEvent;
 
+import umu.tds.maven.apps.PhotoApp.modelo.User;
+
 public class Atributos extends JPanel {
 
 	private static final String COMMENT_ICON = "icono_comentario.png";
@@ -28,7 +30,7 @@ public class Atributos extends JPanel {
 	private JLabel megustas,userimagen;
 	private int likes;
 	
-	public Atributos(String usuario, int likes) {
+	public Atributos(User usuario, int likes) {
 		this.likes=likes;
 		fixSize(this, VentanaPrincipal.WINDOW_WIDTH-Publicacion.IMAGE_WIDTH, Publicacion.PUBLICACION_HEIGHT);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -55,7 +57,7 @@ public class Atributos extends JPanel {
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 		
 		userimagen = new JLabel(ViewConstants.getIcon(BUTTON_WIDTH,BUTTON_HEIGHT,COMMENT_ICON));
-		userimagen.setText(usuario);
+		userimagen.setText(usuario.getUserName());
 		bottomPanel.add(userimagen);
 		this.add(bottomPanel, BorderLayout.SOUTH);
 		  

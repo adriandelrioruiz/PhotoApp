@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.awt.Cursor;
 
@@ -27,6 +28,7 @@ import javax.swing.JTextField;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
+import umu.tds.maven.apps.PhotoApp.modelo.User;
 
 public class Menu extends JPanel {
 	/**
@@ -55,7 +57,7 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 	private JButton uploadButton,lupaButton,userButton,premiumButton,titulo;
 	private ImageIcon image;
 	//PARTE DE ARRIBA DE LA PANTALLA
-	public Menu(JFrame ventana,JPanel contenedor) {
+	public Menu(VentanaPrincipal ini,JPanel contenedor) {
 			VentanaPrincipal.fixSize(this,VentanaPrincipal.WINDOW_WIDTH,MENU_HEIGHT);
 			//this.setLayout(new BoxLayout(this));
 			this.setBackground(Color.WHITE);
@@ -64,6 +66,7 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 			titulo.setFont(new Font("Book Antiqua",Font.BOLD,22));
 			 this.setButton(titulo,0, TITULO_WIDTH, MENU_HEIGHT);;
 			//BOTON PARA SUBIR FOTO
+			 
 			uploadButton = new JButton(this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, "iconUploadPhoto.png"));
 			this.setButton(uploadButton, VentanaPrincipal.WINDOW_WIDTH/2 -100, BUTTON_WIDTH, BUTTON_HEIGHT);
 			//PARTE DE BUSCAR 
@@ -82,12 +85,18 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 			//FOTO USER 
 			 //PhotoAppController.getInstance().getProfilePic();
 			//image=this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "raro.png");
-			 userButton = new JButton(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT,"default-profpic.png"));
+			 userButton = new JButton(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT,PhotoAppController.getInstance().getProfilePic()));
 			 this.setButton(userButton,VentanaPrincipal.WINDOW_WIDTH-100,USER_PHOTO_WIDTH,USER_PHOTO_HEIGHT);
 			//BOTON PREMIUN
 			 premiumButton = new JButton(this.getIcon(BUTTON_WIDTH,BUTTON_HEIGHT,"icon_tres_lineas.png"));
 			setButton(premiumButton,VentanaPrincipal.WINDOW_WIDTH-50,BUTTON_WIDTH,BUTTON_HEIGHT);
 			contenedor.add(this,BorderLayout.NORTH);
+			
+			titulo.addActionListener(new ActionListener() {
+			      public void actionPerformed(ActionEvent e) {
+			        // Recargar pagina principal
+			      }
+			    });
 			
 			uploadButton.addActionListener(new ActionListener() {
 			      public void actionPerformed(ActionEvent e) {
@@ -133,13 +142,18 @@ private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {
 	
 	}
 	private   ImageIcon getIcon(int width,int height,String filename ) {
+		/*ClassLoader classLoader = getClass().getClassLoader();
+		URL imageUrl = classLoader.getResource("img\\"+filename); // Ruta relativa de la imagen
+		ImageIcon imageIcon = new ImageIcon(imageUrl);*/
 		Image image;
-		image = Toolkit.getDefaultToolkit().getImage("C:\\Users\\elcrio\\git\\PhotoApp\\img\\"+filename);
+		//image = Toolkit.getDefaultToolkit().getImage(imageUrl);
 		image = Toolkit.getDefaultToolkit().getImage(ViewConstants.RUTA_FOTOS+filename);
 		// Escalar la imagen a un tamaño específico
+		
 		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		// Crear un ImageIcon a partir de la imagen escalada
 		return new ImageIcon(image);
+		//return imageIcon;
 	}
 	private void setComponent(JComponent component,int x,int y,int width,int height) {
 		component.setAlignmentX(x);

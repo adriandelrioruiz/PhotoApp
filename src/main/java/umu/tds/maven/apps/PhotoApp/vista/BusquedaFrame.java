@@ -22,7 +22,7 @@ public class BusquedaFrame extends JFrame{
 		JPanel panel= new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		for (DomainObject d : busqueda) {
-			System.out.println("query: "+d.getCode());
+			//System.out.println("query: "+d.getCode());
 			if(d instanceof User) {
 				User user=(User) d;
 				JPanel panelUser= new JPanel();
@@ -31,7 +31,7 @@ public class BusquedaFrame extends JFrame{
 				panelUser.setLayout(new BoxLayout(panelUser, BoxLayout.X_AXIS));
 				JLabel foto=new JLabel(PhotoAppController.getInstance().getProfilePic(user));
 				VentanaPrincipal.fixSize(foto,50,30);
-				System.out.println("query: "+PhotoAppController.getInstance().getProfilePic(user));
+				//System.out.println("query: "+PhotoAppController.getInstance().getProfilePic(user));
 				JLabel nombre=new JLabel(PhotoAppController.getInstance().getUsername(user));
 				VentanaPrincipal.fixSize(foto,100,30);
 				panelUser.add(foto);
@@ -44,6 +44,7 @@ public class BusquedaFrame extends JFrame{
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		this.add(scroll);
+		 this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 
