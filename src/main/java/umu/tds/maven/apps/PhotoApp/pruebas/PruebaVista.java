@@ -26,6 +26,8 @@ public class PruebaVista extends JFrame{
 	}
 
 	public static void main(String[] args) {
+		// PON TU RUTA AQUI
+		ViewConstants.RUTA_FOTOS = "C:\\Users\\adria\\eclipse-workspace\\PhotoApp2\\img\\";
 		LoggedFrame lf = new LoggedFrame();
 		lf.setLocationRelativeTo(null);
 		lf.setDefaultCloseOperation(EXIT_ON_CLOSE);

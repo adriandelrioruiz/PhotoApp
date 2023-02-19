@@ -1,8 +1,6 @@
 package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -14,18 +12,11 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
@@ -95,41 +86,13 @@ public class UploadPhotoFrame extends JFrame {
 			return;
 		}
 		
-		JFrame frame = new JFrame();
-		frame.setSize(700, 420);
-		frame.setLocationRelativeTo(null);
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		JTextField titulo = new JTextField();
-		LoggedFrame.fixSize(titulo, 700, 50);
-		titulo.setText("Añade titulo a tu Foto");
-		titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-		frame.getContentPane().add(titulo);
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		File selectedFile = fileChooser.getSelectedFile();
 		Image image = Toolkit.getDefaultToolkit().getImage(path);
 		// Escalar la imagen a un tamaño específico
 		image = image.getScaledInstance(340, 300, Image.SCALE_SMOOTH);
-		JLabel label = new JLabel(new ImageIcon(image));
-		panel.add(label);
-		JTextField description = new JTextField();
-		LoggedFrame.fixSize(description, 340, 300);
-		description.setText("Añade un comentario a tu Foto");
-		panel.add(description);
-		frame.getContentPane().add(panel);
-		JButton boton = new JButton("Subir Foto");
-		boton.setBackground(ViewConstants.APP_GREEN_COLOR);
-		LoggedFrame.fixSize(boton, 200, 30);
-		boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		frame.getContentPane().add(boton);
-		frame.setVisible(true);
-		boton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//SubirFoto(path, description.getText(), titulo.getText());
-				frame.dispose();
-			}
-		});
+		
+		@SuppressWarnings("unused")
+		ShowNewImagePane sip = new ShowNewImagePane(image);
+		
 	}
 	
 	private void mostrarMensajeError() {
