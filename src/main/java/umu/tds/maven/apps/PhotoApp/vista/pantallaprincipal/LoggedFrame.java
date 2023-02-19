@@ -61,8 +61,7 @@ public class LoggedFrame extends JFrame {
 	    feedPane = new FeedPane();
 	    centerPane.add(feedPane, "feed"); // Agrega el panel feedPane al panel secundario con el nombre "feed"
 
-	    User user = new User("Adrian del Rio", "adri@gmail", "adriandelrio", "password", new Date(), false, ViewConstants.RUTA_FOTOS + "default-profpic.png", "myBio");
-	    myProfilePane = new MyProfilePane(user);
+	    myProfilePane = new MyProfilePane();
 	    centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre "profile"
 	    myProfilePane.setVisible(false); // Lo deja no visible
 	}

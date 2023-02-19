@@ -60,18 +60,24 @@ public class PostRepository {
 	}
 	
 	// Método para obtener las últimas 10 fotos de los usuarios a los que sigue un usuario
-	public List<Post> getFeed(List<User> followed) {
+	public List<Photo> getFeed(List<User> followed) {
 		// Obtenemos todos los posts de los seguidos por el usuario ordenados por fecha en orden ascendente
 		List<Post> postsOfFollowed = postsById.values().stream().filter((p)->followed.contains(p.getUser())).sorted().toList();
+		// Solo nos quedamos con las fotos
+		List<Photo> photosOfFollowed = new LinkedList<>();
+		for (Post p: postsOfFollowed)
+			if (p instanceof Photo)
+				photosOfFollowed.add((Photo)p);
+		
 		// Nos quedamos con los últimos 10, o en caso de que haya menos de 10, con todos ellos
-		if (postsOfFollowed.size() <= 10)
-			return postsOfFollowed;
-		List<Post> postsOfFeed = new LinkedList<>();
+		if (photosOfFollowed.size() <= POSTS_IN_FEED)
+			return photosOfFollowed;
+		List<Photo> photosOfFeed = new LinkedList<>();
 		// Vamos añadiendo los posts
-		for(int i = postsOfFollowed.size() - POSTS_IN_FEED - 1; i < postsOfFollowed.size() - 1; i++) {
-			postsOfFeed.add(postsOfFollowed.get(i));
+		for(int i = photosOfFollowed.size() - POSTS_IN_FEED - 1; i < photosOfFollowed.size() - 1; i++) {
+			photosOfFeed.add(photosOfFollowed.get(i));
 		}
-		return postsOfFeed;
+		return photosOfFeed;
 	}
 	
 }

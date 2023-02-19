@@ -26,8 +26,6 @@ import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 @SuppressWarnings("serial")
 public abstract class AbstractProfilePane extends JPanel {
 	
-	protected User user;
-	
 	protected PhotoAppController controller;
 	
 	protected JFrame frame;
@@ -38,11 +36,15 @@ public abstract class AbstractProfilePane extends JPanel {
 	protected List<String> photos;
 	protected List<List<String>> albums;
 
-	public AbstractProfilePane(User user) {
-		this.user = user;
+	public AbstractProfilePane() {
+		initializeFields();
 		this.controller = PhotoAppController.getInstance();
 		addPhotos();
 		initialize();
+	}
+	
+	private void initializeFields() {
+		
 	}
 	
 	private void addPhotos() {
@@ -81,7 +83,7 @@ public abstract class AbstractProfilePane extends JPanel {
 		
 		// Creamos la imagen foto de perfil
 		try {
-			Image profilePic = ImageIO.read(new File(user.getProfilePic()));
+			Image profilePic = ImageIO.read(new File(getProfilePic()));
 			JLabel lblProfilePic = new JLabel(new ImageIcon(profilePic.getScaledInstance(150, 150, Image.SCALE_SMOOTH)));
 			GridBagConstraints gbc_lblProfilePic = new GridBagConstraints();
 			gbc_lblProfilePic.gridheight = 4;
@@ -97,7 +99,7 @@ public abstract class AbstractProfilePane extends JPanel {
 		}
 		
 		
-		JLabel lblEmail = new JLabel(user.getUserName());
+		JLabel lblEmail = new JLabel(getUserName());
 		lblEmail.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
 		lblEmail.setBounds(50, 50, 50, 50);
 		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
@@ -109,7 +111,7 @@ public abstract class AbstractProfilePane extends JPanel {
 		northPanel.add(lblEmail, gbc_lblEmail);
 		
 		
-		JLabel lblPosts = new JLabel(String.valueOf(user.getPhotos().size() + user.getAlbums().size()));
+		JLabel lblPosts = new JLabel(String.valueOf(getNumOfPosts()));
 		lblPosts.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPosts.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
 		GridBagConstraints gbc_lblPosts = new GridBagConstraints();
@@ -139,7 +141,7 @@ public abstract class AbstractProfilePane extends JPanel {
 		gbc_lblFollowers.fill = GridBagConstraints.HORIZONTAL;
 		northPanel.add(lblFollowers, gbc_lblFollowers);
 		
-		JLabel lblNFollowers = new JLabel(String.valueOf(user.getFollowers().size()));
+		JLabel lblNFollowers = new JLabel(String.valueOf(getFollowers()));
 		lblNFollowers.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNFollowers.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
 		GridBagConstraints gbc_lblNFollowers = new GridBagConstraints();
@@ -159,7 +161,7 @@ public abstract class AbstractProfilePane extends JPanel {
 		gbc_lblFollowed.fill = GridBagConstraints.HORIZONTAL;
 		northPanel.add(lblFollowed, gbc_lblFollowed);
 		
-		JLabel lblNFollowed = new JLabel(String.valueOf(user.getFollowed().size()));
+		JLabel lblNFollowed = new JLabel(String.valueOf(getFollowed()));
 		lblNFollowed.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNFollowed.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
 		GridBagConstraints gbc_lblNFollowed = new GridBagConstraints();
@@ -170,7 +172,7 @@ public abstract class AbstractProfilePane extends JPanel {
 		northPanel.add(lblNFollowed, gbc_lblNFollowed);
 		
 		
-		JLabel lblFullName = new JLabel(user.getFullName());
+		JLabel lblFullName = new JLabel(getFullName());
 		lblFullName.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
 		GridBagConstraints gbc_lblFullName = new GridBagConstraints();
 		gbc_lblFullName.gridx = 1;
@@ -184,6 +186,14 @@ public abstract class AbstractProfilePane extends JPanel {
 	protected abstract void addListeners();
 	
 	protected abstract void createCenterPanel();
+	
+	// Según el perfil que sea, estas funciones devolverán un valor distinto
+	protected abstract String getProfilePic();
+	protected abstract int getNumOfPosts();
+	protected abstract String getUserName();
+	protected abstract String getFullName();
+	protected abstract int getFollowers();
+	protected abstract int getFollowed();
 
 }
 

@@ -8,6 +8,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -34,7 +36,7 @@ public class MenuPane extends JPanel {
 	private static final int SEARCH_HEIGHT = 25;
 	private static final int SEARCH_WIDTH = 100;
 	
-	private JTextField txtTexto;
+	private JTextField txtSearch;
 	private JButton uploadButton, lupaButton, userButton, premiumButton, titulo;
 	private ImageIcon image;
 	private LoggedFrame frame;
@@ -60,15 +62,29 @@ public class MenuPane extends JPanel {
 		this.setButton(uploadButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		// Buscar
-		txtTexto = new JTextField();
-		txtTexto.setAlignmentX(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 - 50);
-		LoggedFrame.fixSize(txtTexto, SEARCH_WIDTH, SEARCH_HEIGHT);
-		txtTexto.setText("Search");
-		txtTexto.setFont(new Font("Book Antiqua", Font.BOLD, 12));
-		txtTexto.setEditable(true);
-		txtTexto.setOpaque(true);
-		this.add(txtTexto);
-		txtTexto.setColumns(10);
+		txtSearch = new JTextField();
+		txtSearch.setAlignmentX(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 - 50);
+		LoggedFrame.fixSize(txtSearch, SEARCH_WIDTH, SEARCH_HEIGHT);
+		txtSearch.setText("Search");
+		txtSearch.setFont(new Font("Book Antiqua", Font.BOLD, 12));
+		txtSearch.setEditable(true);
+		txtSearch.setOpaque(true);
+		txtSearch.setFocusable(false);
+		
+		txtSearch.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!txtSearch.isFocusable()) {
+					txtSearch.setFocusable(true);
+					txtSearch.grabFocus();
+					txtSearch.setText("");
+				}
+			}
+		});
+		
+		this.add(txtSearch);
+		txtSearch.setColumns(10);
 		// Bonton lupa
 		lupaButton = new JButton(this.getIcon(BUTTON_WIDTH, SEARCH_HEIGHT, "icon_lupa.png"));
 		this.setButton(lupaButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 + 50, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -89,7 +105,7 @@ public class MenuPane extends JPanel {
 		});
 		lupaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String query = txtTexto.getText();
+				String query = txtSearch.getText();
 				System.out.println("query: " + query);
 				new SearchFrame(query);
 			}
