@@ -33,36 +33,17 @@ public abstract class AbstractProfilePane extends JPanel {
 	protected JPanel centerPanel;
 	
 	// Fotos que contendrá el perfil
-	protected List<String> photos;
-	protected List<List<String>> albums;
+	protected List<Integer> photos;
+	protected List<Integer> albums;
 
 	public AbstractProfilePane() {
-		initializeFields();
 		this.controller = PhotoAppController.getInstance();
-		addPhotos();
+		initializePhotos();
 		initialize();
 	}
 	
-	private void initializeFields() {
-		
-	}
-	
-	private void addPhotos() {
-		this.photos = new ArrayList<>();
-		for (int i = 0; i < 6; i++) {
-			photos.add(ViewConstants.RUTA_FOTOS + "default-profpic.png");
-			photos.add(ViewConstants.RUTA_FOTOS + "flecha_derecha.png");
-		}
-		
-		albums = new ArrayList<>();
-		
-		for(int j = 0; j < 8; j++) {
-			ArrayList<String> listPhotos = new ArrayList<>();
-			listPhotos.add(ViewConstants.RUTA_FOTOS + "icon_lupa.png");
-			albums.add(listPhotos);
-		}
-		
-	}
+	protected abstract void initializePhotos();
+
 	
 	protected void initialize() {
 		//TODO DESCOMENTAR setBackground(Color.WHITE);
@@ -187,7 +168,7 @@ public abstract class AbstractProfilePane extends JPanel {
 	
 	protected abstract void createCenterPanel();
 	
-	// Según el perfil que sea, estas funciones devolverán un valor distinto
+	// Según el perfil que sea, estas funciones devolverán un valor
 	protected abstract String getProfilePic();
 	protected abstract int getNumOfPosts();
 	protected abstract String getUserName();

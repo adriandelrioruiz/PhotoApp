@@ -522,10 +522,10 @@ public class PhotoAppController {
 
 	// Método para obtener los últimos 10 posts que han publicado los usuarios a los
 	// que sigues
-	public List<String> getFeed() {
+	public List<Integer> getFeed() {
 		if (user == null)
 			return null;
-		return postRepository.getFeed(user.getFollowed()).stream().map((p) -> p.getPath()).toList();
+		return postRepository.getFeed(user.getFollowed()).stream().map((p) -> p.getCode()).toList();
 
 	}
 
@@ -633,6 +633,27 @@ public class PhotoAppController {
 	public List<Integer> getAlbums(String username) {
 		return userRepository.getUserByUsername(username).getAlbums().stream().map((p) -> p.getCode()).toList();
 	}
+	
+	// Obtener el path de una foto a partir de su id
+	public String getPath(int id) {
+		return postRepository.getPhoto(id).getPath();
+	}
+
+	// Obtener el nombre de usuario del propietario de una foto a partir de su id
+	public String getOwnerOfPhoto(int id) {
+		return postRepository.getPhoto(id).getUser().getUserName();
+	}
+	
+	// Obtener los likes de una foto a partir de su id
+	public int getLikes(int id) {
+		return postRepository.getPhoto(id).getLikes();
+	}
+	
+	// Obtener todas las fotos de un album
+	public List<Integer> getPhotosOfAlbum(int albumId) {
+		return postRepository.getPhotosOfAlbum(albumId);
+	}
+	
 
 	/* Funciones privadas */
 	// Función para extraer los hashtags

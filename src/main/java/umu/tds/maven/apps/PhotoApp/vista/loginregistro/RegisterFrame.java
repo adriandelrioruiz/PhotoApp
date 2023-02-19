@@ -250,7 +250,7 @@ public class RegisterFrame extends AbstractRegisterFrame {
 				
 				Codes code = controller.registerUser(txtFullName.getText(), txtEmail.getText(), 
 						txtUsername.getText(), txtPassword.getText(), 
-						calendar.getDate(), fileChooser.getSelectedFile().getName(), bio);
+						calendar.getDate(), fileChooser.getSelectedFile().getAbsolutePath(), bio);
 				
 				switch(code) {
 				

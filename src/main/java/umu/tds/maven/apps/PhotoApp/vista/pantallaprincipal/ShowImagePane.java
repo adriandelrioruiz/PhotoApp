@@ -5,7 +5,10 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -14,8 +17,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
+
 @SuppressWarnings("serial")
 public abstract class ShowImagePane extends JFrame {
+	
+	protected PhotoAppController controller = PhotoAppController.getInstance();
 	
 	protected JPanel imageTitlePane;
 	protected JPanel imageAndCommentPane;
@@ -23,6 +30,7 @@ public abstract class ShowImagePane extends JFrame {
 	
 	protected JTextArea comment;
 	
+	protected String path;
 	protected Image image;
 	
 	public ShowImagePane(Image image) {
@@ -34,6 +42,7 @@ public abstract class ShowImagePane extends JFrame {
 		initialize();
 		setVisible(true);
 	}
+	
 	
 	private void initialize() {
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));

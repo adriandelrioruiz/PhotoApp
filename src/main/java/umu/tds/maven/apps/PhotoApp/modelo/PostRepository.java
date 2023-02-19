@@ -59,6 +59,16 @@ public class PostRepository {
 		postsById.remove(post.getCode());
 	}
 	
+	// Método para recuperar una foto a partir de su id
+	public Photo getPhoto(int id) {
+		return (Photo)postsById.get(id);
+	}
+	
+	// Método para obtener todas las fotos de un álbum
+	public List<Integer> getPhotosOfAlbum(int albumId) {
+		return ((Album)postsById.get(albumId)).getPhotos().stream().map((p)->p.getCode()).toList();
+	}
+	
 	// Método para obtener las últimas 10 fotos de los usuarios a los que sigue un usuario
 	public List<Photo> getFeed(List<User> followed) {
 		// Obtenemos todos los posts de los seguidos por el usuario ordenados por fecha en orden ascendente

@@ -4,9 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -18,7 +19,6 @@ public class ShowUploadedImagePane extends ShowImagePane {
 
 	public ShowUploadedImagePane(Image image) {
 		super(image);
-		
 	}
 
 	@Override
@@ -64,10 +64,7 @@ public class ShowUploadedImagePane extends ShowImagePane {
 	}
 	
 	@Override
-	protected void createImageTitlePane() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+	protected void createImageTitlePane() {}
+
+
 }

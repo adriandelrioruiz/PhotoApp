@@ -11,6 +11,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
+import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
@@ -26,13 +28,22 @@ public class LoggedFrame extends JFrame {
 	private MyProfilePane myProfilePane;
 	private FeedPane feedPane;
 	
+	// Controlador
+	private PhotoAppController controller;
+	
 	private MenuPane menuPane;
+	
+	private static LoggedFrame lf;
 
 	public LoggedFrame() {
+		lf = this;
+		controller = PhotoAppController.getInstance();
 		initialize();
-		
 	}
 	
+	public static LoggedFrame getInstance() {
+		return lf;
+	}
 	private void initialize() {
 		setResizable(false);
 		setLayout(new BorderLayout());
@@ -58,7 +69,7 @@ public class LoggedFrame extends JFrame {
 		centerPane = new JPanel(new CardLayout()); // Crea un panel secundario
 	    getContentPane().add(centerPane, BorderLayout.CENTER); // Agrega el panel secundario al contenedor principal
 
-	    feedPane = new FeedPane();
+	    feedPane = new FeedPane(controller.getFeed());
 	    centerPane.add(feedPane, "feed"); // Agrega el panel feedPane al panel secundario con el nombre "feed"
 
 	    myProfilePane = new MyProfilePane();
@@ -85,14 +96,24 @@ public class LoggedFrame extends JFrame {
 	// Método para cambiar el panel sur
 	public void changeToFeedPanel() {
 		CardLayout cl = (CardLayout) centerPane.getLayout();
-		cl.show(centerPane, "feed"); // Muestra el panel "feed"
+		cl.show(centerPane, "feed");
 		revalidate();
 		repaint();
 	}
 	
 	public void changeToProfilePanel() {
 		CardLayout cl = (CardLayout) centerPane.getLayout();
-		cl.show(centerPane, "profile"); // Muestra el panel "feed"
+		cl.show(centerPane, "profile"); 
+		revalidate();
+		repaint();
+	}
+	
+	// Para que se actualice la vista del perfil en caso de que se suba una nueva foto
+	public void updateProfile() {
+		centerPane.remove(myProfilePane);
+		myProfilePane = new MyProfilePane();
+	    centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre "profile"
+	    changeToProfilePanel();
 		revalidate();
 		repaint();
 	}

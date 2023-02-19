@@ -127,4 +127,10 @@ public class OthersProfilePane extends AbstractProfilePane {
 		return controller.getFollowed(userName);
 	}
 
+	@Override
+	protected void initializePhotos() {
+		photos = controller.getPhotos(userName);
+		albums = controller.getAlbums(userName);
+	}
+
 }

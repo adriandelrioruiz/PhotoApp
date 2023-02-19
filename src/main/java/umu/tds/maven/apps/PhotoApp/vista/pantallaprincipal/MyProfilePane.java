@@ -6,14 +6,11 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
 
-import org.w3c.dom.css.ViewCSS;
-
-import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.loginregistro.EditRegisterFrame;
 
@@ -67,7 +64,13 @@ public class MyProfilePane extends AbstractProfilePane {
 	
 	@Override
 	protected void createCenterPanel() {
-		centerPanel = new AllPostsPane(photos, albums, true);
+		List<String> photoPaths = photos.stream().map((p)->controller.getPath(p)).toList();
+		List<List<String>> albumPaths = new LinkedList<>();
+		for (Integer albumId : albums) {
+			List<String> albumPhotoPaths = controller.getPhotosOfAlbum(albumId).stream().map((id)->controller.getPath(id)).toList();
+			albumPaths.add(albumPhotoPaths);
+		}
+		centerPanel = new AllPostsPane(photoPaths, albumPaths, true);
 		add(centerPanel, BorderLayout.CENTER);
 	}
 
@@ -111,6 +114,14 @@ public class MyProfilePane extends AbstractProfilePane {
 	@Override
 	protected int getFollowed() {
 		return controller.getFollowed();
+	}
+
+
+
+	@Override
+	protected void initializePhotos() {
+		photos = controller.getPhotos();
+		albums = controller.getAlbums();
 	}
 
 	

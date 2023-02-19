@@ -40,9 +40,12 @@ public class MenuPane extends JPanel {
 	private JButton uploadButton, lupaButton, userButton, premiumButton, titulo;
 	private ImageIcon image;
 	private LoggedFrame frame;
+	
+	private PhotoAppController controller;
 
 	// PARTE DE ARRIBA DE LA PANTALLA
 	public MenuPane(LoggedFrame frame) {
+		this.controller = PhotoAppController.getInstance();
 		this.frame = frame;
 		initialize();
 	}
@@ -58,7 +61,7 @@ public class MenuPane extends JPanel {
 		this.setButton(titulo, 0, TITULO_WIDTH, MENU_HEIGHT);
 
 		// Botón para subir foto
-		uploadButton = new JButton(this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, "iconUploadPhoto.png"));
+		uploadButton = new JButton(this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + "iconUploadPhoto.png"));
 		this.setButton(uploadButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		// Buscar
@@ -86,15 +89,15 @@ public class MenuPane extends JPanel {
 		this.add(txtSearch);
 		txtSearch.setColumns(10);
 		// Bonton lupa
-		lupaButton = new JButton(this.getIcon(BUTTON_WIDTH, SEARCH_HEIGHT, "icon_lupa.png"));
+		lupaButton = new JButton(this.getIcon(BUTTON_WIDTH, SEARCH_HEIGHT, ViewConstants.RUTA_FOTOS +  "icon_lupa.png"));
 		this.setButton(lupaButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 + 50, BUTTON_WIDTH, BUTTON_HEIGHT);
 		// FOTO USER
-		// PhotoAppController.getInstance().getProfilePic();
-		// image=this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "raro.png");
-		userButton = new JButton(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "default-profpic.png"));
+
+		userButton = new JButton(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic()));
 		this.setButton(userButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 100, USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT);
 		// BOTON PREMIUN
-		premiumButton = new JButton(this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, "icon_tres_lineas.png"));
+		premiumButton = new JButton(this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + 
+				"icon_tres_lineas.png"));
 		setButton(premiumButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 50, BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		uploadButton.addActionListener(new ActionListener() {
@@ -113,7 +116,6 @@ public class MenuPane extends JPanel {
 		userButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				User user = new User("Adrian del Rio", "adri@gmail", "adriandelrio", "password", new Date(), false, "myPhoto", "myBio");
 				frame.changeToProfilePanel();
 			}
 		});
@@ -139,9 +141,9 @@ public class MenuPane extends JPanel {
 		});
 	}
 
-	private ImageIcon getIcon(int width, int height, String filename) {
+	private ImageIcon getIcon(int width, int height, String path) {
 		Image image;
-		image = Toolkit.getDefaultToolkit().getImage(ViewConstants.RUTA_FOTOS + filename);
+		image = Toolkit.getDefaultToolkit().getImage(path);
 		// Escalar la imagen a un tamaño específico
 		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		// Crear un ImageIcon a partir de la imagen escalada

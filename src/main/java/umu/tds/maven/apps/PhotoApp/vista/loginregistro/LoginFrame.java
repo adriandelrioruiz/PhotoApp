@@ -25,6 +25,7 @@ import javax.swing.border.Border;
 import umu.tds.maven.apps.PhotoApp.controlador.Codes;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.MyProfilePane;
 
 public class LoginFrame extends JFrame {
@@ -259,8 +260,8 @@ public class LoginFrame extends JFrame {
 				default:
 					// Cerramos la ventana de login
 					dispose();
-					// Abrimos el perfil
-					new MyProfilePane();
+					// Abrimos la app
+					new LoggedFrame();
 					break;
 					
 				}

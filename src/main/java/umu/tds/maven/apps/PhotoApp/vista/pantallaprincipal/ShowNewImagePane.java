@@ -6,7 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,8 +26,9 @@ public class ShowNewImagePane extends ShowImagePane {
 	// JTextField para poner el título
 	private JTextField tituloField;
 
-	public ShowNewImagePane(Image image) {
+	public ShowNewImagePane(String path, Image image) {
 		super(image);
+		this.path = path;
 	}
 
 	@Override
@@ -68,13 +72,23 @@ public class ShowNewImagePane extends ShowImagePane {
 			public void actionPerformed(ActionEvent e) {
 				if (tituloField.getText().equals(DEFAULT_TITLE_TEXT) || tituloField.getText().isEmpty())
 					JOptionPane.showMessageDialog(new JButton("Aceptar"), "Introduce un título a tu foto");
-				else
-					// Subir la foto desde el controlador comprobando el texto de la descripción
+				else {
+					String descripcion;
+					if (comment.equals(DEFAULT_COMMENT_TEXT))
+						descripcion = "";
+					else
+						descripcion = comment.getText();
+					controller.addPhoto(tituloField.getText(), descripcion, path);
+					LoggedFrame.getInstance().updateProfile();
 					dispose();
+				}
+					
 			}
 		});
 
 		getContentPane().add(exitButtonPane, BorderLayout.SOUTH);
 	}
+
+
 
 }

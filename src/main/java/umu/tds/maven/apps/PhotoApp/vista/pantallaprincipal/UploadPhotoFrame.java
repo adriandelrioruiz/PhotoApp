@@ -87,11 +87,9 @@ public class UploadPhotoFrame extends JFrame {
 		}
 		
 		Image image = Toolkit.getDefaultToolkit().getImage(path);
-		// Escalar la imagen a un tamaño específico
-		image = image.getScaledInstance(340, 300, Image.SCALE_SMOOTH);
 		
 		@SuppressWarnings("unused")
-		ShowNewImagePane sip = new ShowNewImagePane(image);
+		ShowNewImagePane sip = new ShowNewImagePane(path, image);
 		
 	}
 	
