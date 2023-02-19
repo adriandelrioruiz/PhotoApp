@@ -20,7 +20,9 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
@@ -216,6 +218,8 @@ public class AllPostsPane extends JPanel {
 	public void addImage(Image image, JPanel panel) {
 		JLabel imageIcon = new JLabel(new ImageIcon(
 				image.getScaledInstance(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 3 - 4, 120, Image.SCALE_SMOOTH)));
+		
+		// Añadimos el listener para que aparezca la foto
 		imageIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -223,7 +227,25 @@ public class AllPostsPane extends JPanel {
 				ShowUploadedImagePane sip = new ShowUploadedImagePane(image);
 			}
 		});
+		
+		// Añadimos el menú contextual en caso de que sea una foto nuestra
+		JPopupMenu menuContextual = new JPopupMenu(); 
+		JMenuItem deletePhoto = new JMenuItem("Delete"); 
+		deletePhoto.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Eliminar la imagen
+				
+			}
+		});
+		
+		menuContextual.add(deletePhoto); 
+		imageIcon.setComponentPopupMenu(menuContextual);
+		
+		// Añadimos el label al panel
 		panel.add(imageIcon);
+		
 	}
 
 	@SuppressWarnings("serial")
@@ -353,6 +375,8 @@ public class AllPostsPane extends JPanel {
 	private void changeToAddPhotoPane() {
 
 	}
+	
+
 	
 	// Para llevar el contador de la página de las galerías
 	class PageCounter {

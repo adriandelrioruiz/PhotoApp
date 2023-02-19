@@ -47,12 +47,12 @@ public abstract class AbstractProfilePane extends JPanel {
 	
 	private void addPhotos() {
 		this.photos = new ArrayList<>();
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 8; i++)
 			photos.add(ViewConstants.RUTA_FOTOS + "default-profpic.png");
 		
 		albums = new ArrayList<>();
 		
-		for(int j = 0; j < 20; j++) {
+		for(int j = 0; j < 8; j++) {
 			ArrayList<String> listPhotos = new ArrayList<>();
 			listPhotos.add(ViewConstants.RUTA_FOTOS + "icon_lupa.png");
 			albums.add(listPhotos);
