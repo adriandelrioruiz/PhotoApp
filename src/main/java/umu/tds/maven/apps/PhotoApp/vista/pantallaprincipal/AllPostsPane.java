@@ -52,9 +52,7 @@ public class AllPostsPane extends JPanel {
 	private JPanel photosPane;
 	private JPanel albumsPane;
 	private JPanel photosOrAlbumsPane;
-	// Panel que contendrá dos botones para ir desplazándose por la galería de
-	// imágenes
-	private JPanel movePagePane;
+
 	// Panel que contendrá los botones para cambiar entre una galería y otra
 	private JPanel changeGalleryPane;
 
@@ -229,19 +227,33 @@ public class AllPostsPane extends JPanel {
 		});
 		
 		// Añadimos el menú contextual en caso de que sea una foto nuestra
-		JPopupMenu menuContextual = new JPopupMenu(); 
-		JMenuItem deletePhoto = new JMenuItem("Delete"); 
-		deletePhoto.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Eliminar la imagen
+		if (deletable) {
+			JPopupMenu menuContextual = new JPopupMenu(); 
+			JMenuItem deletePhoto = new JMenuItem("Delete"); 
+			deletePhoto.addActionListener(new ActionListener() {
 				
-			}
-		});
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					panel.removeAll();
+					// Eliminar la imagen en la galería que esté visible
+					if (photosPane.isVisible()) {
+						photos.remove(image);
+						showPage(photos, panel, actualPhotosPage);
+					}
+					
+					else if (albumsPane.isVisible()) {
+						albums.remove(image);
+						showPage(new ArrayList<>(albums.keySet()), panel, actualAlbumsPage);
+					}
+						
+					
+				}
+			});
+			
+			menuContextual.add(deletePhoto); 
+			imageIcon.setComponentPopupMenu(menuContextual);
+		}
 		
-		menuContextual.add(deletePhoto); 
-		imageIcon.setComponentPopupMenu(menuContextual);
 		
 		// Añadimos el label al panel
 		panel.add(imageIcon);
