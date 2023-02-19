@@ -1,6 +1,7 @@
 package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,7 +13,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -22,161 +24,296 @@ import javax.swing.JPanel;
 
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
+/** Clase que define el panel que mostrará todas las fotos y álbumes de un usuario concreto. */
 public class AllPostsPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static final int MAX_IMAGES_PER_PAGE = 9;
-	private ArrayList<Image> images = new ArrayList<>();
-	private int numPages;
-	private int actualPage;
+	private static final int INITIAL_PAGE = 1;
 
-	// Panel que contendrá las imágenes de las fotos o los albumes
-	private JPanel imagesPane;
-	// Panel que contendrá dos botones para ir desplazándose por la galería de imágenes
+	private ArrayList<Image> photos = new ArrayList<>();
+	private HashMap<Image, List<Image>> albums = new HashMap<>();
+
+	// Para saber el número de páginas que habrá en la galería de álbumes o fotos
+	private int numPhotosPage;
+	private int numAlbumsPage;
+	
+	// Para saber si las imágenes se pueden borrar o no
+	private boolean deletable;
+
+	// Para saber en que página de la galería de álbumes o fotos estamos
+	private PageCounter actualPhotosPage = new PageCounter();
+	private PageCounter actualAlbumsPage = new PageCounter();
+
+	// Paneles que contendrá las imágenes de las fotos o los albumes
+	private JPanel centerPane;
+	private JPanel photosPane;
+	private JPanel albumsPane;
+	private JPanel photosOrAlbumsPane;
+	// Panel que contendrá dos botones para ir desplazándose por la galería de
+	// imágenes
 	private JPanel movePagePane;
-	// Panel que contendrá los label "fotos" y "albumes" para cambiar entre una galería y otra
+	// Panel que contendrá los botones para cambiar entre una galería y otra
 	private JPanel changeGalleryPane;
 
-	private JLabel leftIconLabel;
-	private JLabel rightIconLabel;
-	
 	private JButton seePhotosButton;
 	private JButton seeAlbumsButton;
 	private JButton addPhotoToAlbumButton;
-	
 
-	public AllPostsPane() {
+	public AllPostsPane(List<String> photos, List<List<String>> albums, boolean deletable) {
+		// Creamos la lista de fotos
+		photos.stream().forEach((p) -> {
+			try {
+				this.photos.add(ImageIO.read(new File(p)));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+
+		// Creamos la lista de álbumes
+		for (List<String> album : albums) {
+			// Tomamos la clave del mapa de álbumes la primera foto del mismo
+			Image key = null;
+			try {
+				key = ImageIO.read(new File(album.get(0)));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			// Creamos una lista con todas las fotos del álbum
+			List<Image> photosInAlbum = new ArrayList<>();
+			album.stream().forEach((p) -> {
+				try {
+					photosInAlbum.add(ImageIO.read(new File(p)));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+			this.albums.put(key, photosInAlbum);
+		}
+		
+		this.deletable = deletable;
+
+		// Calculamos el número de páginas
 		setLayout(new BorderLayout());
-		addImages();
-		numPages = (int) Math.ceil((double) images.size() / MAX_IMAGES_PER_PAGE);
-		actualPage = 1;
+		numPhotosPage = (int) Math.ceil((double) this.photos.size() / MAX_IMAGES_PER_PAGE);
+		numAlbumsPage = (int) Math.ceil((double) this.albums.keySet().size() / MAX_IMAGES_PER_PAGE);
 
-		createImagesPane();
-		createMovePagePane();
-		createChangeGalleryPane();
+		// Creamos el panel centrals
+		createCenterPane();
 	}
-	
+
+	// Método para crear el panel central que contendrá las fotos/álbumes
+	private void createCenterPane() {
+		centerPane = new JPanel();
+		centerPane.setLayout(new BorderLayout());
+		add(centerPane, BorderLayout.CENTER);
+
+		// Creamos el panel que contiene los botones de cambio de galerías
+		createChangeGalleryPane();
+		// Creamos las galerías
+		createPhotosOrAlbumsPane();
+	}
+
+	// Método para crear el panel que contendrá los botones de cambio de fotos a
+	// álbumes.
 	private void createChangeGalleryPane() {
 		changeGalleryPane = new JPanel();
 		FlowLayout layout = new FlowLayout(0, 10, 0);
 		layout.setAlignment(FlowLayout.CENTER);
 		changeGalleryPane.setLayout(layout);
-		add(changeGalleryPane, BorderLayout.NORTH);
+		centerPane.add(changeGalleryPane, BorderLayout.NORTH);
 		changeGalleryPane.setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 50));
-		
+
 		// Botón para ver las fotos
 		seePhotosButton = new JButton("VER FOTOS");
 		seePhotosButton.setBackground(ViewConstants.APP_GREEN_COLOR);
 		seePhotosButton.setVisible(false);
 		changeGalleryPane.add(seePhotosButton);
-		
+
 		// Botón para ver los álbumes
 		seeAlbumsButton = new JButton("VER ALBUMES");
 		seeAlbumsButton.setBackground(ViewConstants.APP_GREEN_COLOR);
 		changeGalleryPane.add(seeAlbumsButton);
-		
+
 		// Botón para añadir foto a álbum
 		addPhotoToAlbumButton = new JButton("AÑADIR FOTO A ALBUM");
 		addPhotoToAlbumButton.setBackground(ViewConstants.APP_GREEN_COLOR);
 		addPhotoToAlbumButton.setVisible(false);
 		changeGalleryPane.add(addPhotoToAlbumButton);
-		
+
 		seePhotosButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				seeAlbumsButton.setVisible(false);
-				addPhotoToAlbumButton.setVisible(false);
-				// Mostrar fotos
+				changeToSeePhotosPane();
 			}
 		});
-		
-		
+
+		seeAlbumsButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				changeToSeeAlbumsPane();
+			}
+		});
+
+		addPhotoToAlbumButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Mostrar frame de añadir foto
+			}
+		});
+
 	}
 
-	private void createImagesPane() {
-		imagesPane = new JPanel();
-		imagesPane.setLayout(new FlowLayout(0, 0, 0));
-		add(imagesPane, BorderLayout.CENTER);
-		imagesPane.setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 500));
+	// Panel variable que contendrá la galería de fotos o álbumes
+	private void createPhotosOrAlbumsPane() {
+		photosOrAlbumsPane = new JPanel(new CardLayout());
+		centerPane.add(photosOrAlbumsPane, BorderLayout.CENTER);
 
-		showPage();
+		// Creamos el panel de la galería de las fotos
+		photosPane = new JPanel(new BorderLayout());
+		photosOrAlbumsPane.add(photosPane, "photos");
+		JPanel imagesPaneForPhotos = createImagesPane(photos, photosPane, actualPhotosPage);
+		photosPane.add(imagesPaneForPhotos, BorderLayout.CENTER);
+		photosPane.add(new MovePagePane(photos, imagesPaneForPhotos, actualPhotosPage, numPhotosPage),
+				BorderLayout.SOUTH);
+
+		// Creamos el panel de la galería los álbumes
+		albumsPane = new JPanel(new BorderLayout());
+		photosOrAlbumsPane.add(albumsPane, "albums");
+		List<Image> firstAlbumsPhoto = new ArrayList<>(albums.keySet());
+		JPanel imagesPaneForAlbums = createImagesPane(firstAlbumsPhoto, albumsPane, actualAlbumsPage);
+		albumsPane.add(imagesPaneForAlbums, BorderLayout.CENTER);
+		albumsPane.add(new MovePagePane(firstAlbumsPhoto, imagesPaneForAlbums, actualAlbumsPage, numAlbumsPage),
+				BorderLayout.SOUTH);
+		albumsPane.setVisible(false);
+
 	}
 
-	private void createMovePagePane() {
-		movePagePane = new JPanel();
-		add(movePagePane, BorderLayout.SOUTH);
-		movePagePane.setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 70));
-		movePagePane.setLayout(null);
-
-		Image rightImage;
-		Image leftImage;
-		try {
-			rightImage = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "flecha_derecha.png"));
-			leftImage = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "flecha_izquierda.png"));
-
-			rightIconLabel = new JLabel(new ImageIcon(rightImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-			rightIconLabel.setSize(100, 30);
-			rightIconLabel.setLocation(400, 10);
-			rightIconLabel.addMouseListener(new RightButtonListener());
-			if (images.size() > MAX_IMAGES_PER_PAGE)
-				movePagePane.add(rightIconLabel);
-
-			leftIconLabel = new JLabel(new ImageIcon(leftImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-			leftIconLabel.addMouseListener(new LeftButtonListener());
-			leftIconLabel.setSize(100, 30);
-			leftIconLabel.setLocation(238, 10);
-			movePagePane.add(leftIconLabel);
-			leftIconLabel.setVisible(false);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	private JPanel createImagesPane(List<Image> images, JPanel imagesPane, PageCounter pc) {
+		JPanel photosPane = new JPanel();
+		photosPane.setLayout(new FlowLayout(0, 0, 0));
+		photosPane.setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 500));
+		showPage(images, photosPane, pc);
+		return photosPane;
 	}
 
 	// Método para mostrar una página de fotos o álbumes
-	private void showPage() {
-		for (int i = (actualPage - 1) * MAX_IMAGES_PER_PAGE; i < Math.min(images.size(),
-				actualPage * MAX_IMAGES_PER_PAGE); i++)
+	private void showPage(List<Image> images, JPanel imagesPane, PageCounter actualPage) {
+		for (int i = (actualPage.getPageCount() - 1) * MAX_IMAGES_PER_PAGE; i < Math.min(images.size(),
+				actualPage.getPageCount() * MAX_IMAGES_PER_PAGE); i++)
 			addImage(images.get(i), imagesPane);
-	}
-
-	public void addImage(Image image, JPanel panel) {
-		panel.add(new JLabel(new ImageIcon(
-				image.getScaledInstance(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 3 - 4, 120, Image.SCALE_SMOOTH))));
 		revalidate();
 		repaint();
 	}
 
-	class RightButtonListener extends MouseAdapter {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			actualPage++;
-			if (actualPage >= numPages) {
-				rightIconLabel.setVisible(false);
+	// Para pintar una imagen 
+	public void addImage(Image image, JPanel panel) {
+		JLabel imageIcon = new JLabel(new ImageIcon(
+				image.getScaledInstance(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 3 - 4, 120, Image.SCALE_SMOOTH)));
+		imageIcon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				@SuppressWarnings("unused")
+				ShowUploadedImagePane sip = new ShowUploadedImagePane(image);
 			}
-			leftIconLabel.setVisible(true);
-			imagesPane.removeAll();
-			showPage();
-		}
-
-		public void mouseEntered(MouseEvent e) {
-			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		}
+		});
+		panel.add(imageIcon);
 	}
 
-	class LeftButtonListener extends MouseAdapter {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			actualPage--;
-			if (actualPage <= 1) {
+	@SuppressWarnings("serial")
+	// Panel para el paso de fotos o álbumes de la galería
+	class MovePagePane extends JPanel {
+
+		private JLabel leftIconLabel;
+		private JLabel rightIconLabel;
+
+		public MovePagePane(List<Image> images, JPanel imagesPane, PageCounter actualPage, int numPages) {
+			super();
+			setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 70));
+			setLayout(null);
+
+			Image rightImage;
+			Image leftImage;
+			try {
+				rightImage = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "flecha_derecha.png"));
+				leftImage = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "flecha_izquierda.png"));
+
+				rightIconLabel = new JLabel(new ImageIcon(rightImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+				rightIconLabel.setSize(100, 30);
+				rightIconLabel.setName("right");
+				rightIconLabel.setLocation(400, 10);
+				if (images.size() > MAX_IMAGES_PER_PAGE)
+					add(rightIconLabel);
+
+				leftIconLabel = new JLabel(new ImageIcon(leftImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+				leftIconLabel.setName("left");
+				leftIconLabel.setSize(100, 30);
+				leftIconLabel.setLocation(238, 10);
+				add(leftIconLabel);
 				leftIconLabel.setVisible(false);
+				
+				rightIconLabel.addMouseListener(new ButtonListener(images, imagesPane, actualPage, numPages, rightIconLabel, leftIconLabel));
+				leftIconLabel.addMouseListener(new ButtonListener(images, imagesPane, actualPage, numPages, rightIconLabel, leftIconLabel));
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			rightIconLabel.setVisible(true);
+		}
+	}
+
+	// Handler para el botón que pasa a la siguiente página de la galería
+	class ButtonListener extends MouseAdapter {
+
+		PageCounter actualPage;
+		List<Image> images;
+		JPanel imagesPane;
+		int numPages;
+		JLabel rightIconLabel;
+		JLabel leftIconLabel;
+
+		public ButtonListener(List<Image> images, JPanel imagesPane, PageCounter actualPage, int numPages, JLabel rightIconLabel, JLabel leftIconLabel) {
+			this.actualPage = actualPage;
+			this.images = images;
+			this.imagesPane = imagesPane;
+			this.numPages = numPages;
+			this.rightIconLabel = rightIconLabel;
+			this.leftIconLabel = leftIconLabel;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			System.out.println(((JLabel)e.getSource()).getName());
+			
+			JLabel label = (JLabel)e.getSource();
+			// Si se ha pulsado el botón de la derecha
+			if (label.getName().equals("right")) {
+				// Pasar de página
+				actualPage.forward();
+				if (actualPage.getPageCount() >= numPages) {
+					label.setVisible(false);
+				}
+				leftIconLabel.setVisible(true);
+			}
+			
+			// Si se ha pulsado el botón de la izquierda
+			else if (label.getName().equals("left")) {
+				// Retroceder página
+				actualPage.backward();
+				if (actualPage.getPageCount() <= 1) {
+					label.setVisible(false);
+				}
+				rightIconLabel.setVisible(true);
+			}
+			
 			imagesPane.removeAll();
-			showPage();
+			showPage(images, imagesPane, actualPage);
 		}
 
 		public void mouseEntered(MouseEvent e) {
@@ -184,48 +321,57 @@ public class AllPostsPane extends JPanel {
 		}
 	}
 
-	// TODO borrar
-	private void addImages() {
-		try {
-			String[] matriz = new String[8];
-			matriz[0] = ViewConstants.RUTA_FOTOS + "default-profpic.png";
-			matriz[1] = ViewConstants.RUTA_FOTOS + "flecha_derecha.png";
-			matriz[2] = ViewConstants.RUTA_FOTOS + "flecha_izquierda.png";
-			matriz[3] = ViewConstants.RUTA_FOTOS + "icon_lupa.png";
-			matriz[4] = ViewConstants.RUTA_FOTOS + "icon_tres_lineas.png";
-			matriz[5] = ViewConstants.RUTA_FOTOS + "icono_comentario.png";
-			matriz[6] = ViewConstants.RUTA_FOTOS + "icono_like.png";
-			matriz[7] = ViewConstants.RUTA_FOTOS + "iconUploadPhoto.png";
-		
-			Random r = new Random();
-			for (int i = 0; i < 30; i++)
-				images.add(ImageIO.read(new File(matriz[r.nextInt(matriz.length)])));
-			
+	
+	// Para mostrar las fotos
+	private void changeToSeePhotosPane() {
+		// Cambiamos botones del panel changeGalleryPane
+		seeAlbumsButton.setVisible(true);
+		seePhotosButton.setVisible(false);
+		addPhotoToAlbumButton.setVisible(false);
 
+		// Cambiamos panel photosOrAlbumsPanel gracias al CardLayout
+		CardLayout cl = (CardLayout) photosOrAlbumsPane.getLayout();
+		cl.show(photosOrAlbumsPane, "photos");
+		revalidate();
+		repaint();
+	}
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	// Para mostrar los álbumes
+	private void changeToSeeAlbumsPane() {
+		// Cambiamos botones del panel changeGalleryPane
+		seeAlbumsButton.setVisible(false);
+		seePhotosButton.setVisible(true);
+		addPhotoToAlbumButton.setVisible(false);
+
+		// Cambiamos panel photosOrAlbumsPanel gracias al CardLayout
+		CardLayout cl = (CardLayout) photosOrAlbumsPane.getLayout();
+		cl.show(photosOrAlbumsPane, "albums");
+		revalidate();
+		repaint();
+	}
+
+	private void changeToAddPhotoPane() {
+
 	}
 	
-	class FotosAlbumesLabelHandler extends MouseAdapter {
+	// Para llevar el contador de la página de las galerías
+	class PageCounter {
 		
-		// Queremos que al cambiar el texto se cambie de fotos a albumes y viceversa
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// Si el texto está en "fotos", cambiar a "álbumes"
-			if (fotosAlbumesLabel.getText().equals("FOTOS")) {
-				fotosAlbumesLabel.setText("ALBUMES");
-				
-			
-			
-			
+		private int pageCount = INITIAL_PAGE;
+		
+		public int getPageCount() {
+			return pageCount;
 		}
 		
-		// Queremos que el cursor sea tipo mano para dar la impresión de botón
-		public void mouseEntered(MouseEvent e) {
-			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		// Método para pasar de página
+		public void forward() {
+			pageCount++;
+		}
+		
+		// Método para retroceder página
+		public void backward() {
+			pageCount--;
 		}
 	}
+
 }

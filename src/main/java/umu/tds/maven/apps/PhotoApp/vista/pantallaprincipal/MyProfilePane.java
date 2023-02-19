@@ -1,12 +1,17 @@
 package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
+
+import org.w3c.dom.css.ViewCSS;
 
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
@@ -19,7 +24,13 @@ public class MyProfilePane extends AbstractProfilePane {
 
 	public MyProfilePane(User user) {
 		super(user);
+		//TODO quitar
+		/*// Coger las fotos y álbumes del controlador
+		photos = null;
+		albums = null;*/
 	}
+	
+
 	
 	protected void createNorthPanel() {
 		
@@ -51,6 +62,13 @@ public class MyProfilePane extends AbstractProfilePane {
 				
 			}
 		});
+	}
+
+	
+	@Override
+	protected void createCenterPanel() {
+		centerPanel = new AllPostsPane(photos, albums, true);
+		add(centerPanel, BorderLayout.CENTER);
 	}
 
 	

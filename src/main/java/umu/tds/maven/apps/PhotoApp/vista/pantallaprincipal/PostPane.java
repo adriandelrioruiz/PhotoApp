@@ -3,25 +3,15 @@ package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.MouseInputAdapter;
-
-import org.w3c.dom.events.MouseEvent;
 
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
@@ -65,7 +55,6 @@ public class PostPane extends JPanel {
 		frame.setLocation(this.getX(), this.getY() + MenuPane.MENU_HEIGHT);
 		// Mostrar la ventana
 		frame.setVisible(true);
-
 	}
 
 	private void mostrarMenu(java.awt.event.MouseEvent e) {

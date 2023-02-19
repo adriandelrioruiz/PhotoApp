@@ -21,9 +21,11 @@ public class LoggedFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private MyProfilePane myProfilePane;
+	// El centerPane podra ir variando su contenido entre myProfilePane y feedPane
 	private JPanel centerPane;
+	private MyProfilePane myProfilePane;
 	private FeedPane feedPane;
+	
 	private MenuPane menuPane;
 
 	public LoggedFrame() {

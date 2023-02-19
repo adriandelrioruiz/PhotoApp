@@ -9,6 +9,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -30,12 +32,32 @@ public abstract class AbstractProfilePane extends JPanel {
 	
 	protected JFrame frame;
 	protected JPanel northPanel;
-	private JPanel centerPanel;
+	protected JPanel centerPanel;
+	
+	// Fotos que contendrá el perfil
+	protected List<String> photos;
+	protected List<List<String>> albums;
 
 	public AbstractProfilePane(User user) {
 		this.user = user;
 		this.controller = PhotoAppController.getInstance();
+		addPhotos();
 		initialize();
+	}
+	
+	private void addPhotos() {
+		this.photos = new ArrayList<>();
+		for (int i = 0; i < 20; i++)
+			photos.add(ViewConstants.RUTA_FOTOS + "default-profpic.png");
+		
+		albums = new ArrayList<>();
+		
+		for(int j = 0; j < 20; j++) {
+			ArrayList<String> listPhotos = new ArrayList<>();
+			listPhotos.add(ViewConstants.RUTA_FOTOS + "icon_lupa.png");
+			albums.add(listPhotos);
+		}
+		
 	}
 	
 	protected void initialize() {
@@ -159,10 +181,7 @@ public abstract class AbstractProfilePane extends JPanel {
 	
 	protected abstract void addListeners();
 	
-	protected void createCenterPanel() {
-		centerPanel = new AllPostsPane();
-		add(centerPanel, BorderLayout.CENTER);
-	}
+	protected abstract void createCenterPanel();
 
 }
 

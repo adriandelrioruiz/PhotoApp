@@ -1,5 +1,6 @@
 package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -21,6 +22,9 @@ public class OthersProfilePane extends AbstractProfilePane {
 	public OthersProfilePane(User user, User userSearch) {
 		super(user);
 		this.userSearch = userSearch;
+		// Coger las fotos y álbumes del controlador
+		photos = null;
+		albums = null;
 	}
 	
 	protected void createNorthPanel() {
@@ -84,6 +88,12 @@ public class OthersProfilePane extends AbstractProfilePane {
 				addFollowButtonListener(btnFollow);
 			}
 		});
+	}
+	
+	@Override
+	protected void createCenterPanel() {
+		centerPanel = new AllPostsPane(photos, albums, false);
+		add(centerPanel, BorderLayout.CENTER);
 	}
 	
 
