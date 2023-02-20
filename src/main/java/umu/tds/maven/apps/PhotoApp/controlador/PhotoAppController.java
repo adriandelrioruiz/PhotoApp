@@ -211,7 +211,7 @@ public class PhotoAppController {
 			System.out.println("No sigues al usuario " + userNameUnfollowed);
 	}
 
-	// Método para añadir una foto TODO Hace falta q devuelva el post??????????
+	// Método para añadir una foto 
 	public Photo addPhoto(String title, String description, String path) {
 		if (user == null)
 			return null;
@@ -229,12 +229,10 @@ public class PhotoAppController {
 				photo.addHashtag(hashtag);
 
 			photoAdapter.addPhoto(photo);
-			postRepository.addPost(photo);
+			postRepository.addPhoto(photo);
 
 			user.addPhoto(photo);
 			// añadir la foto en la persistencia del usuario
-			// TODO cambiar para que no se añada una foto individual cuando pertenece a un
-			// álbum
 			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
 			// Habrá que mandar una notificación a todos los seguidores
 			user.getFollowers().stream().forEach((u) -> notify(u, notification));
@@ -248,19 +246,48 @@ public class PhotoAppController {
 
 		return photo;
 	}
-
-	public Album addAlbum(String title, String description, List<String> paths) {
+	
+	// Método para añadir 
+	public Codes addPhotoToAlbum(String title, String description, String path, int albumId) {
 		if (user == null)
 			return null;
 
-		List<Photo> photos = new LinkedList<>();
-
-		// Vamos añadiendo cada foto
-		paths.stream().forEach((p) -> photos.add(addPhoto(title, description, p)));
+		Date now = new Date();
+		Photo photo = new Photo(title, now, description, path, user);
+		
+		// Añadimos la foto al photoAdapter
+		photoAdapter.addPhoto(photo);
+		
+		// Metemos la foto en el repositorio y nos devuelve el álbum al que pertenece
+		Album album = postRepository.addPhotoToAlbum(photo, albumId);
+		
+		// Actualizamos foto y album en usuario en la persistencia
+		userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
+		
+		// Miramos si se ha excedido el número de fotos, en cuyo caso el repositorio devolverá null
+		if (album == null) {
+			// Tendremos que borrar la foto que acabamos de meter en la persistencia
+			photoAdapter.deletePhoto(photo.getCode());
+			return Codes.NUM_OF_PHOTOS_IN_ALBUM_EXCEEDED;
+		}
+		
+		// Actualizamos el álbum den albumAdapter
+		albumAdapter.updateAlbum(album, AlbumAdapterTDS.PHOTOS);
+		
+		return Codes.OK;
+		
+	}
+	
+	// Método para añadir un álbum
+	public Album addAlbum(String title, String description, String path) {
+		if (user == null)
+			return null;
 
 		// Creamos el álbum
-		Album album = new Album(title, null, description, user);
-		album.setPhotos(photos);
+		Date now = new Date();
+		Album album = new Album(title, now, description, user);
+		Photo photo = new Photo(title, now, description, path, user);
+		album.addPhoto(photo);
 
 		try {
 			// Extraer hashtags y meter en la foto
@@ -269,14 +296,18 @@ public class PhotoAppController {
 			for (String hashtag : hashtags)
 				album.addHashtag(hashtag);
 
+			// Registramos la foto y el álbum
+			photoAdapter.addPhoto(photo);
 			albumAdapter.addAlbum(album);
-			postRepository.addPost(album);
-
+			postRepository.addAlbum(album);
+			
+			// Añadimos el album al usuario
 			user.addAlbum(album);
+			
 			// añadir la foto en la persistencia del usuario
 			userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
 
-			System.out.println("El usuario " + user.getUserName() + " ha añadido el post " + title);
+			System.out.println("El usuario " + user.getUserName() + " ha añadido el album " + title);
 		}
 
 		catch (InvalidHashtagException e) {
@@ -285,6 +316,53 @@ public class PhotoAppController {
 
 		return album;
 	}
+	
+	// Método para eliminar un post
+	public void deletePhoto(int id) {
+		if (user == null)
+			return;
+
+		Post post = postRepository.deletePhoto(id);
+		
+		if (post instanceof Photo) {
+			photoAdapter.deletePhoto(id);
+			user.removePhoto(id);
+			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
+		} else {
+			Album album = (Album)post;
+			// Si el álbum solo tenía una foto, borramos el álbum
+			if (album.getPhotos().size() == 0) {
+				albumAdapter.deleteAlbum(album.getCode());
+			}
+			
+			// Si el álbum tenía más de una foto, borramos la foto y actualizamos el álbum
+			else {
+				photoAdapter.deletePhoto(id);
+				albumAdapter.updateAlbum(album, AlbumAdapterTDS.PHOTOS);
+			}
+			
+		}
+
+		System.out.println("El usuario " + user.getUserName() + " ha eliminado el post " + post.getTitle());
+	}
+	
+	// Método para eliminar un álbum
+	public void deleteAlbum(int id) {
+		if (user == null)
+			return;
+
+		
+		postRepository.deleteAlbum(id);
+		albumAdapter.deleteAlbum(id);
+		
+		// Eliminamos el álbum de su usuario
+		user.removeAlbum(id);
+		
+		// Actualizamos el usuario en la base de datos
+		userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
+		
+	}
+	
 
 	// Método para actualizar la bio
 	public void changeBio(String newBio) {
@@ -314,35 +392,7 @@ public class PhotoAppController {
 		userAdapter.updateUser(user, UserAdapterTDS.PASSWORD);
 	}
 
-	// Método para eliminar un post
-	public void deletePost(Post post) {
-		if (user == null)
-			return;
 
-		postRepository.deletePost(post);
-
-		if (post instanceof Photo) {
-			photoAdapter.deletePhoto(post.getCode());
-			user.removePhoto((Photo) post);
-			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
-		} else {
-			albumAdapter.deleteAlbum((Album) post);
-			user.removeAlbum((Album) post);
-			userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
-		}
-
-		System.out.println("El usuario " + user.getUserName() + " ha eliminado el post " + post.getTitle());
-	}
-
-	public List<Post> getAllPosts() {
-		if (user == null)
-			return null;
-		LinkedList<Post> posts = new LinkedList<>();
-		posts.addAll(user.getPhotos());
-		posts.addAll(user.getAlbums());
-
-		return posts;
-	}
 
 	// Método para darle like a un post
 	public void like(Post post) {
@@ -587,9 +637,12 @@ public class PhotoAppController {
 		return user.getBio();
 	}
 
-	// Obtener lista de mis fotos
+	// Obtener lista de mis fotos, incluyendo las que incluyen los álbumes
 	public List<Integer> getPhotos() {
-		return user.getPhotos().stream().map((p) -> p.getCode()).toList();
+		List<Integer> photos = new ArrayList<>();
+		photos.addAll(user.getPhotos().stream().map((p) -> p.getCode()).toList());
+		photos.addAll(user.getAlbums().stream().map((p) -> p.getCode()).toList());
+		return photos;
 	}
 
 	// Obtener lista de mis albumes

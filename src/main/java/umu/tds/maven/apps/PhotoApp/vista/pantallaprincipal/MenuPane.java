@@ -103,7 +103,8 @@ public class MenuPane extends JPanel {
 		uploadButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Mostrar una ventana de diálogo para SUBIR FOTO
-				UploadPhotoFrame cargar = new UploadPhotoFrame();
+				@SuppressWarnings("unused")
+				UploadPhotoFrame cargar = new UploadPhotoFrame(true);
 			}
 		});
 		lupaButton.addActionListener(new ActionListener() {

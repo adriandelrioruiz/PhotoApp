@@ -65,8 +65,8 @@ public class UserRepository {
 	// Método para eliminar un usuario
 	public void deleteUser(User user) {
 		// Si eliminamos un usuario, tenemos que eliminar todos sus posts
-		user.getPhotos().stream().forEach((p->PostRepository.getInstance().deletePost(p)));
-		user.getAlbums().stream().forEach((a->PostRepository.getInstance().deletePost(a)));
+		user.getPhotos().stream().forEach((p->PostRepository.getInstance().deletePhoto(p.getCode())));
+		user.getAlbums().stream().forEach((a->PostRepository.getInstance().deleteAlbum(a.getCode())));
 		usersByUsername.remove(user.getUserName());
 	}
 

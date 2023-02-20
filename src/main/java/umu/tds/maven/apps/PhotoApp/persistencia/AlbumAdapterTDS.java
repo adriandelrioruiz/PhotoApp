@@ -85,13 +85,14 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 		}
 		description = servPersistencia.recuperarPropiedadEntidad(en, DESCRIPTION);
 		likes = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, LIKES)); 
-		user = UserAdapterTDS.getInstance().getUser(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, USER))); 
 		
 		
 		// Recuperamos los atributos que son listas 
 		List<String> hashtags = getHashtagsFromString(servPersistencia.recuperarPropiedadEntidad(en, HASHTAGS));
 		List<Comment> comments = CommentAdapterTDS.getInstance().getCommentsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, COMMENTS));
 		List<Photo> photos = PhotoAdapterTDS.getInstance().getAllPhotosFromCodes(servPersistencia.recuperarPropiedadEntidad(en, PHOTOS));
+		
+		user = photos.get(0).getUser();
 	
 		Album album = new Album(title, date, description, user);
 		album.setLikes(likes);
@@ -116,7 +117,7 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 			album = (Album) entityToObject(eAlbum);
 			
 		} catch (NullPointerException e) {
-			System.out.println("El photo con el id " + code + " no está registrado");
+			System.out.println("El album con el id " + code + " no está registrado");
 		}
 		return album;
 	}
@@ -132,9 +133,9 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 		if (eAlbum != null)
 			return;
 		
-		// Creamos entidad photo
+		// Creamos entidad album
 		eAlbum = objectToEntity(album);
-		// registrar entidad photo
+		// registrar entidad album
 		eAlbum = servPersistencia.registrarEntidad(eAlbum);
 		// asignar identificador unico
 		// Se aprovecha el que genera el servicio de persistencia
@@ -143,14 +144,12 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 	}
 	
 	@Override
-	public void deleteAlbum(Album album) {
-		if (album != null ) {
-			Entidad eAlbum = servPersistencia.recuperarEntidad(album.getCode());
-			// Borramos todas las fotos del álbum
-			List<Photo> photos = PhotoAdapterTDS.getInstance().getAllPhotosFromCodes(servPersistencia.recuperarPropiedadEntidad(eAlbum, PHOTOS));
-			photos.stream().forEach((p)->PhotoAdapterTDS.getInstance().deletePhoto(p.getCode()));
-			servPersistencia.borrarEntidad(eAlbum);
-		}
+	public void deleteAlbum(int id) {
+		Entidad eAlbum = servPersistencia.recuperarEntidad(id);
+		// Borramos todas las fotos del álbum
+		List<Photo> photos = PhotoAdapterTDS.getInstance().getAllPhotosFromCodes(servPersistencia.recuperarPropiedadEntidad(eAlbum, PHOTOS));
+		photos.stream().forEach((p)->PhotoAdapterTDS.getInstance().deletePhoto(p.getCode()));
+		servPersistencia.borrarEntidad(eAlbum);
 	}
 	
 	@Override
@@ -243,6 +242,12 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 		}
 
 		return albums;
+	}
+	
+	// TODO para pruebas
+	public void deleteAll() {
+		List<Entidad> entities = servPersistencia.recuperarEntidades(ALBUM);
+		entities.stream().forEach((e)->servPersistencia.borrarEntidad(e));
 	}
 	
 

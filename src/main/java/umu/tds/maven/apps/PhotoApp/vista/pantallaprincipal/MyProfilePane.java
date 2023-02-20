@@ -21,10 +21,6 @@ public class MyProfilePane extends AbstractProfilePane {
 
 	public MyProfilePane() {
 		super();
-		//TODO quitar
-		/*// Coger las fotos y álbumes del controlador
-		photos = null;
-		albums = null;*/
 	}
 	
 
@@ -64,13 +60,7 @@ public class MyProfilePane extends AbstractProfilePane {
 	
 	@Override
 	protected void createCenterPanel() {
-		List<String> photoPaths = photos.stream().map((p)->controller.getPath(p)).toList();
-		List<List<String>> albumPaths = new LinkedList<>();
-		for (Integer albumId : albums) {
-			List<String> albumPhotoPaths = controller.getPhotosOfAlbum(albumId).stream().map((id)->controller.getPath(id)).toList();
-			albumPaths.add(albumPhotoPaths);
-		}
-		centerPanel = new AllPostsPane(photoPaths, albumPaths, true);
+		centerPanel = new AllPostsPane(photos, albums, true);
 		add(centerPanel, BorderLayout.CENTER);
 	}
 

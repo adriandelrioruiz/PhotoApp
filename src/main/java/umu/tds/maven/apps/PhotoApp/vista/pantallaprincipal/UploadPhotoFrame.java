@@ -26,9 +26,20 @@ public class UploadPhotoFrame extends JFrame {
 	private static final int DEFAULT_WIDTH = 500;
 	private static final int DEFAULT_HEIGHT = 500;
 
+	private static final String PHOTO_DESCRIPTION_TEXT = "<h1>Agregar Foto</h1><p>An&iacute;mate a compartir una foto con tus amigos. <br> Puedes arrastrar el fichero aqu&iacute;"
+			+ ". </p>";
+	private static final String ALBUM_DESCRIPTION_TEXT = "<h1>Agregar Album</h1><p>An&iacute;mate a compartir un álbum con tus amigos. <br> "
+			+ "Escoge la foto que será la portada de tu álbum. Puedes arrastrar el fichero aqu&iacute;. <br>"
+			+ "Podrás añadir más fotos al álbum desde tu perfil"
+			+ ". </p>";
+	
 	private JFileChooser fileChooser;
+	
+	// Para saber si se trata de un álbum o de una foto
+	private boolean isAlbum;
 
-	public UploadPhotoFrame() {
+	public UploadPhotoFrame(boolean isAlbum) {
+		this.isAlbum = isAlbum;
 		fileChooser = new JFileChooser();
 		initialize();
 	}
@@ -41,9 +52,10 @@ public class UploadPhotoFrame extends JFrame {
 		getContentPane().add(editorPane, BorderLayout.CENTER);
 		//editorPane.setPreferredSize(new Dimension(400, 200));
 		editorPane.setContentType("text/html");
-		editorPane.setText(
-				"<h1>Agregar Foto</h1><p>An&iacute;mate a compartir una foto con tus amigos. <br> Puedes arrastrar el fichero aqu&iacute;"
-				+ ". </p>");
+		if (!isAlbum)
+			editorPane.setText(PHOTO_DESCRIPTION_TEXT);
+		else
+			editorPane.setText(ALBUM_DESCRIPTION_TEXT);
 		editorPane.setEditable(false);
 		editorPane.setDropTarget(new DropTarget() {
 			public synchronized void drop(DropTargetDropEvent evt) {
@@ -89,7 +101,7 @@ public class UploadPhotoFrame extends JFrame {
 		Image image = Toolkit.getDefaultToolkit().getImage(path);
 		
 		@SuppressWarnings("unused")
-		ShowNewImagePane sip = new ShowNewImagePane(path, image);
+		ShowNewImagePane sip = new ShowNewImagePane(path, image, isAlbum);
 		
 	}
 	

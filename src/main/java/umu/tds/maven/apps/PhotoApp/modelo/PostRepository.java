@@ -9,13 +9,15 @@ import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
 public class PostRepository {
 	
 	// Número de posts que queremos en la feed
+	public static final int MAX_PHOTOS_IN_ALBUM = 16;
 	public static final int POSTS_IN_FEED = 10;
 	// Patrón singleton
 	private static PostRepository instance;
 	// TODO quitar esto?
 	private static FactoriaDAO factory;
 	
-	private HashMap<Integer,Post> postsById;
+	private HashMap<Integer,Photo> photosById;
+	private HashMap<Integer, Album> albumsById;
 	
 	// Devuelve la única instancia (Singleton)
 	public static PostRepository getInstance() {
@@ -26,18 +28,16 @@ public class PostRepository {
 	
 	// Constructor con el que extraemos todos los posts de la persistencia y los añadimos al repositorio
 	private PostRepository() {
-		postsById = new HashMap<>();
+		photosById = new HashMap<>();
+		albumsById = new HashMap<>();
 		
 		try {
 			factory = FactoriaDAO.getInstance();
 			
 			
-			// Recuperamos todas las fotos y las las introducimos en nuestro mapa
-			factory.getPhotoDAO().getAllPhotos().stream().forEach((p) -> postsById.put(p.getCode(), p));
-			
-			// postsById.values().stream().forEach((u) -> factory.getPhotoDAO().deletePhoto((Photo)u)); System.exit(0);
-			
-			// Recuperamos todos los álbumes
+			// Recuperamos todas las fotos y álbumes y los introducimos en nuestro mapa
+			factory.getPhotoDAO().getAllPhotos().stream().forEach((p) -> photosById.put(p.getCode(), p));
+			factory.getAlbumDAO().getAllAlbums().stream().forEach((a) -> albumsById.put(a.getCode(), a));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -45,39 +45,76 @@ public class PostRepository {
 		}
 	}
 	
-	// Método para añadir un post al repositorio
-	// TODO cambiar por un metodo addAlbum y addPhoto
-	public void addPost(Post post) {
-		postsById.put(post.getCode(), post);
+	// Método para añadir una foto al repositorio
+	public void addPhoto(Photo photo) {
+		photosById.put(photo.getCode(), photo);
 	}
 	
-	// Método para eliminar un post
-	public void deletePost(Post post) {
-		// Si es una foto, tenemos que eliminar las notificaciones que hacían referencia a ella
-		if (post instanceof Photo)
-			post.getUser().getFollowers().stream().forEach((u)->u.removeNotification(((Photo)post).getNotification().getCode()));
-		postsById.remove(post.getCode());
+	// Método para añadir un álbum al repositorio
+	public void addAlbum(Album album) {
+		// Añadimos el álbum a la lista de álbumes
+		albumsById.put(album.getCode(), album);
+	}
+	
+	// Método para añadir una foto a un álbum
+	public Album addPhotoToAlbum(Photo photo, int idAlbum) {
+		// Recuperamos el álbum y comprobamos que no se ha excedido el máximo de fotos
+		Album a = albumsById.get(idAlbum);
+		if (a.getPhotos().size() > MAX_PHOTOS_IN_ALBUM)
+			return null;
+		
+		// Metemos la foto en el álbum dentro de la lista de álbumes
+		a.addPhoto(photo);
+		return a;
+		
+	}
+	
+	// Método para eliminar una foto
+	public Post deletePhoto(int id) {
+		Photo photo = photosById.get(id);
+		// tenemos que eliminar las notificaciones que hacían referencia a ella
+		photo.getUser().getFollowers().stream().forEach((u)->u.removeNotification((photo.getNotification().getCode())));
+		// También tenemos que ver si pertenece a algún álbum. En caso de que quede vacío, lo borraremos
+		for (Album a : albumsById.values()) {
+			if (a.getPhotos().stream().filter((p)->p.getCode() == id).toList().size() >= 1 && a.getPhotos().size() == 1) {
+				// Eliminamos la foto de la lista de fotos
+				photosById.remove(id);
+				// Eliminamos el álbum y lo devolvemos sin la foto
+				deleteAlbum(a.getCode());
+				a.removePhoto(id);
+				return a;
+			}
+		}
+		// Eliminarmos la foto y la devolvemos
+		return photosById.remove(id);
+		
+	}
+	
+	// Método para eliminar un álbum
+	public Album deleteAlbum(int id) {
+		Album a = albumsById.get(id);
+
+		// Eliminamos el álbum en sí
+		albumsById.remove(id);
+		return a;
 	}
 	
 	// Método para recuperar una foto a partir de su id
 	public Photo getPhoto(int id) {
-		return (Photo)postsById.get(id);
+		return photosById.get(id);
 	}
 	
 	// Método para obtener todas las fotos de un álbum
 	public List<Integer> getPhotosOfAlbum(int albumId) {
-		return ((Album)postsById.get(albumId)).getPhotos().stream().map((p)->p.getCode()).toList();
+		return (albumsById.get(albumId)).getPhotos().stream().map((p)->p.getCode()).toList();
 	}
 	
 	// Método para obtener las últimas 10 fotos de los usuarios a los que sigue un usuario
 	public List<Photo> getFeed(List<User> followed) {
-		// Obtenemos todos los posts de los seguidos por el usuario ordenados por fecha en orden ascendente
-		List<Post> postsOfFollowed = postsById.values().stream().filter((p)->followed.contains(p.getUser())).sorted().toList();
-		// Solo nos quedamos con las fotos
-		List<Photo> photosOfFollowed = new LinkedList<>();
-		for (Post p: postsOfFollowed)
-			if (p instanceof Photo)
-				photosOfFollowed.add((Photo)p);
+		// Obtenemos todas las fotos de los seguidos por el usuario ordenados por fecha en orden ascendente
+		List<Photo> photosOfFollowed = photosById.values().stream().filter((p)->followed.contains(p.getUser())).sorted().toList();
+		for (Photo p: photosOfFollowed)
+			photosOfFollowed.add((Photo)p);
 		
 		// Nos quedamos con los últimos 10, o en caso de que haya menos de 10, con todos ellos
 		if (photosOfFollowed.size() <= POSTS_IN_FEED)
@@ -89,5 +126,8 @@ public class PostRepository {
 		}
 		return photosOfFeed;
 	}
+	
+	// Método para añadir una foto a un álbum
+	
 	
 }

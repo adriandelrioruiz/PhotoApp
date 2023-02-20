@@ -144,6 +144,10 @@ public class User extends DomainObject {
 	public void addAlbum(Album album) {
 		albums.add(album);
 	}
+	
+	public void addPhotoToAlbum(Photo photo, int id) {
+		albums.stream().filter((a)->a.getCode()==id).forEach((a)->a.addPhoto(photo));
+	}
 
 	public void addNotification(Notification notification) {
 		notifications.add(notification);
@@ -157,11 +161,13 @@ public class User extends DomainObject {
 		followed.remove(followedUser);
 	}
 	
-	public void removePhoto(Photo photo) {
+	public void removePhoto(int id) {
+		Photo photo = photos.stream().filter((p)->p.getCode()==id).toList().get(0);
 		photos.remove(photo);
 	}
 
-	public void removeAlbum(Album album) {
+	public void removeAlbum(int id) {
+		Album album = albums.stream().filter((a)->a.getCode()==id).toList().get(0);
 		albums.remove(album);
 	}
 	
