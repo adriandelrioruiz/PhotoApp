@@ -25,10 +25,10 @@ public abstract class ShowPostFrame extends JFrame {
 	private static final int FRAME_HEIGHT = 500; 
 	
 	// Tamaños de los paneles
-	private static final Dimension NORTH_PANEL_DIMENSION = new Dimension(FRAME_WIDTH, 40);
-	private static final Dimension WEST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH/2, 100);
-	private static final Dimension EAST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH/2, 100);
-	private static final Dimension SOUTH_PANEL_DIMENSION = new Dimension(FRAME_WIDTH, 40);
+	protected static final Dimension NORTH_PANEL_DIMENSION = new Dimension(FRAME_WIDTH, 40);
+	protected static final Dimension WEST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH/2, 100);
+	protected static final Dimension EAST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH/2, 100);
+	protected static final Dimension SOUTH_PANEL_DIMENSION = new Dimension(FRAME_WIDTH, 40);
 	
 	// -----------------------
 	
@@ -93,6 +93,7 @@ public abstract class ShowPostFrame extends JFrame {
 		
 		westPane = new JPanel();
 		westPane.setPreferredSize(WEST_PANEL_DIMENSION);
+		westPane.setLayout(new BorderLayout());
 		getContentPane().add(westPane, BorderLayout.WEST);
 		
 	}
