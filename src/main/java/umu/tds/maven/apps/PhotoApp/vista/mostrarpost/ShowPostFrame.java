@@ -63,7 +63,6 @@ public abstract class ShowPostFrame extends JFrame {
 		
 		this.userId = userId;
 
-		initialize();
 	}
 	
 	// Método para inicializar los valores del Frame
@@ -74,7 +73,7 @@ public abstract class ShowPostFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 		setResizable(false);
-		// ...
+		
 		
 		// Creamos los paneles
 		createNorthPane();

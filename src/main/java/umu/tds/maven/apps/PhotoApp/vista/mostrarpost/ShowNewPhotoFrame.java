@@ -9,6 +9,8 @@ import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetDefaultTextListener;
 import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetEmptyTextListener;
 
+/** Esta clase hereda de ShowNewPostFrame y se utiliza para mostrar una foto que va a ser subida */
+
 @SuppressWarnings("serial")
 public class ShowNewPhotoFrame extends ShowNewPostFrame {
 	

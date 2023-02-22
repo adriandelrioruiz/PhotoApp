@@ -9,6 +9,8 @@ import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetDefaultTextListener;
 import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetEmptyTextListener;
 
+/** Esta clase hereda de ShowNewPostFrame y se utiliza para mostrar un álbum que va a ser subido */
+
 @SuppressWarnings("serial")
 public class ShowNewAlbumFrame extends ShowNewPostFrame {
 	
@@ -18,8 +20,17 @@ public class ShowNewAlbumFrame extends ShowNewPostFrame {
 	
 	public ShowNewAlbumFrame(int userId, String path) {
 		super(userId, path);
-		setVisible(true);
+
+		initialize();
 		
+	}
+	
+	@Override
+	protected void initialize() {
+		super.initialize();
+		
+		setTitle(DEFAULT_FRAME_NAME);
+		setVisible(true);
 	}
 	
 	@Override
@@ -31,13 +42,6 @@ public class ShowNewAlbumFrame extends ShowNewPostFrame {
 		txtTitulo.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
 	}
 	
-	@Override
-	protected void initialize() {
-		super.initialize();
-		
-		setTitle(DEFAULT_FRAME_NAME);
-		setVisible(true);
-	}
 	
 	@Override
 	protected void addListeners() {

@@ -42,9 +42,16 @@ public abstract class ShowNewPostFrame extends ShowPostFrame {
 		
 		this.path = path;
 		
-		// Añadimos la imagen al panel oeste
-		addImage();
 	}
+	
+	@Override
+	protected void initialize() {
+		
+		super.initialize();
+		
+	}
+	
+	
 	
 	
 	@Override
@@ -61,6 +68,24 @@ public abstract class ShowNewPostFrame extends ShowPostFrame {
 		northPane.setLayout(new BorderLayout());
 		northPane.add(txtTitulo, BorderLayout.CENTER);
 		
+	}
+	
+	@Override
+	protected void createWestPane() {
+	
+		super.createWestPane();
+		
+		try {
+			Image image = ImageIO.read(new File(path));
+			ImageIcon postImage = new ImageIcon(image.getScaledInstance((int)WEST_PANEL_DIMENSION.getWidth() - 20, (int)WEST_PANEL_DIMENSION.getHeight() - 20, DO_NOTHING_ON_CLOSE));
+			// Lo añadimos al panel oeste
+			imageLabel = new JLabel(postImage);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		westPane.add(imageLabel, BorderLayout.CENTER);
 	}
 	
 	@Override
@@ -81,22 +106,7 @@ public abstract class ShowNewPostFrame extends ShowPostFrame {
 		
 	}
 	
-	// Método para añadir la imagen del post que vamos a subir
-	private void addImage() {
-		
-		
-		try {
-			Image image = ImageIO.read(new File(path));
-			ImageIcon postImage = new ImageIcon(image.getScaledInstance((int)WEST_PANEL_DIMENSION.getWidth() - 20, (int)WEST_PANEL_DIMENSION.getHeight() - 20, DO_NOTHING_ON_CLOSE));
-			// Lo añadimos al panel oeste
-			imageLabel = new JLabel(postImage);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		westPane.add(imageLabel, BorderLayout.CENTER);
-	}
+	
 	
 	@Override
 	protected void addListeners() {

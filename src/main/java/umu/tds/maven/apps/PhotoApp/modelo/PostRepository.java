@@ -104,6 +104,18 @@ public class PostRepository {
 		return photosById.get(id);
 	}
 	
+	// Método para recuperar un post a partir de su id
+	public Post getPost(int id) {
+		// Miramos si es una foto
+		Post p = photosById.get(id);
+		
+		// Si no, miramos si es un álbum
+		if (p == null)
+			p = albumsById.get(id);
+		
+		return p;	
+	}
+	
 	// Método para obtener todas las fotos de un álbum
 	public List<Integer> getPhotosOfAlbum(int albumId) {
 		return (albumsById.get(albumId)).getPhotos().stream().map((p)->p.getCode()).toList();

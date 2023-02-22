@@ -707,6 +707,11 @@ public class PhotoAppController {
 		return postRepository.getPhotosOfAlbum(albumId);
 	}
 	
+	// Obtener el título de una foto
+	public String getPhotoTitle(int photoId) {
+		return postRepository.getPost(photoId).getDescription();
+	}
+	
 
 	/* Funciones privadas */
 	// Función para extraer los hashtags
