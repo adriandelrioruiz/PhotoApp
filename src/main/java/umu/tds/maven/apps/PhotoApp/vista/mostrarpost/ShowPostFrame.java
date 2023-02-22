@@ -1,8 +1,10 @@
 package umu.tds.maven.apps.PhotoApp.vista.mostrarpost;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 /** Clase JFrame usada para mostrar un post */
@@ -26,12 +29,14 @@ public abstract class ShowPostFrame extends JFrame {
 	
 	// Tamaños de los paneles
 	protected static final Dimension NORTH_PANEL_DIMENSION = new Dimension(FRAME_WIDTH, 40);
-	protected static final Dimension WEST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH/2, 100);
-	protected static final Dimension EAST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH/2, 100);
+	protected static final Dimension WEST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH/2, 400);
+	protected static final Dimension EAST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH/2-50, 400);
 	protected static final Dimension SOUTH_PANEL_DIMENSION = new Dimension(FRAME_WIDTH, 40);
 	
 	// -----------------------
 	
+	// Controlador
+	protected PhotoAppController controller = PhotoAppController.getInstance();
 	
 	// Id del usuario del que mostrará el post
 	protected int userId;
@@ -62,12 +67,13 @@ public abstract class ShowPostFrame extends JFrame {
 	}
 	
 	// Método para inicializar los valores del Frame
-	private void initialize() {
+	protected void initialize() {
 		
 		// TODO centrar el frame, layout...
-		setLocationRelativeTo(null);
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
+		setResizable(false);
 		// ...
 		
 		// Creamos los paneles
@@ -109,6 +115,9 @@ public abstract class ShowPostFrame extends JFrame {
 		
 		// Creamos el área de texto
 		commentTxtArea = new JTextArea();
+		commentTxtArea.setFocusable(false);
+		commentTxtArea.setForeground(Color.GRAY);
+		commentTxtArea.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
 		eastPane.add(commentTxtArea, BorderLayout.CENTER);
 		
 	}
