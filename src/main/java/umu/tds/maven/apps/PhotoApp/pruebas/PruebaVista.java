@@ -2,8 +2,7 @@ package umu.tds.maven.apps.PhotoApp.pruebas;
 
 import javax.swing.JFrame;
 
-import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowNewAlbumFrame;
-import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowNewPhotoFrame;
+import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedAlbumFrame;
 
 public class PruebaVista extends JFrame{
 	
@@ -25,7 +24,7 @@ public class PruebaVista extends JFrame{
 		LoggedFrame lf = new LoggedFrame();
 		lf.setLocationRelativeTo(null);
 		lf.setDefaultCloseOperation(EXIT_ON_CLOSE);*/
-		ShowNewAlbumFrame showPhoto = new ShowNewAlbumFrame(0, "C:\\Users\\adria\\eclipse-workspace\\PhotoApp2\\img\\default-profpic.png");
+		ShowOtherUploadedAlbumFrame showPhoto = new ShowOtherUploadedAlbumFrame(8481, 8533);
 	}
 
 }

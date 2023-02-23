@@ -42,6 +42,8 @@ public abstract class ShowNewPostFrame extends ShowPostFrame {
 		
 		this.path = path;
 		
+		initialize();
+		
 	}
 	
 	@Override
@@ -77,15 +79,18 @@ public abstract class ShowNewPostFrame extends ShowPostFrame {
 		
 		try {
 			Image image = ImageIO.read(new File(path));
-			ImageIcon postImage = new ImageIcon(image.getScaledInstance((int)WEST_PANEL_DIMENSION.getWidth() - 20, (int)WEST_PANEL_DIMENSION.getHeight() - 20, DO_NOTHING_ON_CLOSE));
+			ImageIcon postImage = new ImageIcon(image.getScaledInstance((int)WEST_PANEL_DIMENSION.getWidth() - 20, (int)WEST_PANEL_DIMENSION.getHeight() - 40, DO_NOTHING_ON_CLOSE));
 			// Lo añadimos al panel oeste
 			imageLabel = new JLabel(postImage);
+			imageLabel.setSize(330, 363);
+			imageLabel.setLocation(20, 10);
+			imageLabel.setLayout(null);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		westPane.add(imageLabel, BorderLayout.CENTER);
+		westPane.add(imageLabel);
 	}
 	
 	@Override
@@ -93,6 +98,7 @@ public abstract class ShowNewPostFrame extends ShowPostFrame {
 		super.createEastPane();
 		
 		commentTxtArea.setText(DEFAULT_COMMENT_TEXT);
+		
 	
 	}
 	

@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
@@ -71,7 +72,7 @@ public abstract class ShowPostFrame extends JFrame {
 		// TODO centrar el frame, layout...
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setLocationRelativeTo(null);
-		setLayout(new BorderLayout());
+		getContentPane().setLayout(new BorderLayout());
 		setResizable(false);
 		
 		
@@ -98,7 +99,7 @@ public abstract class ShowPostFrame extends JFrame {
 		
 		westPane = new JPanel();
 		westPane.setPreferredSize(WEST_PANEL_DIMENSION);
-		westPane.setLayout(new BorderLayout());
+		westPane.setLayout(null);
 		getContentPane().add(westPane, BorderLayout.WEST);
 		
 	}
@@ -108,16 +109,18 @@ public abstract class ShowPostFrame extends JFrame {
 		
 		eastPane = new JPanel();
 		eastPane.setPreferredSize(EAST_PANEL_DIMENSION);
-		eastPane.setLayout(new BorderLayout());
+		eastPane.setLayout(null);
 		getContentPane().add(eastPane, BorderLayout.EAST);
 
 		
-		// Creamos el área de texto
 		commentTxtArea = new JTextArea();
+		commentTxtArea.setSize(280, 186);
+		commentTxtArea.setLocation(10, 10);
 		commentTxtArea.setFocusable(false);
+		commentTxtArea.setBorder(null);
 		commentTxtArea.setForeground(Color.GRAY);
 		commentTxtArea.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
-		eastPane.add(commentTxtArea, BorderLayout.CENTER);
+		eastPane.add(commentTxtArea);
 		
 	}
 	

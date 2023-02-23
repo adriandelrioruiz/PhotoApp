@@ -34,6 +34,7 @@ import umu.tds.maven.apps.PhotoApp.persistencia.IPhotoAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
+import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 public class PhotoAppController {
 
@@ -395,9 +396,12 @@ public class PhotoAppController {
 
 
 	// Método para darle like a un post
-	public void like(Post post) {
+	public void like(int postId) {
 		if (user == null)
 			return;
+		
+		// Obtenemos el post
+		Post post = postRepository.getPost(postId);
 		// Modificamos los likes en el objeto post, que será una foto o un álbum
 		post.like();
 
@@ -432,31 +436,27 @@ public class PhotoAppController {
 	}
 
 	// Método para comentar en un post
-	public void comment(Post post, String commentText) {
-		if (user == null)
-			return;
+	public boolean comment(int id, String commentText) {
 		// Creamos el objeto comentario, que tendrá como usuario comentador a nuestro
 		// usuario
 		Comment comment = new Comment(commentText, user);
-		// Modificamos nuestro objeto post
-		post.addComment(comment);
+		// Recuperamos el objeto Photo
+		Photo photo = postRepository.getPhoto(id);
+		// Si no existe, return
+		if (photo == null) return false;
+		// Modificamos nuestro objeto photo
+		photo.addComment(comment);
 		// Añadimos el comentario a la persistencia
 		commentAdapter.addComment(comment);
-		// Modificamos el post de la persistencia según sea foto o álbum
-		if (post instanceof Photo)
-			photoAdapter.updatePhoto((Photo) post, PhotoAdapterTDS.COMMENTS);
-		else {
-			// Cambiamos los comentarios del álbum
-			albumAdapter.updateAlbum((Album) post, AlbumAdapterTDS.COMMENTS);
-			// Cambiamos los comentarios de todas sus fotos
-			((Album) post).getPhotos().stream().forEach((p) -> photoAdapter.updatePhoto(p, PhotoAdapterTDS.COMMENTS));
-		}
+		// Modificamos la foto de la persistencia
+		photoAdapter.updatePhoto(photo, PhotoAdapterTDS.COMMENTS);
+		
+		return true;
+		
 	}
 
 	// Método para hacer una búsqueda. Devuelve una lista de objetos de dominio
 	public List<DomainObject> search(String search) {
-		if (user == null)
-			return null;
 		List<DomainObject> objetos = new LinkedList<>();
 		// Primero buscamos si hay usuarios a partir del userName
 		objetos.addAll(userRepository.getUsersByUserNameContaining(search));
@@ -473,8 +473,6 @@ public class PhotoAppController {
 
 	// Método para hacerse premium
 	public void changeToPremium() {
-		if (user == null)
-			return;
 		// Aquí es donde se realizaría el pago, pero esto queda fuera de los que se pide
 		// en la especificación
 		user.setPremium(true);
@@ -501,8 +499,7 @@ public class PhotoAppController {
 	}
 
 	private double getDiscountByAge() {
-		if (user == null)
-			return -1;
+
 		LocalDate date = LocalDate.of(user.getDateOfBirth().getYear(), user.getDateOfBirth().getMonth(),
 				user.getDateOfBirth().getDay());
 		Period age = Period.between(date, LocalDate.now());
@@ -516,14 +513,10 @@ public class PhotoAppController {
 	}
 
 	public double getDiscount() {
-		if (user == null)
-			return -1;
 		return Math.min(getDiscountByAge(), getDiscountByLikes());
 	}
 
 	public List<Photo> getTopPhotosByLikes() {
-		if (user == null)
-			return null;
 		return user.getPhotos().stream().sorted(new PhotoComparatorByLikes()).limit(NUMBER_OF_TOP_PHOTOS).toList();
 	}
 
@@ -581,29 +574,22 @@ public class PhotoAppController {
 
 	// Obtener número de seguidores
 	public int getFollowers() {
-		if (user == null)
-			return -1;
 		return user.getFollowers().size();
 	}
 
 	// Obtener número de seguidos
 	public int getFollowed() {
-		if (user == null)
-			return -1;
 		return user.getFollowed().size();
 	}
 
 	// Obtener nombre de usuario
 	public String getUsername() {
-		if (user == null)
-			return null;
 		return user.getUserName();
 	}
 
 	// Obtener nombre completo
 	public String getFullName() {
-		if (user == null)
-			return null;
+		
 		return user.getFullName();
 	}
 
@@ -656,40 +642,48 @@ public class PhotoAppController {
 			return false;
 		return user.isPremium();
 	}
-
-	// Obtener el nombre completo a partir del nombre de usuario
-	public String getFullName(String username) {
-		return userRepository.getUserByUsername(username).getFullName();
+	
+	// Método para devolver el id de un usuario a partir de su username
+	public int getId(String username) {
+		return userRepository.getUserByUsername(username).getCode();
 	}
 
-	// Obtener el número de seguidores a partir del nombre de usuario
-	public int getFollowers(String username) {
-		return userRepository.getUserByUsername(username).getFollowers().size();
+	// Obtener el nombre completo de un usuario
+	public String getFullName(int id) {
+		return userRepository.getUser(id).getFullName();
 	}
 
-	// Obtener el número de seguidos a partir del nombre de usuario
-	public int getFollowed(String username) {
-		return userRepository.getUserByUsername(username).getFollowed().size();
+	// Obtener el número de seguidores de un usuario
+	public int getFollowers(int id) {
+		return userRepository.getUser(id).getFollowers().size();
+	}
+
+	// Obtener el número de seguidos de un usuario
+	public int getFollowed(int id) {
+		return userRepository.getUser(id).getFollowed().size();
 	}
 	
-	// Obtener foto de perfil de un usuario a partir de su nombre de usuario
-	public String getProfilePic(String username) {
-		return userRepository.getUserByUsername(username).getProfilePic();
+	// Obtener foto de perfil de un usuario 
+	public String getProfilePic(int id) {
+		return userRepository.getUser(id).getProfilePic();
 	}
 
-	// Obtener la lista de fotos de un usuario a partir de su nombre de usuario
-	public List<Integer> getPhotos(String username) {
-		return userRepository.getUserByUsername(username).getPhotos().stream().map((p) -> p.getCode()).toList();
+	// Obtener la lista de fotos de un usuario 
+	public List<Integer> getPhotos(int id) {
+		return userRepository.getUser(id).getPhotos().stream().map((p) -> p.getCode()).toList();
 	}
 
-	// Obtener la lista de albumes de un usuario a partir de su nombre de usuario
-	public List<Integer> getAlbums(String username) {
-		return userRepository.getUserByUsername(username).getAlbums().stream().map((p) -> p.getCode()).toList();
+	// Obtener la lista de albumes de un usuario
+	public List<Integer> getAlbums(int id) {
+		return userRepository.getUser(id).getAlbums().stream().map((p) -> p.getCode()).toList();
 	}
+	
 	
 	// Obtener el path de una foto a partir de su id
 	public String getPath(int id) {
-		return postRepository.getPhoto(id).getPath();
+		// TODO QUITAR
+		return ViewConstants.RUTA_FOTOS + "default-profpic.png";
+		//return postRepository.getPhoto(id).getPath();
 	}
 
 	// Obtener el nombre de usuario del propietario de una foto a partir de su id

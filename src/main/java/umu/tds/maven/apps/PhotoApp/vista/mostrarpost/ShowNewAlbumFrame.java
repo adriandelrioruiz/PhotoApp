@@ -21,7 +21,6 @@ public class ShowNewAlbumFrame extends ShowNewPostFrame {
 	public ShowNewAlbumFrame(int userId, String path) {
 		super(userId, path);
 
-		initialize();
 		
 	}
 	
