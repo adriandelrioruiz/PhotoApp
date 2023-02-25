@@ -22,8 +22,7 @@ public class PruebasPersistencia {
 	}
 	
 	public static void main(String[] args) {
-		/*deleteAllDatabase();
-		System.exit(0);*/
+		//deleteAllDatabase();System.exit(0);
 		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password", new Date(), "myPhoto", "myBio");
 		/*PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan@gmail", "juanhdz", "password", new Date(), "PhotoJuan", "BioJuan");
 		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan2@gmail", "juanhdz2", "password", new Date(), "PhotoJuan", "BioJuan");*/
@@ -47,7 +46,7 @@ public class PruebasPersistencia {
 		
 		PhotoAppController.getInstance().deleteAlbum(a.getCode());
 		
-		List<Integer> photos = PhotoAppController.getInstance().getPhotos();
+		//List<Integer> photos = PhotoAppController.getInstance().getPhotos();
 		
 		List<Photo> top = PhotoAppController.getInstance().getTopPhotosByLikes();
 		//PhotoAppController.getInstance().comment(post, "hola soy juan comentando");

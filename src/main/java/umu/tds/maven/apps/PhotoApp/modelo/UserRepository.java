@@ -63,6 +63,7 @@ public class UserRepository {
 
 	// Método para añadir un usuario al repositorio
 	public void addUser(User user) {
+		usersById.put(user.getCode(), user);
 		usersByUsername.put(user.getUserName(), user);
 	}
 
@@ -71,7 +72,7 @@ public class UserRepository {
 		// Si eliminamos un usuario, tenemos que eliminar todos sus posts
 		user.getPhotos().stream().forEach((p->PostRepository.getInstance().deletePhoto(p.getCode())));
 		user.getAlbums().stream().forEach((a->PostRepository.getInstance().deleteAlbum(a.getCode())));
-		usersByUsername.remove(user.getUserName());
+		usersById.remove(user.getCode());
 	}
 
 	// Método que devuelve un usuario dado su nombre de usuario

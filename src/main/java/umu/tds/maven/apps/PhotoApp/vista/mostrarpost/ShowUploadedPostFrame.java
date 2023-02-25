@@ -24,6 +24,8 @@ import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetEmptyTextListener;
 public abstract class ShowUploadedPostFrame extends ShowPostFrame {
 	
 	protected static final String DEFAULT_COMMENT_TEXT = "Introduce un comentario..."; 
+	protected static final String DEFAULT_NLIKES_TEXT = "Número de likes: ";
+	protected static final String DEFAULT_NALBUMLIKES_TEXT = "Número de likes del álbum: ";
 	
 	protected static final int DEFAULT_ICON_BUTTON_WIDTH = 38;
 	protected static final int DEFAULT_ICON_BUTTON_HEIGHT = DEFAULT_ICON_BUTTON_WIDTH;
@@ -53,7 +55,7 @@ public abstract class ShowUploadedPostFrame extends ShowPostFrame {
 	@Override
 	protected void createNorthPane() {
 		super.createNorthPane();
-		titleLabel = new JLabel(controller.getPhotoTitle(postId));
+		titleLabel = new JLabel(controller.getPostTitle(postId));
 		titleLabel.setForeground(Color.DARK_GRAY);
 		titleLabel.setFont(new Font(ViewConstants.APP_FONT, Font.BOLD, 14));
 		northPane.add(titleLabel);

@@ -9,8 +9,6 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -20,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
-import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 @SuppressWarnings("serial")
@@ -31,19 +28,16 @@ public abstract class AbstractProfilePane extends JPanel {
 	protected JFrame frame;
 	protected JPanel northPanel;
 	protected JPanel centerPanel;
-	
-	// Fotos que contendrá el perfil
-	protected List<Integer> photos;
-	protected List<Integer> albums;
 
-	public AbstractProfilePane() {
+	
+	// Id del usuario
+	int userId;
+
+	public AbstractProfilePane(int userId) {
 		this.controller = PhotoAppController.getInstance();
-		initializePhotos();
+		this.userId = userId;
 		initialize();
 	}
-	
-	protected abstract void initializePhotos();
-
 	
 	protected void initialize() {
 		//TODO DESCOMENTAR setBackground(Color.WHITE);
@@ -165,16 +159,32 @@ public abstract class AbstractProfilePane extends JPanel {
 	}
 	
 	protected abstract void addListeners();
+
+	protected String getProfilePic() {
+		return controller.getProfilePic(userId);
+	}
+
+	protected int getNumOfPosts() {
+		return controller.getPhotos(userId).size() + controller.getAlbums(userId).size();
+	}
+
+	protected String getUserName() {
+		return controller.getUserName(userId);
+	}
+
+	protected String getFullName() {
+		return controller.getFullName(controller.getId());
+	}
+
+	protected int getFollowers() {
+		return controller.getFollowers(userId);
+	}
+
+	protected int getFollowed() {
+		return controller.getFollowed(userId);
+	}
 	
 	protected abstract void createCenterPanel();
-	
-	// Según el perfil que sea, estas funciones devolverán un valor
-	protected abstract String getProfilePic();
-	protected abstract int getNumOfPosts();
-	protected abstract String getUserName();
-	protected abstract String getFullName();
-	protected abstract int getFollowers();
-	protected abstract int getFollowed();
 
 }
 

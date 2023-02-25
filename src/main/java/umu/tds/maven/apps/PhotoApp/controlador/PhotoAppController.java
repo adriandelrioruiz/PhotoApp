@@ -263,7 +263,10 @@ public class PhotoAppController {
 		Album album = postRepository.addPhotoToAlbum(photo, albumId);
 		
 		// Actualizamos foto y album en usuario en la persistencia
-		userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
+		userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);	
+		
+		// Si el álbum del usuario no contenía es foto, la añadimos
+		user.addPhotoToAlbum(photo, albumId);
 		
 		// Miramos si se ha excedido el número de fotos, en cuyo caso el repositorio devolverá null
 		if (album == null) {
@@ -320,9 +323,7 @@ public class PhotoAppController {
 	
 	// Método para eliminar un post
 	public void deletePhoto(int id) {
-		if (user == null)
-			return;
-
+	
 		Post post = postRepository.deletePhoto(id);
 		
 		if (post instanceof Photo) {
@@ -334,10 +335,12 @@ public class PhotoAppController {
 			// Si el álbum solo tenía una foto, borramos el álbum
 			if (album.getPhotos().size() == 0) {
 				albumAdapter.deleteAlbum(album.getCode());
+				user.removeAlbum(album.getCode());
 			}
 			
 			// Si el álbum tenía más de una foto, borramos la foto y actualizamos el álbum
 			else {
+				user.deletePhotoFromAlbum(id, album.getCode());
 				photoAdapter.deletePhoto(id);
 				albumAdapter.updateAlbum(album, AlbumAdapterTDS.PHOTOS);
 			}
@@ -441,8 +444,8 @@ public class PhotoAppController {
 		// usuario
 		Comment comment = new Comment(commentText, user);
 		// Recuperamos el objeto Photo
-		Photo photo = postRepository.getPhoto(id);
-		// Si no existe, return
+		Photo photo = (Photo)postRepository.getPost(id);
+		// Comprobamos que no sea nulo
 		if (photo == null) return false;
 		// Modificamos nuestro objeto photo
 		photo.addComment(comment);
@@ -571,81 +574,38 @@ public class PhotoAppController {
 		return postRepository.getFeed(user.getFollowed()).stream().map((p) -> p.getCode()).toList();
 
 	}
-
-	// Obtener número de seguidores
-	public int getFollowers() {
-		return user.getFollowers().size();
-	}
-
-	// Obtener número de seguidos
-	public int getFollowed() {
-		return user.getFollowed().size();
-	}
-
-	// Obtener nombre de usuario
-	public String getUsername() {
-		return user.getUserName();
-	}
-
-	// Obtener nombre completo
-	public String getFullName() {
-		
-		return user.getFullName();
-	}
-
-	public boolean isFollowed(String userNameFollowed) {
-		return user.getFollowed().stream().anyMatch((u) -> u.getUserName().equals(userNameFollowed));
-	}
-
-	// Obtener email
-	public String getEmail() {
-		return user.getEmail();
-	}
-
-	// Obtener contraseña
-	public String getPassword() {
-		if (user == null)
-			return null;
-		return user.getPassword();
-	}
-
-	// Obtener foto de perfil
-	public String getProfilePic() {
-		if (user == null)
-			return null;
-		return user.getProfilePic();
-	}
-
-	// Obtener foto de perfil
-	public String getBio() {
-		if (user == null)
-			return null;
-		return user.getBio();
-	}
-
-	// Obtener lista de mis fotos, incluyendo las que incluyen los álbumes
-	public List<Integer> getPhotos() {
-		List<Integer> photos = new ArrayList<>();
-		photos.addAll(user.getPhotos().stream().map((p) -> p.getCode()).toList());
-		photos.addAll(user.getAlbums().stream().map((p) -> p.getCode()).toList());
-		return photos;
-	}
-
-	// Obtener lista de mis albumes
-	public List<Integer> getAlbums() {
-		return user.getAlbums().stream().map((p) -> p.getCode()).toList();
-	}
-
-	// Ver si un usuario es premium
-	public boolean isPremium() {
-		if (user == null)
-			return false;
-		return user.isPremium();
+	
+	// Obtener mi id
+	public int getId() {
+		return user.getCode();
 	}
 	
 	// Método para devolver el id de un usuario a partir de su username
 	public int getId(String username) {
 		return userRepository.getUserByUsername(username).getCode();
+	}
+
+	
+	// Obtener lista de fotos de un usuario, incluyendo las que incluyen los álbumes
+	public List<Integer> getPhotos(int id) {
+		List<Integer> photos = new ArrayList<>();
+		User user = userRepository.getUser(id);
+		photos.addAll(user.getPhotos().stream().map((p) -> p.getCode()).toList());
+		List<Album> albums = user.getAlbums();
+		for (Album a : albums) {
+			photos.addAll(a.getPhotos().stream().map((p)->p.getCode()).toList());
+		}
+		return photos;
+	}
+	
+	// Ver si un usuario es premium
+	public boolean isPremium(int id) {
+		return userRepository.getUser(id).isPremium();
+	}
+	
+	// Obtener el nombre de usuario de un usuario
+	public String getUserName(int id) {
+		return userRepository.getUser(id).getUserName();
 	}
 
 	// Obtener el nombre completo de un usuario
@@ -668,32 +628,38 @@ public class PhotoAppController {
 		return userRepository.getUser(id).getProfilePic();
 	}
 
-	// Obtener la lista de fotos de un usuario 
-	public List<Integer> getPhotos(int id) {
-		return userRepository.getUser(id).getPhotos().stream().map((p) -> p.getCode()).toList();
-	}
-
 	// Obtener la lista de albumes de un usuario
 	public List<Integer> getAlbums(int id) {
 		return userRepository.getUser(id).getAlbums().stream().map((p) -> p.getCode()).toList();
 	}
 	
+	// Ver si un usuario user1 tiene a user2 como seguidor
+	public boolean isFollowed(int idUser1, int idUser2) {
+		return userRepository.getUser(idUser1).getFollowers().stream().anyMatch((u) -> u.getCode() == idUser2);	
+	}
 	
 	// Obtener el path de una foto a partir de su id
 	public String getPath(int id) {
-		// TODO QUITAR
-		return ViewConstants.RUTA_FOTOS + "default-profpic.png";
-		//return postRepository.getPhoto(id).getPath();
+		Post post = postRepository.getPost(id);
+		
+		// Si es una foto devolvemos su path
+		if (post instanceof Photo)
+			return ((Photo)post).getPath();
+		
+		// Si es un álbum devolvemos el path de su primera foto
+		else
+			return ((Album)post).getPhotos().get(0).getPath();
 	}
 
 	// Obtener el nombre de usuario del propietario de una foto a partir de su id
 	public String getOwnerOfPhoto(int id) {
-		return postRepository.getPhoto(id).getUser().getUserName();
+		return postRepository.getPost(id).getUser().getUserName();
 	}
 	
-	// Obtener los likes de una foto a partir de su id
+	// Obtener los likes de un post a partir de su id
 	public int getLikes(int id) {
-		return postRepository.getPhoto(id).getLikes();
+		Post p = postRepository.getPost(id);
+		return p.getLikes();
 	}
 	
 	// Obtener todas las fotos de un album
@@ -702,7 +668,12 @@ public class PhotoAppController {
 	}
 	
 	// Obtener el título de una foto
-	public String getPhotoTitle(int photoId) {
+	public String getPostTitle(int photoId) {
+		return postRepository.getPost(photoId).getTitle();
+	}
+	
+	// Obtener el título de una foto
+	public String getPostDescription(int photoId) {
 		return postRepository.getPost(photoId).getDescription();
 	}
 	

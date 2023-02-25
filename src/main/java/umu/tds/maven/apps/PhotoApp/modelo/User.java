@@ -146,7 +146,15 @@ public class User extends DomainObject {
 	}
 	
 	public void addPhotoToAlbum(Photo photo, int id) {
-		albums.stream().filter((a)->a.getCode()==id).forEach((a)->a.addPhoto(photo));
+		Album a = albums.stream().filter((ab)->ab.getCode() == id).toList().get(0);
+		// Si la foto está contenida ya en el album, no la añadimos
+		if (a.getPhotos().stream().filter((p)->p.getCode() == photo.getCode()).toList().size() == 0)
+			a.addPhoto(photo);
+	}
+	
+	public void deletePhotoFromAlbum(int photoId, int id) {
+		Album a = albums.stream().filter((ab)->ab.getCode() == id).toList().get(0);
+		a.removePhoto(photoId);
 	}
 
 	public void addNotification(Notification notification) {

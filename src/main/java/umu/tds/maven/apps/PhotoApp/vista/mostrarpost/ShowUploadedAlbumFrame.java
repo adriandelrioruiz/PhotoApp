@@ -1,5 +1,8 @@
 package umu.tds.maven.apps.PhotoApp.vista.mostrarpost;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +33,10 @@ public abstract class ShowUploadedAlbumFrame extends ShowUploadedPostFrame {
 	private JButton goRightButton;
 	// Botón para pasar a la izquierda en la lista e fotos del álbum
 	private JButton goLeftButton;
+	// JLabel para mostrar el número de likes de la foto que se está mostrando 
+	protected JLabel nPhotoLikes;
+	// JLabel para mostrar el número de likes del álbum
+	protected JLabel nAlbumLikes;
 	
 	// Lista de ids de las fotos del álbum
 	protected List<Integer> photoIdList;
@@ -42,8 +49,9 @@ public abstract class ShowUploadedAlbumFrame extends ShowUploadedPostFrame {
 	public ShowUploadedAlbumFrame(int userId, int postId) {
 		super(userId, postId);
 		
+		
 		// Guardamos la lista de los PhotoId del album
-		photoIdList = controller.getAlbums(userId);
+		photoIdList = controller.getPhotosOfAlbum(postId);
 		imageList = new LinkedList<>();
 		nOfPhotos = photoIdList.size() - 1;
 		
@@ -51,6 +59,8 @@ public abstract class ShowUploadedAlbumFrame extends ShowUploadedPostFrame {
 		photoCounter = 0;
 		
 		initialize();
+		
+		
 	}
 	
 	@Override
@@ -124,6 +134,31 @@ public abstract class ShowUploadedAlbumFrame extends ShowUploadedPostFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	
+	@Override
+	protected void createEastPane() {
+
+		super.createEastPane();
+		
+		// Añadimos la etiqueta para mostrar los likes de la foto actual
+		nPhotoLikes = new JLabel(DEFAULT_NLIKES_TEXT + controller.getLikes(photoIdList.get(photoCounter)));
+		nPhotoLikes.setBackground(Color.LIGHT_GRAY);
+		nPhotoLikes.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
+		nPhotoLikes.setLocation(commentTxtArea.getX(), commentButton.getY() + commentButton.getHeight());
+		nPhotoLikes.setSize(200, 20);
+		eastPane.add(nPhotoLikes);
+	}
+	
+	@Override
+	protected void createSouthPane() {
+		super.createSouthPane();
+		
+		nAlbumLikes = new JLabel(DEFAULT_NALBUMLIKES_TEXT + controller.getLikes(postId));
+		nAlbumLikes.setBackground(Color.LIGHT_GRAY);
+		nAlbumLikes.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
+		southPane.add(nAlbumLikes, BorderLayout.WEST);
 	}
 	
 	@Override
@@ -135,7 +170,7 @@ public abstract class ShowUploadedAlbumFrame extends ShowUploadedPostFrame {
 		goLeftButton.addActionListener(new ChangePhotoButtonListener(goLeftButton));
 	}
 	
-	// Listener 
+	// Listener para los botones para desplazarse por la lista de fotos del álbum
 	class ChangePhotoButtonListener implements ActionListener {
 		
 		JButton button;
@@ -170,6 +205,9 @@ public abstract class ShowUploadedAlbumFrame extends ShowUploadedPostFrame {
 			
 			// Cambiamos la imagen
 			imageLabel.setIcon(imageList.get(photoCounter));
+			
+			// Cambiamos el número de likes
+			nPhotoLikes.setText(DEFAULT_NLIKES_TEXT + controller.getLikes(photoIdList.get(photoCounter)));
 		}
 	}
 
@@ -178,7 +216,7 @@ public abstract class ShowUploadedAlbumFrame extends ShowUploadedPostFrame {
 		// Comentamos en la foto en la que se esté actualmente
 		if (controller.comment(photoIdList.get(photoCounter), commentTxtArea.getText())) {
 			JButton btnAceptar = new JButton("Aceptar");
-			JOptionPane.showMessageDialog(btnAceptar, "El registro se ha completado con éxito");
+			JOptionPane.showMessageDialog(btnAceptar, "El comentario se ha registrado con éxito");
 			commentTxtArea.setText(DEFAULT_COMMENT_TEXT);
 		}
 

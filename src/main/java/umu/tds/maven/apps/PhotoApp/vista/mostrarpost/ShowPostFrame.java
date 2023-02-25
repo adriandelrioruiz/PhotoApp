@@ -16,6 +16,7 @@ import javax.swing.JTextArea;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import javax.swing.border.LineBorder;
 
 /** Clase JFrame usada para mostrar un post */
 
@@ -63,7 +64,7 @@ public abstract class ShowPostFrame extends JFrame {
 	public ShowPostFrame(int userId) {
 		
 		this.userId = userId;
-
+		
 	}
 	
 	// Método para inicializar los valores del Frame

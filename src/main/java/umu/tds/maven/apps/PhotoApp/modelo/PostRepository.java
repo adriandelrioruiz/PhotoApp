@@ -39,6 +39,9 @@ public class PostRepository {
 			factory.getPhotoDAO().getAllPhotos().stream().forEach((p) -> photosById.put(p.getCode(), p));
 			factory.getAlbumDAO().getAllAlbums().stream().forEach((a) -> albumsById.put(a.getCode(), a));
 			
+			// Quitamos las fotos de la lista de fotos que pertenezcan a un álbum
+			albumsById.values().stream().forEach((a)->a.getPhotos().stream().forEach((p)->photosById.remove(p.getCode())));
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,6 +59,7 @@ public class PostRepository {
 		albumsById.put(album.getCode(), album);
 	}
 	
+
 	// Método para añadir una foto a un álbum
 	public Album addPhotoToAlbum(Photo photo, int idAlbum) {
 		// Recuperamos el álbum y comprobamos que no se ha excedido el máximo de fotos
@@ -71,20 +75,28 @@ public class PostRepository {
 	
 	// Método para eliminar una foto
 	public Post deletePhoto(int id) {
-		Photo photo = photosById.get(id);
-		// tenemos que eliminar las notificaciones que hacían referencia a ella
-		photo.getUser().getFollowers().stream().forEach((u)->u.removeNotification((photo.getNotification().getCode())));
-		// También tenemos que ver si pertenece a algún álbum. En caso de que quede vacío, lo borraremos
-		for (Album a : albumsById.values()) {
-			if (a.getPhotos().stream().filter((p)->p.getCode() == id).toList().size() >= 1 && a.getPhotos().size() == 1) {
-				// Eliminamos la foto de la lista de fotos
-				photosById.remove(id);
-				// Eliminamos el álbum y lo devolvemos sin la foto
-				deleteAlbum(a.getCode());
-				a.removePhoto(id);
-				return a;
+		// Miramos si es una foto normal
+		Photo photo = photosById.remove(id);
+		
+		// Si no lo es, tendremos que mirar si pertenece a un álbum
+		if (photo == null) {
+			for (Album a : albumsById.values()) {
+				for (Photo p : a.getPhotos()) {
+					if (p.getCode() == id) {
+						// Eliminamos la foto del álbum
+						a.removePhoto(id);
+						// Si el álbum se queda vacío, eliminamos el álbum y lo devolvemos sin la foto
+						if (a.getPhotos().size() == 0) {
+							deleteAlbum(a.getCode());
+						}
+						return a;
+					}
+				}
 			}
 		}
+
+		// Si es una foto normal, tenemos que eliminar las notificaciones que hacían referencia a ella
+		photo.getUser().getFollowers().stream().forEach((u)->u.removeNotification((photo.getNotification().getCode())));
 		// Eliminarmos la foto y la devolvemos
 		return photosById.remove(id);
 		
@@ -99,15 +111,20 @@ public class PostRepository {
 		return a;
 	}
 	
-	// Método para recuperar una foto a partir de su id
-	public Photo getPhoto(int id) {
-		return photosById.get(id);
-	}
+	
 	
 	// Método para recuperar un post a partir de su id
 	public Post getPost(int id) {
 		// Miramos si es una foto
 		Post p = photosById.get(id);
+		
+		// Miramos si la foto está en algún álbum
+		for (Album a : albumsById.values()) {
+			for (Photo ph : a.getPhotos()) {
+				if (ph.getCode() == id)
+					return ph;
+			}
+		}
 		
 		// Si no, miramos si es un álbum
 		if (p == null)

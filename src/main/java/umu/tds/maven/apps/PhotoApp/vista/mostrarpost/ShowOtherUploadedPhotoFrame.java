@@ -61,6 +61,11 @@ public class ShowOtherUploadedPhotoFrame extends ShowUploadedPhotoFrame{
 			public void actionPerformed(ActionEvent e) {
 				// Damos like a la foto
 				controller.like(postId);
+				
+				// Incrementamos el like en la pantalla
+				nLikes.setText(DEFAULT_COMMENT_TEXT + controller.getLikes(postId));
+				
+				// Mostramos ventana de diálogo para mostrar que se ha dado like
 				JButton btnAceptar = new JButton("Aceptar");
 				JOptionPane.showMessageDialog(btnAceptar, "Has dado like a la foto");
 				commentTxtArea.setText(DEFAULT_COMMENT_TEXT);

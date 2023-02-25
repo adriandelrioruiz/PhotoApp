@@ -9,8 +9,13 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
+import umu.tds.maven.apps.PhotoApp.controlador.Codes;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.UploadPhotoFrame;
 
 /** Clase para mostrar un álbum mío */
 
@@ -67,6 +72,46 @@ public class ShowMyUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.deleteAlbum(postId);
+				JButton btnAceptar = new JButton("Aceptar");
+				JOptionPane.showMessageDialog(btnAceptar, "El álbum se ha eliminado con éxito");
+				LoggedFrame.getInstance().updateProfile();
+				dispose();
+			}
+		});
+		
+		// Añadimos el listener para añadir foto al álbum
+		addPhotoToAlbumButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String absolutePath = "";
+				JFileChooser fileChooser = new JFileChooser();
+				int returnValue = fileChooser.showOpenDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					absolutePath = fileChooser.getSelectedFile().toString();
+					if (!UploadPhotoFrame.isValidImageFormat(absolutePath)) {
+						JOptionPane.showMessageDialog(null, "Introduce una imagen válida", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+						return;
+					}
+
+				}
+				// Añadimos la foto al álbum con el mismo título y descripción que el álbum
+				Codes exit = controller.addPhotoToAlbum(controller.getPostTitle(postId), controller.getPostDescription(postId), absolutePath, postId);
+				
+				// éxito
+				if (exit == Codes.OK) {
+					JButton btnAceptar = new JButton("Aceptar");
+					JOptionPane.showMessageDialog(btnAceptar, "La foto se ha añadido con éxito");
+					LoggedFrame.getInstance().updateProfile();
+					dispose();
+				}
+				
+				if (exit == Codes.NUM_OF_PHOTOS_IN_ALBUM_EXCEEDED) {
+					JButton btnAceptar = new JButton("Aceptar");
+					JOptionPane.showMessageDialog(btnAceptar, "El álbum ha excedido el máximo de fotos");
+					dispose();
+				}
+				
 			}
 		});
 	}

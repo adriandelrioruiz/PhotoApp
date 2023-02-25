@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -12,8 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
-import umu.tds.maven.apps.PhotoApp.modelo.Photo;
-import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 
@@ -45,7 +42,7 @@ public class LoggedFrame extends JFrame {
 		return lf;
 	}
 	private void initialize() {
-		setResizable(false);
+		setResizable(true);
 		setLayout(new BorderLayout());
 		setSize(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, ViewConstants.LOGGEDFRAME_WINDOW_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,7 +69,7 @@ public class LoggedFrame extends JFrame {
 	    feedPane = new FeedPane(controller.getFeed());
 	    centerPane.add(feedPane, "feed"); // Agrega el panel feedPane al panel secundario con el nombre "feed"
 
-	    myProfilePane = new MyProfilePane();
+	    myProfilePane = new MyProfilePane(controller.getId());
 	    centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre "profile"
 	    myProfilePane.setVisible(false); // Lo deja no visible
 	}
@@ -111,7 +108,7 @@ public class LoggedFrame extends JFrame {
 	// Para que se actualice la vista del perfil en caso de que se suba una nueva foto
 	public void updateProfile() {
 		centerPane.remove(myProfilePane);
-		myProfilePane = new MyProfilePane();
+		myProfilePane = new MyProfilePane(controller.getId());
 	    centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre "profile"
 	    changeToProfilePanel();
 		revalidate();

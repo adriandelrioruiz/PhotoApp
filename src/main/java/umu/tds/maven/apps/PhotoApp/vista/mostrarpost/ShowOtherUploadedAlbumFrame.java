@@ -74,6 +74,7 @@ public class ShowOtherUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 			public void actionPerformed(ActionEvent e) {
 				// Damos like a la foto
 				controller.like(photoIdList.get(photoCounter));
+				nPhotoLikes.setText(DEFAULT_NLIKES_TEXT + controller.getLikes(photoIdList.get(photoCounter))); 
 				JButton btnAceptar = new JButton("Aceptar");
 				JOptionPane.showMessageDialog(btnAceptar, "Has dado like a la foto");
 				commentTxtArea.setText(DEFAULT_COMMENT_TEXT);
@@ -85,7 +86,18 @@ public class ShowOtherUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Damos like al album
 				controller.like(postId);
+				
+				// Actualizamos la JLabel que muestra los likes del álbum
+				nAlbumLikes.setText(DEFAULT_NALBUMLIKES_TEXT + controller.getLikes(postId));
+				
+				// Actualizamos la JLabel que muestra los likes de la foto
+				nPhotoLikes.setText(DEFAULT_NLIKES_TEXT + controller.getLikes(photoIdList.get(photoCounter)));
+				
+				// Mostramos ventana de diálogo
+				JButton btnAceptar = new JButton("Aceptar");
+				JOptionPane.showMessageDialog(btnAceptar, "Has dado like al álbum");
 			}
 		});
 	}

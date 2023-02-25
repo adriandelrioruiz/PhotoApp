@@ -6,8 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.JButton;
 
@@ -19,12 +17,11 @@ public class MyProfilePane extends AbstractProfilePane {
 	
 	private JButton btnEditProfile;
 
-	public MyProfilePane() {
-		super();
+	public MyProfilePane(int userId) {
+		super(userId);
+		
 	}
-	
 
-	
 	protected void createNorthPanel() {
 		
 		super.createNorthPanel();
@@ -51,67 +48,17 @@ public class MyProfilePane extends AbstractProfilePane {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				@SuppressWarnings("unused")
 				EditRegisterFrame frame = new EditRegisterFrame();
 				
 			}
 		});
 	}
 
-	
 	@Override
 	protected void createCenterPanel() {
-		centerPanel = new AllPostsPane(photos, albums, true);
+		centerPanel = new AllPostsPane(userId, true);
 		add(centerPanel, BorderLayout.CENTER);
-	}
-
-
-
-	@Override
-	protected String getProfilePic() {
-		return controller.getProfilePic();
-	}
-
-
-
-	@Override
-	protected int getNumOfPosts() {
-		return controller.getPhotos().size() + controller.getAlbums().size();
-	}
-
-
-
-	@Override
-	protected String getUserName() {
-		return controller.getUsername();
-	}
-
-
-
-	@Override
-	protected String getFullName() {
-		return controller.getFullName();
-	}
-
-
-
-	@Override
-	protected int getFollowers() {
-		return controller.getFollowers();
-	}
-
-
-
-	@Override
-	protected int getFollowed() {
-		return controller.getFollowed();
-	}
-
-
-
-	@Override
-	protected void initializePhotos() {
-		photos = controller.getPhotos();
-		albums = controller.getAlbums();
 	}
 
 	

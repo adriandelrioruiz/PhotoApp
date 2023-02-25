@@ -10,18 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
-import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 public class MenuPane extends JPanel {
@@ -38,7 +33,6 @@ public class MenuPane extends JPanel {
 	
 	private JTextField txtSearch;
 	private JButton uploadButton, lupaButton, userButton, premiumButton, titulo;
-	private ImageIcon image;
 	private LoggedFrame frame;
 	
 	private PhotoAppController controller;
@@ -93,7 +87,7 @@ public class MenuPane extends JPanel {
 		this.setButton(lupaButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 + 50, BUTTON_WIDTH, BUTTON_HEIGHT);
 		// FOTO USER
 
-		userButton = new JButton(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic()));
+		userButton = new JButton(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));
 		this.setButton(userButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 100, USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT);
 		// BOTON PREMIUN
 		premiumButton = new JButton(this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + 
@@ -104,7 +98,7 @@ public class MenuPane extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// Mostrar una ventana de diálogo para SUBIR FOTO
 				@SuppressWarnings("unused")
-				UploadPhotoFrame cargar = new UploadPhotoFrame(true);
+				UploadPhotoFrame cargar = new UploadPhotoFrame(UploadPhotoFrame.ADD_ALBUM);
 			}
 		});
 		lupaButton.addActionListener(new ActionListener() {
@@ -124,7 +118,7 @@ public class MenuPane extends JPanel {
 		premiumButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (PhotoAppController.getInstance().isPremium()) {
+				if (PhotoAppController.getInstance().isPremium(controller.getId())) {
 					new PremiumFrame();// llamar a la clase ventana premium para mostrar frame
 				} else {
 					new DescuentoFrame();
@@ -151,6 +145,7 @@ public class MenuPane extends JPanel {
 		return new ImageIcon(image);
 	}
 
+	/*
 	private void setComponent(JComponent component, int x, int y, int width, int height) {
 		component.setAlignmentX(x);
 		LoggedFrame.fixSize(component, TITULO_WIDTH, MENU_HEIGHT);
@@ -169,7 +164,7 @@ public class MenuPane extends JPanel {
 		menu.add(copy);
 		menu.add(paste);
 		// menu.show(e.getComponent(), e.getX(), e.getY());
-	}
+	}*/
 
 	private void setButton(JButton boton, int x, int width, int height) {
 		this.add(boton);
