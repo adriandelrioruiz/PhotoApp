@@ -1,33 +1,23 @@
 package umu.tds.maven.apps.PhotoApp.vista.loginregistro;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import com.toedter.calendar.JCalendar;
 
 import umu.tds.maven.apps.PhotoApp.controlador.Codes;
-import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 public class RegisterFrame extends AbstractRegisterFrame {

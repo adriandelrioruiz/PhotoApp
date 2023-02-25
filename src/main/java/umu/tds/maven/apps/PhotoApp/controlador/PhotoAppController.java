@@ -623,6 +623,21 @@ public class PhotoAppController {
 		return userRepository.getUser(id).getFollowed().size();
 	}
 	
+	// Obtener el email de un usuario
+	public String getEmail(int id) {
+		return userRepository.getUser(id).getEmail();
+	}
+	
+	// Obtener la contraseña de un usuario
+	public String getPassword(int id) {
+		return userRepository.getUser(id).getPassword();
+	}
+	
+	// Obtener la bio de un usuario
+	public String getBio(int id) {
+		return userRepository.getUser(id).getBio();
+	}
+	
 	// Obtener foto de perfil de un usuario 
 	public String getProfilePic(int id) {
 		return userRepository.getUser(id).getProfilePic();

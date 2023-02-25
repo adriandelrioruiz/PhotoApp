@@ -58,7 +58,6 @@ public class LoggedFrame extends JFrame {
 	private void createNorthPane() {
 		menuPane = new MenuPane(this);
 		getContentPane().add(menuPane, BorderLayout.NORTH);
-		
 	}
 	
 	// Método para crear el panel centro que contendrá los paneles variables
@@ -113,5 +112,12 @@ public class LoggedFrame extends JFrame {
 	    changeToProfilePanel();
 		revalidate();
 		repaint();
+	}
+	
+	// Para que se actualice la foto de perfil en caso de que se suba una nueva foto
+	public void updateProfilePic() {
+		updateProfile();
+		// Recreamos en northPane con el menuPane con la foto de perfil nueva
+		menuPane.updateProfilePic();
 	}
 }

@@ -174,7 +174,15 @@ public class MenuPane extends JPanel {
 		boton.setBackground(null);
 		boton.setBorderPainted(false);
 		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
 	}
+	
+	public void updateProfilePic() {
+		userButton.setIcon(getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));
+		revalidate();
+		repaint();
+		
+	}
+	
+	
 
 }

@@ -2,7 +2,6 @@ package umu.tds.maven.apps.PhotoApp.vista.loginregistro;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -11,6 +10,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -18,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -26,9 +25,9 @@ import javax.swing.border.Border;
 
 import com.toedter.calendar.JCalendar;
 
-import umu.tds.maven.apps.PhotoApp.controlador.Codes;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.UploadPhotoFrame;
 
 /** Clase abstracta que engloba a la vista de registro normal que un usuario usa para registrarse
  * por primera vez y a la vista que el usuario usa para editar su perfil */
@@ -60,6 +59,9 @@ public abstract class AbstractRegisterFrame extends JFrame {
 	// Frame para escribir la bio
 	protected SetBioFrame bioFrame;
 	private JButton btnDescribeYourself;
+	
+	// String que contiene la ruta de la foto de perfil
+	protected String profilePic;
 	
 
 	/**
@@ -205,24 +207,31 @@ public abstract class AbstractRegisterFrame extends JFrame {
 		hideErrors();
 		
 		// Intentamos leer la imagen desde la ruta. Si no es una imagen o no hay ningún archivo seleccionado, error.
-		try {
-			ImageIO.read(fileChooser.getSelectedFile());
-		}
 		
-		catch (Exception e) {
+		if (!UploadPhotoFrame.isValidImageFormat(profilePic)) {
 			lblInvalidProfilePic.setVisible(true);
 			fieldsOkay = false;
 		}
-
-		if (txtPassword.getText().isEmpty() || txtPassword.getText().equals(ViewConstants.PASSWORD_DEFAULT_TEXT)) {
-			lblEmptyPassword.setVisible(true);
-			txtPassword.setBorder(BorderFactory.createLineBorder(Color.RED));
-			fieldsOkay = false;
+		
+		else {
+			try {
+				ImageIO.read(new File(profilePic));
+			}
+			
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+	
+			if (txtPassword.getText().isEmpty() || txtPassword.getText().equals(ViewConstants.PASSWORD_DEFAULT_TEXT)) {
+				lblEmptyPassword.setVisible(true);
+				txtPassword.setBorder(BorderFactory.createLineBorder(Color.RED));
+				fieldsOkay = false;
+			}
 		}
 
 		return fieldsOkay;
 	}
-	
+
 	protected void addListeners() {
 		addFileChooseButtonHandler(fileChooserButton);
 		addBioButtonListener(btnDescribeYourself);
@@ -269,6 +278,8 @@ public abstract class AbstractRegisterFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fileChooser.showOpenDialog(null);
+				if (fileChooser.getSelectedFile() != null)
+					profilePic = fileChooser.getSelectedFile().toString();
 			}
 		});
 	}
