@@ -20,6 +20,7 @@ public class SearchFrame extends JFrame {
 	private static final int BUSQUEDA_HEIGHT = 400;
 
 	public SearchFrame(String query) {
+		/*
 		List<DomainObject> busqueda = PhotoAppController.getInstance().search(query);
 		this.setSize(BUSQUEDA_WIDTH, BUSQUEDA_HEIGHT);
 		JPanel panel = new JPanel();
@@ -48,6 +49,7 @@ public class SearchFrame extends JFrame {
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		this.add(scroll);
 		this.setVisible(true);
+		*/
 	}
 
 }

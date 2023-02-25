@@ -3,7 +3,11 @@ package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -59,10 +63,18 @@ public class PostPane extends JPanel {
 
 	private void mostrarMenu(java.awt.event.MouseEvent e) {
 		JPopupMenu menu = new JPopupMenu();
-		JLabel label = new JLabel();
-		label.setIcon(ViewConstants.getIcon(300, 300, "icon_lupa.png"));
-		menu.add(label);
-		menu.show(e.getComponent(), 5, -5);
+		Image image;
+		
+		try {
+			image = (ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "icon_lupa.png"))).getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+			JLabel label = new JLabel();
+			label.setIcon(new ImageIcon(image));
+			menu.add(label);
+			menu.show(e.getComponent(), 5, -5);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		// menu.show(e.getComponent(), e.getX()-50, e.getY()-50);
 	}
 

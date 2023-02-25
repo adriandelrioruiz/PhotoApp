@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +34,7 @@ import umu.tds.maven.apps.PhotoApp.persistencia.IPhotoAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
+import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 public class PhotoAppController {
 
@@ -44,7 +46,7 @@ public class PhotoAppController {
 	private static final int OLD_AGE_DISCOUNT = 65;
 	private static final double AGE_DISCOUNT = 0.25;
 	private static final int NUMBER_OF_TOP_PHOTOS = 10;
-	
+
 	// única instancia (singleton)
 	private static PhotoAppController onlyInstance;
 
@@ -152,12 +154,11 @@ public class PhotoAppController {
 		System.out.println("El usuario " + usernameOrEmail + " se ha logeado con éxito");
 		return Codes.OK;
 	}
-	
+
 	// Método para unLogearse TODO ver si lo quito
 	public void unLogin() {
 		user = null;
 	}
-	
 
 	public void follow(String userNameFollowed) {
 		if (user == null)
@@ -181,13 +182,12 @@ public class PhotoAppController {
 
 			// No hace falta modificar los datos en el repositorio porque los objetos
 			// usuario son tomados del mismo, así que ya se han modificado en esta función
-			
+
 			System.out.println("Ahora sigues a " + userNameFollowed);
-		}
-		else
+		} else
 			System.out.println("Ya sigues al usuario " + userNameFollowed);
 	}
-	
+
 	public void unFollow(String userNameUnfollowed) {
 		if (user == null)
 			return;
@@ -206,89 +206,168 @@ public class PhotoAppController {
 
 			// No hace falta modificar los datos en el repositorio porque los objetos
 			// usuario son tomados del mismo, así que ya se han modificado en esta función
-			
+
 			System.out.println("Ya no sigues a " + userNameUnfollowed);
-		}
-		else
+		} else
 			System.out.println("No sigues al usuario " + userNameUnfollowed);
 	}
-	
-	// Método para añadir una foto TODO Hace falta q devuelva el post??????????
+
+	// Método para añadir una foto 
 	public Photo addPhoto(String title, String description, String path) {
 		if (user == null)
 			return null;
-		
+
 		Date now = new Date();
 		Photo photo = new Photo(title, now, description, path, user);
 		Notification notification = new Notification(now, photo);
 		photo.setNotification(notification);
-		
+
 		try {
 			// Extraer hashtags y meter en la foto
 			List<String> hashtags = getHashtagsFromDescription(description);
 			// Añadimos los hashtags al objeto Post
-			for(String hashtag : hashtags)
+			for (String hashtag : hashtags)
 				photo.addHashtag(hashtag);
-			
+
 			photoAdapter.addPhoto(photo);
-			postRepository.addPost(photo);
-			
+			postRepository.addPhoto(photo);
+
 			user.addPhoto(photo);
 			// añadir la foto en la persistencia del usuario
-			// TODO cambiar para que no se añada una foto individual cuando pertenece a un álbum
 			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
 			// Habrá que mandar una notificación a todos los seguidores
-			user.getFollowers().stream().forEach((u)->notify(u,notification));
-			
-			
+			user.getFollowers().stream().forEach((u) -> notify(u, notification));
+
 			System.out.println("El usuario " + user.getUserName() + " ha añadido el post " + title);
 		}
-		
+
 		catch (InvalidHashtagException e) {
 			e.showDialog();
 		}
-			
-			return photo;
+
+		return photo;
 	}
 	
-	
-	public Album addAlbum(String title, String description, List<String> paths) {
+	// Método para añadir 
+	public Codes addPhotoToAlbum(String title, String description, String path, int albumId) {
 		if (user == null)
 			return null;
+
+		Date now = new Date();
+		Photo photo = new Photo(title, now, description, path, user);
 		
-		List<Photo> photos = new LinkedList<>();
+		// Añadimos la foto al photoAdapter
+		photoAdapter.addPhoto(photo);
 		
-		// Vamos añadiendo cada foto
-		paths.stream().forEach((p) -> photos.add(addPhoto(title, description, p)));
+		// Metemos la foto en el repositorio y nos devuelve el álbum al que pertenece
+		Album album = postRepository.addPhotoToAlbum(photo, albumId);
+		
+		// Actualizamos foto y album en usuario en la persistencia
+		userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);	
+		
+		// Si el álbum del usuario no contenía es foto, la añadimos
+		user.addPhotoToAlbum(photo, albumId);
+		
+		// Miramos si se ha excedido el número de fotos, en cuyo caso el repositorio devolverá null
+		if (album == null) {
+			// Tendremos que borrar la foto que acabamos de meter en la persistencia
+			photoAdapter.deletePhoto(photo.getCode());
+			return Codes.NUM_OF_PHOTOS_IN_ALBUM_EXCEEDED;
+		}
+		
+		// Actualizamos el álbum den albumAdapter
+		albumAdapter.updateAlbum(album, AlbumAdapterTDS.PHOTOS);
+		
+		return Codes.OK;
+		
+	}
+	
+	// Método para añadir un álbum
+	public Album addAlbum(String title, String description, String path) {
+		if (user == null)
+			return null;
 
 		// Creamos el álbum
-		Album album = new Album(title, null, description, user);
-		album.setPhotos(photos);
-		
+		Date now = new Date();
+		Album album = new Album(title, now, description, user);
+		Photo photo = new Photo(title, now, description, path, user);
+		album.addPhoto(photo);
+
 		try {
 			// Extraer hashtags y meter en la foto
 			List<String> hashtags = getHashtagsFromDescription(description);
 			// Añadimos los hashtags al objeto Post
-			for(String hashtag : hashtags)
+			for (String hashtag : hashtags)
 				album.addHashtag(hashtag);
-			
+
+			// Registramos la foto y el álbum
+			photoAdapter.addPhoto(photo);
 			albumAdapter.addAlbum(album);
-			postRepository.addPost(album);
+			postRepository.addAlbum(album);
 			
+			// Añadimos el album al usuario
 			user.addAlbum(album);
+			
 			// añadir la foto en la persistencia del usuario
 			userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
-			
-			System.out.println("El usuario " + user.getUserName() + " ha añadido el post " + title);
+
+			System.out.println("El usuario " + user.getUserName() + " ha añadido el album " + title);
 		}
-		
+
 		catch (InvalidHashtagException e) {
 			e.showDialog();
 		}
-			
-			return album;
-	}	
+
+		return album;
+	}
 	
+	// Método para eliminar un post
+	public void deletePhoto(int id) {
+	
+		Post post = postRepository.deletePhoto(id);
+		
+		if (post instanceof Photo) {
+			photoAdapter.deletePhoto(id);
+			user.removePhoto(id);
+			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
+		} else {
+			Album album = (Album)post;
+			// Si el álbum solo tenía una foto, borramos el álbum
+			if (album.getPhotos().size() == 0) {
+				albumAdapter.deleteAlbum(album.getCode());
+				user.removeAlbum(album.getCode());
+			}
+			
+			// Si el álbum tenía más de una foto, borramos la foto y actualizamos el álbum
+			else {
+				user.deletePhotoFromAlbum(id, album.getCode());
+				photoAdapter.deletePhoto(id);
+				albumAdapter.updateAlbum(album, AlbumAdapterTDS.PHOTOS);
+			}
+			
+		}
+
+		System.out.println("El usuario " + user.getUserName() + " ha eliminado el post " + post.getTitle());
+	}
+	
+	// Método para eliminar un álbum
+	public void deleteAlbum(int id) {
+		if (user == null)
+			return;
+
+		
+		postRepository.deleteAlbum(id);
+		albumAdapter.deleteAlbum(id);
+		
+		// Eliminamos el álbum de su usuario
+		user.removeAlbum(id);
+		
+		// Actualizamos el usuario en la base de datos
+		userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
+		
+	}
+	
+
 	// Método para actualizar la bio
 	public void changeBio(String newBio) {
 		if (user == null)
@@ -298,7 +377,7 @@ public class PhotoAppController {
 		// Actualizamos la persistencia
 		userAdapter.updateUser(user, UserAdapterTDS.BIO);
 	}
-	
+
 	public void changeProfilePic(String newProfilePicPath) {
 		if (user == null)
 			return;
@@ -307,7 +386,7 @@ public class PhotoAppController {
 		// Actualizamos la persistencia
 		userAdapter.updateUser(user, UserAdapterTDS.PROFILEPIC);
 	}
-	
+
 	public void changePassword(String newPassword) {
 		if (user == null)
 			return;
@@ -316,200 +395,161 @@ public class PhotoAppController {
 		// Actualizamos la persistencia
 		userAdapter.updateUser(user, UserAdapterTDS.PASSWORD);
 	}
-	
-	// Método para eliminar un post
-	public void deletePost(Post post) {
-		if (user == null)
-			return;
 
-		postRepository.deletePost(post);
-		
-		if (post instanceof Photo) {
-			photoAdapter.deletePhoto(post.getCode());
-			user.removePhoto((Photo)post);
-			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
-		}
-		else {
-			albumAdapter.deleteAlbum((Album)post);
-			user.removeAlbum((Album)post);
-			userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
-		}
-		
-		System.out.println("El usuario " + user.getUserName() + " ha eliminado el post " + post.getTitle());
-	}
-	
-	
-	
-	public List<Post> getAllPosts() {
-		if (user == null)
-			return null;
-		LinkedList<Post> posts = new LinkedList<>();
-		posts.addAll(user.getPhotos());
-		posts.addAll(user.getAlbums());
-		
-		return posts;
-	}
-	
+
+
 	// Método para darle like a un post
-	public void like(Post post) {
+	public void like(int postId) {
 		if (user == null)
 			return;
+		
+		// Obtenemos el post
+		Post post = postRepository.getPost(postId);
 		// Modificamos los likes en el objeto post, que será una foto o un álbum
 		post.like();
-			
+
 		// Cambiamos el objeto en la persistencia según sea foto o álbum
 		if (post instanceof Photo)
-			photoAdapter.updatePhoto((Photo)post, PhotoAdapterTDS.LIKES);
+			photoAdapter.updatePhoto((Photo) post, PhotoAdapterTDS.LIKES);
 		else {
 			// Cambiamos los likes del álbum
-			albumAdapter.updateAlbum((Album)post, AlbumAdapterTDS.LIKES);
+			albumAdapter.updateAlbum((Album) post, AlbumAdapterTDS.LIKES);
 			// Cambiamos los likes de todas sus fotos
-			((Album)post).getPhotos().stream().forEach((p) -> photoAdapter.updatePhoto(p, PhotoAdapterTDS.LIKES));
+			((Album) post).getPhotos().stream().forEach((p) -> photoAdapter.updatePhoto(p, PhotoAdapterTDS.LIKES));
 		}
-			
+
 	}
-	
+
 	// Método para quitarle el like a un post
 	public void unlike(Post post) {
 		if (user == null)
 			return;
 		// Modificamos los likes en el objeto post, que será una foto o un álbum
 		post.unlike();
-			
+
 		// Cambiamos el objeto en la persistencia según sea foto o álbum
 		if (post instanceof Photo)
-			photoAdapter.updatePhoto((Photo)post, PhotoAdapterTDS.LIKES);
+			photoAdapter.updatePhoto((Photo) post, PhotoAdapterTDS.LIKES);
 		else {
 			// Cambiamos los likes del álbum
-			albumAdapter.updateAlbum((Album)post, AlbumAdapterTDS.LIKES);
+			albumAdapter.updateAlbum((Album) post, AlbumAdapterTDS.LIKES);
 			// Cambiamos los likes de todas sus fotos
-			((Album)post).getPhotos().stream().forEach((p) -> photoAdapter.updatePhoto(p, PhotoAdapterTDS.LIKES));
+			((Album) post).getPhotos().stream().forEach((p) -> photoAdapter.updatePhoto(p, PhotoAdapterTDS.LIKES));
 		}
 	}
-	
+
 	// Método para comentar en un post
-	public void comment(Post post, String commentText) {
-		if (user == null)
-			return;
-		// Creamos el objeto comentario, que tendrá como usuario comentador a nuestro usuario
+	public boolean comment(int id, String commentText) {
+		// Creamos el objeto comentario, que tendrá como usuario comentador a nuestro
+		// usuario
 		Comment comment = new Comment(commentText, user);
-		// Modificamos nuestro objeto post
-		post.addComment(comment);
+		// Recuperamos el objeto Photo
+		Photo photo = (Photo)postRepository.getPost(id);
+		// Comprobamos que no sea nulo
+		if (photo == null) return false;
+		// Modificamos nuestro objeto photo
+		photo.addComment(comment);
 		// Añadimos el comentario a la persistencia
 		commentAdapter.addComment(comment);
-		// Modificamos el post de la persistencia según sea foto o álbum
-		if (post instanceof Photo)
-			photoAdapter.updatePhoto((Photo)post, PhotoAdapterTDS.COMMENTS);
-		else {
-			// Cambiamos los comentarios del álbum
-			albumAdapter.updateAlbum((Album)post, AlbumAdapterTDS.COMMENTS);
-			// Cambiamos los comentarios de todas sus fotos
-			((Album)post).getPhotos().stream().forEach((p) -> photoAdapter.updatePhoto(p, PhotoAdapterTDS.COMMENTS));
-		}
+		// Modificamos la foto de la persistencia
+		photoAdapter.updatePhoto(photo, PhotoAdapterTDS.COMMENTS);
+		
+		return true;
+		
 	}
-	
+
 	// Método para hacer una búsqueda. Devuelve una lista de objetos de dominio
 	public List<DomainObject> search(String search) {
-		if (user == null)
-			return null;
 		List<DomainObject> objetos = new LinkedList<>();
 		// Primero buscamos si hay usuarios a partir del userName
 		objetos.addAll(userRepository.getUsersByUserNameContaining(search));
-		// Luego buscamos si 
+		// Luego buscamos si
 		objetos.addAll(userRepository.getUsersByNameStartingWith(search));
 		objetos.addAll(userRepository.getUsersByEmailContaining(search));
-		//objetos.addAll(userRepository.getPostsByHashtagsContaining(search));
-		
+		// objetos.addAll(userRepository.getPostsByHashtagsContaining(search));
+
 		return objetos;
 	}
-	
-	
+
 	// -------------------- FUNCIONALIDAD PREMIUM ----------------
 	// TODO
-	
+
 	// Método para hacerse premium
 	public void changeToPremium() {
-		if (user == null)
-			return;
-		// Aquí es donde se realizaría el pago, pero esto queda fuera de los que se pide en la especificación
+		// Aquí es donde se realizaría el pago, pero esto queda fuera de los que se pide
+		// en la especificación
 		user.setPremium(true);
 	}
-	
+
 	public void changeToNotPremium() {
 		if (user == null)
 			return;
 		user.setPremium(false);
 	}
-	
+
 	private double getDiscountByLikes() {
 		if (user == null)
 			return -1;
 		int likes = 0;
 		for (Photo p : user.getPhotos())
 			likes += p.getLikes();
-		
 
 		if (likes > 500)
 			return 0.5 * PREMIUM_PRICE;
-		
-		return (1 - LIKES_DISCOUNT_FACTOR * likes) * PREMIUM_PRICE;
-		
-	}
-	
-	private double getDiscountByAge() {
-		if (user == null)
-			return -1;
-		LocalDate date = LocalDate.of(user.getDateOfBirth().getYear(), user.getDateOfBirth().getMonth(), user.getDateOfBirth().getDay());
-	    Period age = Period.between(date, LocalDate.now());
-	    int yearsOfUser = age.getYears();
 
-	    
-	    if (yearsOfUser <= YOUNG_AGE_DISCOUNT || yearsOfUser >= OLD_AGE_DISCOUNT)
-	    	return (1 - AGE_DISCOUNT) * PREMIUM_PRICE;
-	    
-	    return PREMIUM_PRICE;
- 
+		return (1 - LIKES_DISCOUNT_FACTOR * likes) * PREMIUM_PRICE;
+
 	}
-	
+
+	private double getDiscountByAge() {
+
+		LocalDate date = LocalDate.of(user.getDateOfBirth().getYear(), user.getDateOfBirth().getMonth(),
+				user.getDateOfBirth().getDay());
+		Period age = Period.between(date, LocalDate.now());
+		int yearsOfUser = age.getYears();
+
+		if (yearsOfUser <= YOUNG_AGE_DISCOUNT || yearsOfUser >= OLD_AGE_DISCOUNT)
+			return (1 - AGE_DISCOUNT) * PREMIUM_PRICE;
+
+		return PREMIUM_PRICE;
+
+	}
+
 	public double getDiscount() {
-		if (user == null)
-			return -1;
 		return Math.min(getDiscountByAge(), getDiscountByLikes());
 	}
-	
+
 	public List<Photo> getTopPhotosByLikes() {
-		if (user == null)
-			return null;
 		return user.getPhotos().stream().sorted(new PhotoComparatorByLikes()).limit(NUMBER_OF_TOP_PHOTOS).toList();
 	}
-	
+
 	// TODO
 	public void generatePDF() {
-		
+
 	}
-	
+
 	// TODO
 	public boolean generateExcel(String path) {
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet sheet = workbook.createSheet("lista-seguidores");
-		
+
 		// Contador de filas
 		int i = 0;
 		// Creamos una fila para cada seguidor
 		for (User user : user.getFollowers()) {
 			Row row = sheet.createRow(i);
-			
+
 			Cell cellName = row.createCell(0, CellType.STRING);
 			Cell cellEmail = row.createCell(1, CellType.STRING);
 			Cell cellBio = row.createCell(2, CellType.STRING);
-			
+
 			cellName.setCellValue(user.getUserName());
 			cellEmail.setCellValue(user.getEmail());
 			cellBio.setCellValue(user.getBio());
-			
+
 			i++;
 		}
-		
+
 		FileOutputStream out;
 		try {
 			out = new FileOutputStream(path + "\\lista-seguidores.xlsx");
@@ -519,116 +559,155 @@ public class PhotoAppController {
 		} catch (IOException e) {
 			return false;
 		}
-		
+
 		return true;
 
 	}
-	
+
 	// -------------------------------------------------------------
+
+	// Método para obtener los últimos 10 posts que han publicado los usuarios a los
+	// que sigues
+	public List<Integer> getFeed() {
+		if (user == null)
+			return null;
+		return postRepository.getFeed(user.getFollowed()).stream().map((p) -> p.getCode()).toList();
+
+	}
 	
-	// Método para obtener los últimos 10 posts que han publicado los usuarios a los que sigues
-	public List<Post> getFeed() {
-		if (user == null)
-			return null;
-		return postRepository.getFeed(user.getFollowed());
+	// Obtener mi id
+	public int getId() {
+		return user.getCode();
+	}
+	
+	// Método para devolver el id de un usuario a partir de su username
+	public int getId(String username) {
+		return userRepository.getUserByUsername(username).getCode();
 	}
 
-	// Obtener número de seguidores
-	public int getFollowers() {
-		if (user == null)
-			return -1;
-		return user.getFollowers().size();
-	}
-
-	// Obtener número de seguidos
-	public int getFollowed() {
-		if (user == null)
-			return -1;
-		return user.getFollowed().size();
-	}
-
-	// Obtener nombre de usuario
-	public String getUsername() {
-		if (user == null)
-			return null;
-		return user.getUserName();
-	}
-	// Obtener nombre de usuario
-	public String getUsername(User user) {
-			if (user == null)
-				return null;
-			return user.getUserName();
+	
+	// Obtener lista de fotos de un usuario, incluyendo las que incluyen los álbumes
+	public List<Integer> getPhotos(int id) {
+		List<Integer> photos = new ArrayList<>();
+		User user = userRepository.getUser(id);
+		photos.addAll(user.getPhotos().stream().map((p) -> p.getCode()).toList());
+		List<Album> albums = user.getAlbums();
+		for (Album a : albums) {
+			photos.addAll(a.getPhotos().stream().map((p)->p.getCode()).toList());
 		}
-	// Obtener nombre completo
-	public String getFullName() {
-		if (user == null)
-			return null;
-		return user.getFullName();
-	}
-	
-	public boolean isFollowed(String userNameFollowed) {
-		return user.getFollowed().stream().anyMatch((u) -> u.getUserName().equals(userNameFollowed));
-	}
-	
-	// Obtener email
-	public String getEmail() {
-		return user.getEmail();
-	}
-	
-	// Obtener contraseña
-	public String getPassword() {
-		if (user == null)
-			return null;
-		return user.getPassword();
-	}
-
-	// Obtener foto de perfil
-	public String getProfilePic() {
-		if (user == null)
-			return null;
-		return user.getProfilePic();
-	}
-	// Obtener foto de perfil
-		public String getProfilePic(User user) {
-			if (user == null)
-				return null;
-			return user.getProfilePic();
-		}
-	// Obtener foto de perfil
-	public String getBio() {
-		if (user == null)
-			return null;
-		return user.getBio();
+		return photos;
 	}
 	
 	// Ver si un usuario es premium
-	public boolean isPremium() {
-		if (user == null)
-			return false;
-		return user.isPremium();
+	public boolean isPremium(int id) {
+		return userRepository.getUser(id).isPremium();
 	}
 	
-	// TODO borrar
-	public User getLoggedUser() {
-		return user;
+	// Obtener el nombre de usuario de un usuario
+	public String getUserName(int id) {
+		return userRepository.getUser(id).getUserName();
+	}
+
+	// Obtener el nombre completo de un usuario
+	public String getFullName(int id) {
+		return userRepository.getUser(id).getFullName();
+	}
+
+	// Obtener el número de seguidores de un usuario
+	public int getFollowers(int id) {
+		return userRepository.getUser(id).getFollowers().size();
+	}
+
+	// Obtener el número de seguidos de un usuario
+	public int getFollowed(int id) {
+		return userRepository.getUser(id).getFollowed().size();
 	}
 	
+	// Obtener el email de un usuario
+	public String getEmail(int id) {
+		return userRepository.getUser(id).getEmail();
+	}
 	
+	// Obtener la contraseña de un usuario
+	public String getPassword(int id) {
+		return userRepository.getUser(id).getPassword();
+	}
+	
+	// Obtener la bio de un usuario
+	public String getBio(int id) {
+		return userRepository.getUser(id).getBio();
+	}
+	
+	// Obtener foto de perfil de un usuario 
+	public String getProfilePic(int id) {
+		return userRepository.getUser(id).getProfilePic();
+	}
+
+	// Obtener la lista de albumes de un usuario
+	public List<Integer> getAlbums(int id) {
+		return userRepository.getUser(id).getAlbums().stream().map((p) -> p.getCode()).toList();
+	}
+	
+	// Ver si un usuario user1 tiene a user2 como seguidor
+	public boolean isFollowed(int idUser1, int idUser2) {
+		return userRepository.getUser(idUser1).getFollowers().stream().anyMatch((u) -> u.getCode() == idUser2);	
+	}
+	
+	// Obtener el path de una foto a partir de su id
+	public String getPath(int id) {
+		Post post = postRepository.getPost(id);
+		
+		// Si es una foto devolvemos su path
+		if (post instanceof Photo)
+			return ((Photo)post).getPath();
+		
+		// Si es un álbum devolvemos el path de su primera foto
+		else
+			return ((Album)post).getPhotos().get(0).getPath();
+	}
+
+	// Obtener el nombre de usuario del propietario de una foto a partir de su id
+	public String getOwnerOfPhoto(int id) {
+		return postRepository.getPost(id).getUser().getUserName();
+	}
+	
+	// Obtener los likes de un post a partir de su id
+	public int getLikes(int id) {
+		Post p = postRepository.getPost(id);
+		return p.getLikes();
+	}
+	
+	// Obtener todas las fotos de un album
+	public List<Integer> getPhotosOfAlbum(int albumId) {
+		return postRepository.getPhotosOfAlbum(albumId);
+	}
+	
+	// Obtener el título de una foto
+	public String getPostTitle(int photoId) {
+		return postRepository.getPost(photoId).getTitle();
+	}
+	
+	// Obtener el título de una foto
+	public String getPostDescription(int photoId) {
+		return postRepository.getPost(photoId).getDescription();
+	}
+	
+
 	/* Funciones privadas */
 	// Función para extraer los hashtags
 	List<String> getHashtagsFromDescription(String description) {
 		List<String> hashtags = new LinkedList<>();
-		
+
 		StringTokenizer strTok = new StringTokenizer(description, " ");
 		while (strTok.hasMoreTokens()) {
 			String nxtElement = (String) strTok.nextElement();
 			if (nxtElement.startsWith("#"))
 				hashtags.add(nxtElement.substring(1));
 		}
-		
+
 		return hashtags;
 	}
-	
+
 	// Mandar una notificación a un usuario
 	private void notify(User user, Notification notification) {
 		if (user == null)

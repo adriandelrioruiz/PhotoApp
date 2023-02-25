@@ -3,7 +3,7 @@ package umu.tds.maven.apps.PhotoApp.main;
 
 import java.awt.EventQueue;
 
-import umu.tds.maven.apps.PhotoApp.vista.LoginView;
+import umu.tds.maven.apps.PhotoApp.vista.loginregistro.LoginFrame;
 
 
 public class Launcher {
@@ -13,7 +13,7 @@ public class Launcher {
 				try {
 					
 					//LoginView ventana = new LoginView();
-					LoginView ventana = new LoginView();
+					LoginFrame ventana = new LoginFrame();
 					// Hacemos visible la ventana
 					ventana.setVisible(true);
 				} catch (Exception e) {

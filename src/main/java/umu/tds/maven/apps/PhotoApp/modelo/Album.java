@@ -27,7 +27,8 @@ public class Album extends Post {
 		photos.add(photo);
 	}
 	
-	public void removePhoto(Photo photo) {
+	public void removePhoto(int id) {
+		Photo photo = photos.stream().filter((p)->p.getCode()==id).toList().get(0);
 		photos.remove(photo);
 	}
 	

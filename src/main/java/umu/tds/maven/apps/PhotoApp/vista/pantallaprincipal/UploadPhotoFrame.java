@@ -1,8 +1,6 @@
 package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 
 import java.awt.BorderLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -18,17 +16,37 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowNewAlbumFrame;
+import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowNewPhotoFrame;
 
 @SuppressWarnings("serial")
 public class UploadPhotoFrame extends JFrame {
+	
+	public static final byte ADD_PHOTO = 1;
+	public static final byte ADD_ALBUM = 2;
 
 	private static final int DEFAULT_WIDTH = 500;
 	private static final int DEFAULT_HEIGHT = 500;
 
+	private static final String PHOTO_DESCRIPTION_TEXT = "<h1>Agregar Foto</h1><p>An&iacute;mate a compartir una foto con tus amigos. <br> Puedes arrastrar el fichero aqu&iacute;"
+			+ ". </p>";
+	private static final String ALBUM_DESCRIPTION_TEXT = "<h1>Agregar Album</h1><p>An&iacute;mate a compartir un álbum con tus amigos. <br> "
+			+ "Escoge la foto que será la portada de tu álbum. Puedes arrastrar el fichero aqu&iacute;. <br>"
+			+ "Podrás añadir más fotos al álbum desde tu perfil"
+			+ ". </p>";
+	private static final String ADD_PHOTO_TO_ALBUM_TEXT = "";
+	
 	private JFileChooser fileChooser;
+	
+	// Para saber si se trata de un álbum o de una foto
+	private byte frameType;
+	
 
-	public UploadPhotoFrame() {
+
+	public UploadPhotoFrame(byte frameType) {
+		this.frameType = frameType;
 		fileChooser = new JFileChooser();
 		initialize();
 	}
@@ -41,9 +59,15 @@ public class UploadPhotoFrame extends JFrame {
 		getContentPane().add(editorPane, BorderLayout.CENTER);
 		//editorPane.setPreferredSize(new Dimension(400, 200));
 		editorPane.setContentType("text/html");
-		editorPane.setText(
-				"<h1>Agregar Foto</h1><p>An&iacute;mate a compartir una foto con tus amigos. <br> Puedes arrastrar el fichero aqu&iacute;"
-				+ ". </p>");
+		switch(frameType) {
+		case ADD_PHOTO:
+			editorPane.setText(PHOTO_DESCRIPTION_TEXT);
+			break;
+		case ADD_ALBUM:
+			editorPane.setText(ALBUM_DESCRIPTION_TEXT);
+			break;
+		}
+
 		editorPane.setEditable(false);
 		editorPane.setDropTarget(new DropTarget() {
 			public synchronized void drop(DropTargetDropEvent evt) {
@@ -53,7 +77,8 @@ public class UploadPhotoFrame extends JFrame {
 					List<File> droppedFiles = (List<File>) evt.getTransferable()
 							.getTransferData(DataFlavor.javaFileListFlavor);
 					for (File file : droppedFiles) {
-						validarImagen(file.getPath());
+						String path = file.getPath();
+						validarImagen(path);
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -70,7 +95,8 @@ public class UploadPhotoFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int returnValue = fileChooser.showOpenDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
-					validarImagen(fileChooser.getSelectedFile().toString());
+					String absolutePath = fileChooser.getSelectedFile().toString();
+					validarImagen(absolutePath);
 				}
 			}
 		});
@@ -78,25 +104,31 @@ public class UploadPhotoFrame extends JFrame {
 	}
 	
 
+	@SuppressWarnings("unused")
 	private void validarImagen(String path) {
 		// Cerramos la ventana
 		dispose();
-		if (!(path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".jpg") || path.endsWith(".bmp"))) {
-			mostrarMensajeError();
+		if (!isValidImageFormat(path)) {
+			JOptionPane.showMessageDialog(null, "Introduce una imagen válida", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 		
-		Image image = Toolkit.getDefaultToolkit().getImage(path);
-		// Escalar la imagen a un tamaño específico
-		image = image.getScaledInstance(340, 300, Image.SCALE_SMOOTH);
 		
-		@SuppressWarnings("unused")
-		ShowNewImagePane sip = new ShowNewImagePane(image);
+		switch(frameType) {
+		case ADD_PHOTO:
+			ShowNewPhotoFrame newPhoto = new ShowNewPhotoFrame(PhotoAppController.getInstance().getId(), path);
+			break;
+		case ADD_ALBUM:
+			ShowNewAlbumFrame newAlbum = new ShowNewAlbumFrame(PhotoAppController.getInstance().getId(), path);
+			break;
+		}
 		
 	}
 	
-	private void mostrarMensajeError() {
-		// Mostramos mensaje de error
-		JOptionPane.showMessageDialog(null, "Introduce una imagen válida", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+	// Para saber si una imagen tiene un formato válido
+	public static boolean isValidImageFormat(String path) {
+		return (path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".jpg") || path.endsWith(".bmp"));
 	}
+	
+
 }

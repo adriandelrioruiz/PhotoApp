@@ -22,6 +22,7 @@ public class UserRepository {
 	private static FactoriaDAO factory;
 
 	private HashMap<String, User> usersByUsername;
+	private HashMap<Integer, User> usersById;
 
 	// Devuelve la única instancia (Singleton)
 	public static UserRepository getInstance() {
@@ -34,6 +35,7 @@ public class UserRepository {
 	// añadimos al repositorio
 	private UserRepository() {
 		usersByUsername = new HashMap<>();
+		usersById = new HashMap<>();
 
 		try {
 			factory = FactoriaDAO.getInstance();
@@ -48,6 +50,8 @@ public class UserRepository {
 			 
 
 			// Los introducimos en nuestro mapa
+			for (User user : users) 
+				usersById.put(user.getCode(), user);
 			for (User user : users)
 				usersByUsername.put(user.getUserName(), user);
 
@@ -59,15 +63,16 @@ public class UserRepository {
 
 	// Método para añadir un usuario al repositorio
 	public void addUser(User user) {
+		usersById.put(user.getCode(), user);
 		usersByUsername.put(user.getUserName(), user);
 	}
 
 	// Método para eliminar un usuario
 	public void deleteUser(User user) {
 		// Si eliminamos un usuario, tenemos que eliminar todos sus posts
-		user.getPhotos().stream().forEach((p->PostRepository.getInstance().deletePost(p)));
-		user.getAlbums().stream().forEach((a->PostRepository.getInstance().deletePost(a)));
-		usersByUsername.remove(user.getUserName());
+		user.getPhotos().stream().forEach((p->PostRepository.getInstance().deletePhoto(p.getCode())));
+		user.getAlbums().stream().forEach((a->PostRepository.getInstance().deleteAlbum(a.getCode())));
+		usersById.remove(user.getCode());
 	}
 
 	// Método que devuelve un usuario dado su nombre de usuario
@@ -91,6 +96,11 @@ public class UserRepository {
 		usersByUsername.values().stream().map((u) -> u.getPhotos()).toList().forEach((list) -> posts.addAll(list));
 		usersByUsername.values().stream().map((u) -> u.getAlbums()).toList().forEach((list) -> posts.addAll(list));
 		return posts;
+	}
+	
+	// Método para devolver un usuario a partir de su id
+	public User getUser(int id) {
+		return usersById.get(id);
 	}
 
 	// Método que devuelve todos los usuarios cuyo username contiene una cadena

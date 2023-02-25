@@ -3,11 +3,12 @@ package umu.tds.maven.apps.PhotoApp.vista.loginregistro;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import umu.tds.maven.apps.PhotoApp.vista.constantes.*;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 @SuppressWarnings("serial")
 public class EditRegisterFrame extends AbstractRegisterFrame {
@@ -18,8 +19,6 @@ public class EditRegisterFrame extends AbstractRegisterFrame {
 	private String email;
 	private String password;
 	private String bio;
-	private String profilePic;
-	
 	// Botones para salir o actualizar los campos
 	private JButton btnExit;
 	private JButton btnUpdate;
@@ -28,15 +27,21 @@ public class EditRegisterFrame extends AbstractRegisterFrame {
 
 	public EditRegisterFrame() {
 		super();
-		this.username = controller.getUsername();
-		this.fullName = controller.getFullName();
-		this.email = controller.getEmail();
-		this.password = controller.getPassword();
-		this.bio = controller.getBio();
-		this.profilePic = controller.getProfilePic();
+		this.username = controller.getUserName(controller.getId());
+		this.fullName = controller.getFullName(controller.getId());
+		this.email = controller.getEmail(controller.getId());
+		this.password = controller.getPassword(controller.getId());
+		this.bio = controller.getBio(controller.getId());
+		this.profilePic = controller.getProfilePic(controller.getId());
 		bioFrame = new SetBioFrame(bio);
 		
 		initialize();
+	}
+	
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	@Override
@@ -69,6 +74,13 @@ public class EditRegisterFrame extends AbstractRegisterFrame {
 		btnExit = new JButton("Salir");
 		btnExit.setForeground(Color.WHITE);
 		btnExit.setBackground(ViewConstants.APP_GREEN_COLOR);
+		btnExit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		southPanel.add(btnExit);
 	}
 	
@@ -93,12 +105,16 @@ public class EditRegisterFrame extends AbstractRegisterFrame {
 				
 				
 				// Si los datos son diferentes, los cambiamos
-				if (!txtPassword.getText().equals(controller.getPassword()))
+				if (!txtPassword.getText().equals(controller.getPassword(controller.getId())))
 					controller.changePassword(txtPassword.getText());
-				if (!profilePic.equals(controller.getProfilePic()))
+				if (!profilePic.equals(controller.getProfilePic(controller.getId())))
 					controller.changeProfilePic(profilePic);
-				if (!bioFrame.getBio().equals(controller.getBio()))
+				if (!bioFrame.getBio().equals(controller.getBio(controller.getId())))
 					controller.changeBio(bioFrame.getBio());
+				
+				// Actualizamos la vista
+				LoggedFrame.getInstance().updateProfilePic();
+				dispose();
 				
 			}
 		});

@@ -6,14 +6,9 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 
-import org.w3c.dom.css.ViewCSS;
-
-import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.loginregistro.EditRegisterFrame;
 
@@ -22,16 +17,11 @@ public class MyProfilePane extends AbstractProfilePane {
 	
 	private JButton btnEditProfile;
 
-	public MyProfilePane(User user) {
-		super(user);
-		//TODO quitar
-		/*// Coger las fotos y álbumes del controlador
-		photos = null;
-		albums = null;*/
+	public MyProfilePane(int userId) {
+		super(userId);
+		
 	}
-	
 
-	
 	protected void createNorthPanel() {
 		
 		super.createNorthPanel();
@@ -58,16 +48,16 @@ public class MyProfilePane extends AbstractProfilePane {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				@SuppressWarnings("unused")
 				EditRegisterFrame frame = new EditRegisterFrame();
 				
 			}
 		});
 	}
 
-	
 	@Override
 	protected void createCenterPanel() {
-		centerPanel = new AllPostsPane(photos, albums, true);
+		centerPanel = new AllPostsPane(userId, true);
 		add(centerPanel, BorderLayout.CENTER);
 	}
 
