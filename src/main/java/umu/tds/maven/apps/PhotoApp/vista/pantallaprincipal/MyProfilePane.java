@@ -1,5 +1,6 @@
 package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -8,7 +9,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.loginregistro.EditRegisterFrame;
 
@@ -17,10 +17,11 @@ public class MyProfilePane extends AbstractProfilePane {
 	
 	private JButton btnEditProfile;
 
-	public MyProfilePane(User user) {
-		super(user);
+	public MyProfilePane(int userId) {
+		super(userId);
+		
 	}
-	
+
 	protected void createNorthPanel() {
 		
 		super.createNorthPanel();
@@ -47,10 +48,17 @@ public class MyProfilePane extends AbstractProfilePane {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				@SuppressWarnings("unused")
 				EditRegisterFrame frame = new EditRegisterFrame();
 				
 			}
 		});
+	}
+
+	@Override
+	protected void createCenterPanel() {
+		centerPanel = new AllPostsPane(userId, true);
+		add(centerPanel, BorderLayout.CENTER);
 	}
 
 	

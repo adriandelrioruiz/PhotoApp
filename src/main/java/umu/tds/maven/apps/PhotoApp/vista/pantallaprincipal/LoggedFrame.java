@@ -4,14 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import umu.tds.maven.apps.PhotoApp.modelo.User;
+import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 
@@ -21,18 +20,29 @@ public class LoggedFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private MyProfilePane myProfilePane;
+	// El centerPane podra ir variando su contenido entre myProfilePane y feedPane
 	private JPanel centerPane;
+	private MyProfilePane myProfilePane;
 	private FeedPane feedPane;
+	
+	// Controlador
+	private PhotoAppController controller;
+	
 	private MenuPane menuPane;
+	
+	private static LoggedFrame lf;
 
 	public LoggedFrame() {
+		lf = this;
+		controller = PhotoAppController.getInstance();
 		initialize();
-		
 	}
 	
+	public static LoggedFrame getInstance() {
+		return lf;
+	}
 	private void initialize() {
-		setResizable(false);
+		setResizable(true);
 		setLayout(new BorderLayout());
 		setSize(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, ViewConstants.LOGGEDFRAME_WINDOW_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,7 +58,6 @@ public class LoggedFrame extends JFrame {
 	private void createNorthPane() {
 		menuPane = new MenuPane(this);
 		getContentPane().add(menuPane, BorderLayout.NORTH);
-		
 	}
 	
 	// Método para crear el panel centro que contendrá los paneles variables
@@ -56,11 +65,10 @@ public class LoggedFrame extends JFrame {
 		centerPane = new JPanel(new CardLayout()); // Crea un panel secundario
 	    getContentPane().add(centerPane, BorderLayout.CENTER); // Agrega el panel secundario al contenedor principal
 
-	    feedPane = new FeedPane();
+	    feedPane = new FeedPane(controller.getFeed());
 	    centerPane.add(feedPane, "feed"); // Agrega el panel feedPane al panel secundario con el nombre "feed"
 
-	    User user = new User("Adrian del Rio", "adri@gmail", "adriandelrio", "password", new Date(), false, ViewConstants.RUTA_FOTOS + "default-profpic.png", "myBio");
-	    myProfilePane = new MyProfilePane(user);
+	    myProfilePane = new MyProfilePane(controller.getId());
 	    centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre "profile"
 	    myProfilePane.setVisible(false); // Lo deja no visible
 	}
@@ -84,15 +92,32 @@ public class LoggedFrame extends JFrame {
 	// Método para cambiar el panel sur
 	public void changeToFeedPanel() {
 		CardLayout cl = (CardLayout) centerPane.getLayout();
-		cl.show(centerPane, "feed"); // Muestra el panel "feed"
+		cl.show(centerPane, "feed");
 		revalidate();
 		repaint();
 	}
 	
 	public void changeToProfilePanel() {
 		CardLayout cl = (CardLayout) centerPane.getLayout();
-		cl.show(centerPane, "profile"); // Muestra el panel "feed"
+		cl.show(centerPane, "profile"); 
 		revalidate();
 		repaint();
+	}
+	
+	// Para que se actualice la vista del perfil en caso de que se suba una nueva foto
+	public void updateProfile() {
+		centerPane.remove(myProfilePane);
+		myProfilePane = new MyProfilePane(controller.getId());
+	    centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre "profile"
+	    changeToProfilePanel();
+		revalidate();
+		repaint();
+	}
+	
+	// Para que se actualice la foto de perfil en caso de que se suba una nueva foto
+	public void updateProfilePic() {
+		updateProfile();
+		// Recreamos en northPane con el menuPane con la foto de perfil nueva
+		menuPane.updateProfilePic();
 	}
 }

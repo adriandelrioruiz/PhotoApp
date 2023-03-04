@@ -40,7 +40,7 @@ public class ViewConstants {
 	public static final int LOGGEDFRAME_WINDOW_HEIGHT = 800;
 
 	//
-	public static final String RUTA_FOTOS = "C:\\Users\\adria\\eclipse-workspace\\PhotoApp2\\img\\";
+	public static String RUTA_FOTOS =  "C:\\Users\\adria\\eclipse-workspace\\PhotoApp2\\img\\";
 
 	public static ImageIcon getIcon(int width, int height, String filename) {
 		Image image;

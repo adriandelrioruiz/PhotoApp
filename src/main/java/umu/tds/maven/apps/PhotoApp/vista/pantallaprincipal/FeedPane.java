@@ -1,23 +1,35 @@
 package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 public class FeedPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	
+	// Lista de fotos por id
+	private List<Integer> photoIds;
+	
+	// Controlador
+	private PhotoAppController controller;
 
-	public FeedPane() {
+	public FeedPane(List<Integer> photoIds) {
+		this.controller = PhotoAppController.getInstance();
+		this.photoIds = photoIds;
 		setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, MenuPane.MENU_HEIGHT));
 		JPanel panel = new JPanel();	
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		anadirPostPanees(panel);
+		
+		// Añadimos los PostPanes a partir de la lista de ids
+		anadirPostPanes(panel);
 		
 		JScrollPane sp = new JScrollPane(this);
 		sp.setViewportView(panel);
@@ -26,14 +38,9 @@ public class FeedPane extends JPanel {
 		add(sp);
 	}
 
-	public void anadirPostPanees(JPanel panel) {
-
-		panel.add(new PostPane("icono_comentario.png", "Pikachu", 15));
-		panel.add(new PostPane("icono_comentario.png", "Mujer maravilla", 50));
-		panel.add(new PostPane("icono_comentario.png", "Shongoku", 100));
-		panel.add(new PostPane("icono_comentario.png", "Emoji", 10));
-		panel.add(new PostPane("icono_comentario.png", "Pikachu", 15));
-		panel.add(new PostPane("icono_comentario.png", "Mujer maravilla", 50));
-		panel.add(new PostPane("icono_comentario.png", "Shongoku", 100));
+	public void anadirPostPanes(JPanel panel) {
+		for (Integer id : photoIds) {
+			add(new PostPane(controller.getPath(id), controller.getOwnerOfPhoto(id), controller.getLikes(id)));
+		}
 	}
 }

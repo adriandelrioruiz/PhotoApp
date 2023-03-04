@@ -2,15 +2,12 @@ package umu.tds.maven.apps.PhotoApp.vista.loginregistro;
 
 
 import java.awt.BorderLayout;
-
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -26,7 +23,9 @@ import javax.swing.border.Border;
 import umu.tds.maven.apps.PhotoApp.controlador.Codes;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
-import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.*;
+import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetDefaultTextListener;
+import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetEmptyTextListener;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 public class LoginFrame extends JFrame {
 
@@ -260,8 +259,8 @@ public class LoginFrame extends JFrame {
 				default:
 					// Cerramos la ventana de login
 					dispose();
-					// Abrimos el perfil
-					new MyProfilePanel();
+					// Abrimos la app
+					new LoggedFrame();
 					break;
 					
 				}
@@ -272,26 +271,8 @@ public class LoginFrame extends JFrame {
 	private void addTextFieldHandler(JTextField textField, String defaultText) {
 		
 		
-		textField.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				textField.setFocusable(true);
-				textField.grabFocus();
-				if (textField.getText().equals(defaultText))
-					textField.setText("");
-			}
-		});
+		textField.addMouseListener(new SetEmptyTextListener(defaultText, textField));
 		
-		textField.addFocusListener(new FocusAdapter() {
-			
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (textField.getText().equals("")) {
-					textField.setText(defaultText);
-				}
-			}
-		});
+		textField.addFocusListener(new SetDefaultTextListener(defaultText, textField));
 	}
 }
