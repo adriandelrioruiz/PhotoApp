@@ -1,4 +1,4 @@
-package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
+package umu.tds.maven.apps.PhotoApp.vista.ventanausuario;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -11,15 +11,17 @@ import javax.swing.JButton;
 
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.loginregistro.EditRegisterFrame;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.AllPostsPane;
 
 @SuppressWarnings("serial")
-public class MyProfilePane extends AbstractProfilePane {
+public class MyProfilePane extends ProfilePane {
 	
 	private JButton btnEditProfile;
 
 	public MyProfilePane(int userId) {
 		super(userId);
 		
+		initialize();
 	}
 
 	protected void createNorthPanel() {
@@ -35,7 +37,6 @@ public class MyProfilePane extends AbstractProfilePane {
 		gbc_btnEditProfile.gridy = 3;
 		northPanel.add(btnEditProfile, gbc_btnEditProfile);
 		
-		addListeners();
 	}
 	
 	@Override

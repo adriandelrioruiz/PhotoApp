@@ -1,17 +1,6 @@
 package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 
-import java.util.List;
-
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-
-import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
-import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
-import umu.tds.maven.apps.PhotoApp.modelo.User;
 
 public class SearchFrame extends JFrame {
 

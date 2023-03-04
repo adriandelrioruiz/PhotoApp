@@ -53,14 +53,18 @@ public abstract class ShowUploadedPhotoFrame extends ShowUploadedPostFrame {
 		}
 		
 		westPane.add(imageLabel);
-		
+	}
+	
+	@Override
+	protected void createEastPane() {
+		super.createEastPane();
 		// Añadimos el Label
 		nLikes = new JLabel(DEFAULT_NLIKES_TEXT + controller.getLikes(postId));
 		nLikes.setBackground(Color.LIGHT_GRAY);
 		nLikes.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
-		nLikes.setLocation(imageLabel.getX(), imageLabel.getY() + imageLabel.getHeight());
+		nLikes.setLocation(eastPane.getX() + 100, commentButton.getY() + commentButton.getHeight() + 20);
 		nLikes.setSize(200, 20);
-		westPane.add(nLikes);
+		eastPane.add(nLikes);
 	}
 	
 

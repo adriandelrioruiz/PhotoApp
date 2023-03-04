@@ -3,8 +3,8 @@ package umu.tds.maven.apps.PhotoApp.pruebas;
 import javax.swing.JFrame;
 
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowMyUploadedAlbumFrame;
-import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedAlbumFrame;
 
+@SuppressWarnings("serial")
 public class PruebaVista extends JFrame{
 	
 	/*

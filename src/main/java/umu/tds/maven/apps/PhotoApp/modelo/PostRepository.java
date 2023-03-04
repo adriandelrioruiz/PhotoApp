@@ -3,6 +3,7 @@ package umu.tds.maven.apps.PhotoApp.modelo;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import umu.tds.maven.apps.PhotoApp.persistencia.FactoriaDAO;
 
@@ -154,6 +155,33 @@ public class PostRepository {
 			photosOfFeed.add(photosOfFollowed.get(i));
 		}
 		return photosOfFeed;
+	}
+	
+	public List<Post> getPostsByHashtagsContaining(String hashtagsSubset) {
+		// Primero extraemos los hashtags de la búsqueda, pues puede haber varios
+		List<String> hashtags = new LinkedList<>();
+		
+		StringTokenizer strTok = new StringTokenizer(hashtagsSubset, " ");
+		while (strTok.hasMoreTokens()) {
+			hashtags.add((String) strTok.nextElement());
+		}
+		// Esta será la lista de posts que contengan todos los hashtags
+		List<Post> validPosts = new LinkedList<>();
+		// Primero buscamos en los álbumes
+		for (Post post : albumsById.values()) {
+			if (post.getHashtags().containsAll(hashtags)) {
+				validPosts.add(post);
+			}
+		}
+		
+		// Luego buscamos en las fotos
+		for (Post post : photosById.values()) {
+			if (post.getHashtags().containsAll(hashtags)) {
+				validPosts.add(post);
+			}
+		}
+		
+		return validPosts;
 	}
 	
 	// Método para añadir una foto a un álbum

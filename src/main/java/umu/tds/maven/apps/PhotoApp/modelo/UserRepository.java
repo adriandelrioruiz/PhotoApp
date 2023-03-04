@@ -120,26 +120,6 @@ public class UserRepository {
 		return usersByUsername.values().stream().filter((u) -> u.getEmail().contains(emailSubset)).toList();
 	}
 	
-	public List<Post> getPostsByHashtagsContaining(String hashtagsSubset) {
-		// Primero extraemos los hashtags de la búsqueda, pues puede haber varios
-		List<String> hashtags = new LinkedList<>();
-		
-		StringTokenizer strTok = new StringTokenizer(hashtagsSubset, " ");
-		while (strTok.hasMoreTokens()) {
-			hashtags.add((String) strTok.nextElement());
-		}
-		// Esta será la lista de posts que contengan todos los hashtags
-		List<Post> validPosts = new LinkedList<>();
-		// Ahora buscamos todas las publicaciones que contengan todos esos hashtags
-		List<Post> allPosts = getAllPosts();
-		for (Post post : allPosts) {
-			if (post.getHashtags().containsAll(hashtags)) {
-				validPosts.add(post);
-			}
-		}
-		return validPosts;
-		
-	}
 	
 
 }

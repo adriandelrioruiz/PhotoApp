@@ -28,6 +28,10 @@ import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowMyUploadedAlbumFrame;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowMyUploadedPhotoFrame;
+import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedAlbumFrame;
+import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedPhotoFrame;
+import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowUploadedAlbumFrame;
+import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowUploadedPhotoFrame;
 
 /**
  * Clase que define el panel que mostrará todas las fotos y álbumes de un
@@ -55,6 +59,9 @@ public class AllPostsPane extends JPanel {
 
 	// Para saber si las imágenes se pueden borrar o no
 	private boolean deletable;
+	
+	// Id del usuario que se muestra el perfil
+	private int userId;
 
 	// Para saber en que página de la galería de álbumes o fotos estamos
 	private PageCounter actualPhotosPage = new PageCounter();
@@ -84,6 +91,8 @@ public class AllPostsPane extends JPanel {
 
 		this.photosId = controller.getPhotos(userId);
 		this.albumsId = controller.getAlbums(userId);
+		
+		this.userId = userId;
 
 		// Creamos la lista de fotos
 		photosId.stream().forEach((p) -> {
@@ -263,7 +272,13 @@ public class AllPostsPane extends JPanel {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					@SuppressWarnings("unused")
-					ShowMyUploadedPhotoFrame frame = new ShowMyUploadedPhotoFrame(controller.getId(), imageId);
+					ShowUploadedPhotoFrame frame;
+					// Si es un perfil que puede borrar fotos, será MyProfile
+					if (deletable)
+						frame = new ShowMyUploadedPhotoFrame(userId, imageId);
+					// Si no, será OthersProfile
+					else
+						frame = new ShowOtherUploadedPhotoFrame(userId, imageId);
 				}
 			});
 		else
@@ -271,7 +286,13 @@ public class AllPostsPane extends JPanel {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					@SuppressWarnings("unused")
-					ShowMyUploadedAlbumFrame frame = new ShowMyUploadedAlbumFrame(controller.getId(), imageId);
+					ShowUploadedAlbumFrame frame;
+					// Si es un perfil que puede borrar fotos, será MyProfile
+					if (deletable)
+						frame = new ShowMyUploadedAlbumFrame(userId, imageId);
+					// Si no, será OthersProfile
+					else
+						frame = new ShowOtherUploadedAlbumFrame(userId, imageId);
 				}
 			});
 

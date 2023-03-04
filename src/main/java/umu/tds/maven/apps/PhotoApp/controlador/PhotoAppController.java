@@ -6,8 +6,10 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -34,7 +36,6 @@ import umu.tds.maven.apps.PhotoApp.persistencia.IPhotoAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
-import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 public class PhotoAppController {
 
@@ -160,16 +161,16 @@ public class PhotoAppController {
 		user = null;
 	}
 
-	public void follow(String userNameFollowed) {
+	public boolean follow(String userNameFollowed) {
 		if (user == null)
-			return;
+			return false;
 		// Si no se sigue ya al usuario se seguirá
 		if (!user.getFollowed().stream().anyMatch((u) -> u.getUserName().equals(userNameFollowed))) {
 			// Obtenemos el objeto user del usuario seguido
 			User userFollowed = userRepository.getUserByUsername(userNameFollowed);
 			if (userFollowed == null) {
 				System.out.println("El usuario con el username " + userNameFollowed + " no existe");
-				return;
+				return false;
 			}
 			// Añadimos seguido a nuestro usuario
 			user.addFollowed(userFollowed);
@@ -184,13 +185,17 @@ public class PhotoAppController {
 			// usuario son tomados del mismo, así que ya se han modificado en esta función
 
 			System.out.println("Ahora sigues a " + userNameFollowed);
-		} else
+			return true;
+		} else {
 			System.out.println("Ya sigues al usuario " + userNameFollowed);
+			return false;
+		}
+			
 	}
 
-	public void unFollow(String userNameUnfollowed) {
+	public boolean unFollow(String userNameUnfollowed) {
 		if (user == null)
-			return;
+			return false;
 		// Si se sigue ya al usuario se dejará de seguir
 		if (user.getFollowed().stream().anyMatch((u) -> u.getUserName().equals(userNameUnfollowed))) {
 			// Obtenemos el objeto user del usuario seguido
@@ -208,8 +213,12 @@ public class PhotoAppController {
 			// usuario son tomados del mismo, así que ya se han modificado en esta función
 
 			System.out.println("Ya no sigues a " + userNameUnfollowed);
-		} else
+			return true;
+		} else {
 			System.out.println("No sigues al usuario " + userNameUnfollowed);
+			return false;
+		}
+			
 	}
 
 	// Método para añadir una foto 
@@ -461,14 +470,27 @@ public class PhotoAppController {
 	// Método para hacer una búsqueda. Devuelve una lista de objetos de dominio
 	public List<DomainObject> search(String search) {
 		List<DomainObject> objetos = new LinkedList<>();
-		// Primero buscamos si hay usuarios a partir del userName
-		objetos.addAll(userRepository.getUsersByUserNameContaining(search));
-		// Luego buscamos si
-		objetos.addAll(userRepository.getUsersByNameStartingWith(search));
-		objetos.addAll(userRepository.getUsersByEmailContaining(search));
-		// objetos.addAll(userRepository.getPostsByHashtagsContaining(search));
+		
+		// Comprobamos si el query empieza por hashtag, en ese caso habrá que busar posts
+		if (search.startsWith("#")) {
+			objetos.addAll(postRepository.getPostsByHashtagsContaining(search));	
+		}
+		
+		// Si no, buscamos usuarios
+		else {
+			// Primero buscamos si hay usuarios a partir del userName
+			objetos.addAll(userRepository.getUsersByUserNameContaining(search));
+			// Luego buscamos si los hay a partir del name
+			objetos.addAll(userRepository.getUsersByNameStartingWith(search));
+			// Luego buscamos si los hay a partir del email
+			objetos.addAll(userRepository.getUsersByEmailContaining(search));
+		}
+		
+		// Eliminamos duplicados
+		Set<DomainObject> conjuntoUnico = new HashSet<>(objetos);
+		List<DomainObject> listaUnica = new ArrayList<>(conjuntoUnico);
 
-		return objetos;
+		return listaUnica;
 	}
 
 	// -------------------- FUNCIONALIDAD PREMIUM ----------------

@@ -12,6 +12,9 @@ import javax.swing.JPanel;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.ventanausuario.MyProfilePane;
+import umu.tds.maven.apps.PhotoApp.vista.ventanausuario.OthersProfilePane;
+import umu.tds.maven.apps.PhotoApp.vista.ventanausuario.ProfilePane;
 
 
 public class LoggedFrame extends JFrame {
@@ -22,7 +25,7 @@ public class LoggedFrame extends JFrame {
 	
 	// El centerPane podra ir variando su contenido entre myProfilePane y feedPane
 	private JPanel centerPane;
-	private MyProfilePane myProfilePane;
+	private ProfilePane myProfilePane;
 	private FeedPane feedPane;
 	
 	// Controlador
@@ -67,7 +70,8 @@ public class LoggedFrame extends JFrame {
 
 	    feedPane = new FeedPane(controller.getFeed());
 	    centerPane.add(feedPane, "feed"); // Agrega el panel feedPane al panel secundario con el nombre "feed"
-
+	    
+	    
 	    myProfilePane = new MyProfilePane(controller.getId());
 	    centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre "profile"
 	    myProfilePane.setVisible(false); // Lo deja no visible

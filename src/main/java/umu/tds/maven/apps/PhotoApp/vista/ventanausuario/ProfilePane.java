@@ -1,4 +1,4 @@
-package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
+package umu.tds.maven.apps.PhotoApp.vista.ventanausuario;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,22 +21,23 @@ import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 @SuppressWarnings("serial")
-public abstract class AbstractProfilePane extends JPanel {
+public abstract class ProfilePane extends JPanel {
 	
 	protected PhotoAppController controller;
 	
 	protected JFrame frame;
 	protected JPanel northPanel;
 	protected JPanel centerPanel;
+	
+	protected JLabel lblNFollowers;
 
 	
 	// Id del usuario
 	int userId;
 
-	public AbstractProfilePane(int userId) {
+	public ProfilePane(int userId) {
 		this.controller = PhotoAppController.getInstance();
 		this.userId = userId;
-		initialize();
 	}
 	
 	protected void initialize() {
@@ -45,6 +46,8 @@ public abstract class AbstractProfilePane extends JPanel {
 		
 		createNorthPanel();
 		createCenterPanel();
+		
+		addListeners();
 	}
 	
 	protected void createNorthPanel() {
@@ -116,7 +119,7 @@ public abstract class AbstractProfilePane extends JPanel {
 		gbc_lblFollowers.fill = GridBagConstraints.HORIZONTAL;
 		northPanel.add(lblFollowers, gbc_lblFollowers);
 		
-		JLabel lblNFollowers = new JLabel(String.valueOf(getFollowers()));
+		lblNFollowers = new JLabel(String.valueOf(getFollowers()));
 		lblNFollowers.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNFollowers.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
 		GridBagConstraints gbc_lblNFollowers = new GridBagConstraints();
@@ -173,7 +176,7 @@ public abstract class AbstractProfilePane extends JPanel {
 	}
 
 	protected String getFullName() {
-		return controller.getFullName(controller.getId());
+		return controller.getFullName(userId);
 	}
 
 	protected int getFollowers() {
