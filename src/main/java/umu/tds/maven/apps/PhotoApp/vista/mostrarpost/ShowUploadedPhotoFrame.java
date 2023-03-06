@@ -14,47 +14,46 @@ import javax.swing.JOptionPane;
 
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
-/** Clase para mostrar una foto que ya está subida, permite comentar en ella */ 
+/** Clase para mostrar una foto que ya está subida, permite comentar en ella */
 
 @SuppressWarnings("serial")
 public abstract class ShowUploadedPhotoFrame extends ShowUploadedPostFrame {
-	
-	
+
 	// JLabel para mostrar la foto
 	private JLabel imageLabel;
-	
+
 	// JLabel para mostrar el número de likes de la foto
 	protected JLabel nLikes;
 
 	public ShowUploadedPhotoFrame(int userId, int photoId) {
 		super(userId, photoId);
-		
+
 		initialize();
-		
+
 	}
-	
-	
+
 	@Override
 	protected void createWestPane() {
 
 		super.createWestPane();
-		
+
 		try {
 			Image image = ImageIO.read(new File(controller.getPath(postId)));
-			ImageIcon postImage = new ImageIcon(image.getScaledInstance((int)WEST_PANEL_DIMENSION.getWidth() - 20, (int)WEST_PANEL_DIMENSION.getHeight() - 60, DO_NOTHING_ON_CLOSE));
+			ImageIcon postImage = new ImageIcon(image.getScaledInstance((int) WEST_PANEL_DIMENSION.getWidth() - 20,
+					(int) WEST_PANEL_DIMENSION.getHeight() - 60, DO_NOTHING_ON_CLOSE));
 			// Lo añadimos al panel oeste
 			imageLabel = new JLabel(postImage);
 			imageLabel.setSize(330, 340);
 			imageLabel.setLocation(20, 10);
 			imageLabel.setLayout(null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
-		
+
 		westPane.add(imageLabel);
 	}
-	
+
 	@Override
 	protected void createEastPane() {
 		super.createEastPane();
@@ -66,7 +65,6 @@ public abstract class ShowUploadedPhotoFrame extends ShowUploadedPostFrame {
 		nLikes.setSize(200, 20);
 		eastPane.add(nLikes);
 	}
-	
 
 	@Override
 	protected void comment() {
@@ -76,7 +74,5 @@ public abstract class ShowUploadedPhotoFrame extends ShowUploadedPostFrame {
 			commentTxtArea.setText(DEFAULT_COMMENT_TEXT);
 		}
 	}
-	
-	
 
 }

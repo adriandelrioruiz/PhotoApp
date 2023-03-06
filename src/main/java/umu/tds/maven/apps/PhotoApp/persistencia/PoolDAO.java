@@ -13,11 +13,12 @@ public class PoolDAO {
 	}
 
 	public static PoolDAO getInstance() {
-		if (instance == null) instance = new PoolDAO();
+		if (instance == null)
+			instance = new PoolDAO();
 		return instance;
-		
+
 	}
-	
+
 	public Object getObject(int id) {
 		return pool.get(id);
 	} // devuelve null si no encuentra el objeto
@@ -30,4 +31,3 @@ public class PoolDAO {
 		return pool.containsKey(id);
 	}
 }
-

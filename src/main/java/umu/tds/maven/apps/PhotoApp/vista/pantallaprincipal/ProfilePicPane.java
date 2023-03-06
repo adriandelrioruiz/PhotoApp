@@ -14,31 +14,31 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class ProfilePicPane extends JPanel {
-	
+
 	private BufferedImage image;
-	
+
 	public ProfilePicPane(JFrame frame, String imagePath) {
 		try {
-		  image = ImageIO.read(new File(imagePath));
+			image = ImageIO.read(new File(imagePath));
 		} catch (IOException e) {
-		  e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
-	
+
 	public void paintComponent(Graphics g) {
-		
+
 		int width = 96;
 		int height = 96;
 		int x = 103;
 		int y = 10;
-		
-	    super.paintComponent(g);
-	    Graphics2D g2d = (Graphics2D) g;
-	    g2d.setColor(Color.red);
-	    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	    g2d.drawImage(image, 0, 0, width, height, this);
-	    g2d.setClip(x, y, width, height);
-	    g2d.drawOval(x, y, width, height);
-	    
+
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setColor(Color.red);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.drawImage(image, 0, 0, width, height, this);
+		g2d.setClip(x, y, width, height);
+		g2d.drawOval(x, y, width, height);
+
 	}
 }

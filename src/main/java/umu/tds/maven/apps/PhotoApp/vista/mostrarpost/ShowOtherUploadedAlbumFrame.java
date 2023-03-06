@@ -20,17 +20,17 @@ public class ShowOtherUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 
 	// Botón para dar like a la foto actual
 	private JButton likePhotoButton;
-	
+
 	// Botón para dar like al álbum
 	private JButton likeAlbumButton;
 
 	public ShowOtherUploadedAlbumFrame(int userId, int photoId) {
-			super(userId, photoId);
-			
-			initialize();
-			
-			setVisible(true);
-		}
+		super(userId, photoId);
+
+		initialize();
+
+		setVisible(true);
+	}
 
 	@Override
 	protected void createSouthPane() {
@@ -41,11 +41,11 @@ public class ShowOtherUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 		likeAlbumButton.setBackground(ViewConstants.APP_GREEN_COLOR);
 		southPane.add(likeAlbumButton);
 	}
-	
+
 	@Override
 	protected void createEastPane() {
 		super.createEastPane();
-		
+
 		// Creamos el botón para dar like al álbum
 		try {
 			Image image = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "icono_like.png"));
@@ -58,7 +58,6 @@ public class ShowOtherUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 			likePhotoButton.setLayout(null);
 			eastPane.add(likePhotoButton);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -74,27 +73,27 @@ public class ShowOtherUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 			public void actionPerformed(ActionEvent e) {
 				// Damos like a la foto
 				controller.like(photoIdList.get(photoCounter));
-				nPhotoLikes.setText(DEFAULT_NLIKES_TEXT + controller.getLikes(photoIdList.get(photoCounter))); 
+				nPhotoLikes.setText(DEFAULT_NLIKES_TEXT + controller.getLikes(photoIdList.get(photoCounter)));
 				JButton btnAceptar = new JButton("Aceptar");
 				JOptionPane.showMessageDialog(btnAceptar, "Has dado like a la foto");
 				commentTxtArea.setText(DEFAULT_COMMENT_TEXT);
 			}
 		});
-		
+
 		// Añadimos el listener para dar like al álbum
 		likeAlbumButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Damos like al album
 				controller.like(postId);
-				
+
 				// Actualizamos la JLabel que muestra los likes del álbum
 				nAlbumLikes.setText(DEFAULT_NALBUMLIKES_TEXT + controller.getLikes(postId));
-				
+
 				// Actualizamos la JLabel que muestra los likes de la foto
 				nPhotoLikes.setText(DEFAULT_NLIKES_TEXT + controller.getLikes(photoIdList.get(photoCounter)));
-				
+
 				// Mostramos ventana de diálogo
 				JButton btnAceptar = new JButton("Aceptar");
 				JOptionPane.showMessageDialog(btnAceptar, "Has dado like al álbum");

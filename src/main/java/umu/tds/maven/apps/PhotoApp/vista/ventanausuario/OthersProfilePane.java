@@ -16,12 +16,12 @@ import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.AllPostsPane;
 
 @SuppressWarnings("serial")
 public class OthersProfilePane extends ProfilePane {
-	
+
 	private static final String IS_FOLLOWED_TEXT = "Dejar de seguir";
 	private static final String NOT_FOLLOWED_TEXT = "Seguir";
-	
+
 	private JButton btnFollow;
-	
+
 	// Id de mi usuario
 	private int myId;
 
@@ -29,12 +29,12 @@ public class OthersProfilePane extends ProfilePane {
 
 	public OthersProfilePane(int userId, int myId) {
 		super(userId);
-		
+
 		this.myId = myId;
-		
+
 		initialize();
 	}
-	
+
 	@Override
 	protected void initialize() {
 		super.initialize();
@@ -54,7 +54,7 @@ public class OthersProfilePane extends ProfilePane {
 			btnFollow.setText("Dejar de seguir");
 			btnFollow.setBackground(Color.white);
 		}
-		
+
 		btnFollow.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
 		GridBagConstraints gbc_btnEditProfile = new GridBagConstraints();
 		gbc_btnEditProfile.insets = new Insets(0, 0, 5, 5);
@@ -68,8 +68,6 @@ public class OthersProfilePane extends ProfilePane {
 		addFollowButtonListener(btnFollow);
 	}
 
-
-
 	protected void addFollowButtonListener(JButton button) {
 		button.addActionListener(new ActionListener() {
 
@@ -82,10 +80,10 @@ public class OthersProfilePane extends ProfilePane {
 						btnFollow.setText(IS_FOLLOWED_TEXT);
 						btnFollow.setBackground(Color.white);
 						// Aumentamos el número de seguidores en la vista
-						lblNFollowers.setText(String.valueOf(Integer.valueOf(lblNFollowers.getText())+1));
+						lblNFollowers.setText(String.valueOf(Integer.valueOf(lblNFollowers.getText()) + 1));
 					}
 				}
-				
+
 				// Si lo sigue
 				else if (btnFollow.getText().equals(IS_FOLLOWED_TEXT)) {
 					boolean ok = controller.unFollow(controller.getUserName(userId));
@@ -93,21 +91,19 @@ public class OthersProfilePane extends ProfilePane {
 						btnFollow.setText(NOT_FOLLOWED_TEXT);
 						btnFollow.setBackground(ViewConstants.APP_GREEN_COLOR);
 						// Disminuimos el número de seguidores en la vista
-						lblNFollowers.setText(String.valueOf(Integer.valueOf(lblNFollowers.getText())-1));
+						lblNFollowers.setText(String.valueOf(Integer.valueOf(lblNFollowers.getText()) - 1));
 					}
-						
+
 				}
-				
+
 			}
 		});
 	}
-
 
 	@Override
 	protected void createCenterPanel() {
 		centerPanel = new AllPostsPane(userId, false);
 		add(centerPanel, BorderLayout.CENTER);
 	}
-
 
 }

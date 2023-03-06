@@ -5,14 +5,17 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.text.JTextComponent;
 
-/** Action Listener para que al clicar en un texto desaparezca su texto por defecto */
+/**
+ * Action Listener para que al clicar en un texto desaparezca su texto por
+ * defecto
+ */
 
-public class SetEmptyTextListener extends MouseAdapter{
-	
+public class SetEmptyTextListener extends MouseAdapter {
+
 	// Texto por defecto
 	private String defaultText;
 	private JTextComponent componente;
-	
+
 	public SetEmptyTextListener(String defaultText, JTextComponent componente) {
 		this.defaultText = defaultText;
 		this.componente = componente;
@@ -25,10 +28,5 @@ public class SetEmptyTextListener extends MouseAdapter{
 		if (componente.getText().equals(defaultText))
 			componente.setText("");
 	}
-	
-	
-	
-	
-	
 
 }

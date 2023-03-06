@@ -21,54 +21,55 @@ import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.UploadPhotoFrame;
 
 @SuppressWarnings("serial")
 public class ShowMyUploadedAlbumFrame extends ShowUploadedAlbumFrame {
-	
+
 	// Botón para eliminar álbum
 	private JButton deleteAlbumButton;
 	// Botón para añadir foto a álbum
 	private JButton addPhotoToAlbumButton;
 	// TODO Botón para eliminar foto de álbum
-	
+
 	public ShowMyUploadedAlbumFrame(int userId, int postId) {
 		super(userId, postId);
-		
+
 	}
-	
+
 	@Override
 	protected void createEastPane() {
 		super.createEastPane();
-		
+
 		// Creamos el botón para comentar
 		try {
 			Image image = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "iconUploadPhoto.png"));
-			ImageIcon addPhotoImage = new ImageIcon(image.getScaledInstance(DEFAULT_ICON_BUTTON_WIDTH, DEFAULT_ICON_BUTTON_HEIGHT, DO_NOTHING_ON_CLOSE));
+			ImageIcon addPhotoImage = new ImageIcon(image.getScaledInstance(DEFAULT_ICON_BUTTON_WIDTH,
+					DEFAULT_ICON_BUTTON_HEIGHT, DO_NOTHING_ON_CLOSE));
 			// Lo añadimos al panel oeste
 			addPhotoToAlbumButton = new JButton(addPhotoImage);
 			addPhotoToAlbumButton.setSize(DEFAULT_ICON_BUTTON_WIDTH, DEFAULT_ICON_BUTTON_HEIGHT);
-			addPhotoToAlbumButton.setLocation(commentButton.getX() - DEFAULT_ICON_BUTTON_WIDTH - 10, commentButton.getY());
+			addPhotoToAlbumButton.setLocation(commentButton.getX() - DEFAULT_ICON_BUTTON_WIDTH - 10,
+					commentButton.getY());
 			addPhotoToAlbumButton.setLayout(null);
 			eastPane.add(addPhotoToAlbumButton);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	protected void createSouthPane() {
 		super.createSouthPane();
-		
+
 		deleteAlbumButton = new JButton("Eliminar álbum");
 		deleteAlbumButton.setBackground(ViewConstants.APP_GREEN_COLOR);
 		southPane.add(deleteAlbumButton);
 	}
-	
+
 	@Override
 	protected void addListeners() {
 		super.addListeners();
-		
+
 		// Añadimos el listener para borrar el álbum
 		deleteAlbumButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.deleteAlbum(postId);
@@ -78,10 +79,10 @@ public class ShowMyUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 				dispose();
 			}
 		});
-		
+
 		// Añadimos el listener para añadir foto al álbum
 		addPhotoToAlbumButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String absolutePath = "";
@@ -90,14 +91,16 @@ public class ShowMyUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					absolutePath = fileChooser.getSelectedFile().toString();
 					if (!UploadPhotoFrame.isValidImageFormat(absolutePath)) {
-						JOptionPane.showMessageDialog(null, "Introduce una imagen válida", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Introduce una imagen válida", "Mensaje",
+								JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
 
 				}
 				// Añadimos la foto al álbum con el mismo título y descripción que el álbum
-				Codes exit = controller.addPhotoToAlbum(controller.getPostTitle(postId), controller.getPostDescription(postId), absolutePath, postId);
-				
+				Codes exit = controller.addPhotoToAlbum(controller.getPostTitle(postId),
+						controller.getPostDescription(postId), absolutePath, postId);
+
 				// éxito
 				if (exit == Codes.OK) {
 					JButton btnAceptar = new JButton("Aceptar");
@@ -105,15 +108,15 @@ public class ShowMyUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 					LoggedFrame.getInstance().updateProfile();
 					dispose();
 				}
-				
+
 				if (exit == Codes.NUM_OF_PHOTOS_IN_ALBUM_EXCEEDED) {
 					JButton btnAceptar = new JButton("Aceptar");
 					JOptionPane.showMessageDialog(btnAceptar, "El álbum ha excedido el máximo de fotos");
 					dispose();
 				}
-				
+
 			}
 		});
 	}
-	
+
 }

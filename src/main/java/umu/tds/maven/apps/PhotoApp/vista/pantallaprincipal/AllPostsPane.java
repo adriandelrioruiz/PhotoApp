@@ -59,14 +59,14 @@ public class AllPostsPane extends JPanel {
 
 	// Para saber si las imágenes se pueden borrar o no
 	private boolean deletable;
-	
+
 	// Id del usuario que se muestra el perfil
 	private int userId;
 
 	// Para saber en que página de la galería de álbumes o fotos estamos
 	private PageCounter actualPhotosPage = new PageCounter();
 	private PageCounter actualAlbumsPage = new PageCounter();
-	
+
 	// Panel que contendrá las imagenes en sí
 	private JPanel imagesPaneForPhotos;
 	private JPanel imagesPaneForAlbums;
@@ -91,7 +91,7 @@ public class AllPostsPane extends JPanel {
 
 		this.photosId = controller.getPhotos(userId);
 		this.albumsId = controller.getAlbums(userId);
-		
+
 		this.userId = userId;
 
 		// Creamos la lista de fotos
@@ -99,7 +99,7 @@ public class AllPostsPane extends JPanel {
 			try {
 				this.photos.add(ImageIO.read(new File(controller.getPath(p))));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
 		});
@@ -114,7 +114,7 @@ public class AllPostsPane extends JPanel {
 			try {
 				key = ImageIO.read(new File(controller.getPath(albumId)));
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
+
 				e1.printStackTrace();
 			}
 			// Creamos una lista con todas las fotos del álbum
@@ -123,7 +123,7 @@ public class AllPostsPane extends JPanel {
 				try {
 					photosInAlbum.add(ImageIO.read(new File(controller.getPath(p))));
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 			});
@@ -218,18 +218,16 @@ public class AllPostsPane extends JPanel {
 		photosOrAlbumsPane.add(photosPane, "photos");
 		imagesPaneForPhotos = createImagesPane(PHOTOS_GALLERY);
 		photosPane.add(imagesPaneForPhotos, BorderLayout.CENTER);
-		photosPane.add(new MovePagePane(PHOTOS_GALLERY),
-				BorderLayout.SOUTH);
+		photosPane.add(new MovePagePane(PHOTOS_GALLERY), BorderLayout.SOUTH);
 
 		// Creamos el panel de la galería los álbumes
 		albumsPane = new JPanel(new BorderLayout());
 		photosOrAlbumsPane.add(albumsPane, "albums");
 		imagesPaneForAlbums = createImagesPane(ALBUMS_GALLERY);
 		albumsPane.add(imagesPaneForAlbums, BorderLayout.CENTER);
-		albumsPane.add(new MovePagePane(ALBUMS_GALLERY),
-				BorderLayout.SOUTH);
+		albumsPane.add(new MovePagePane(ALBUMS_GALLERY), BorderLayout.SOUTH);
 		albumsPane.setVisible(false);
-		
+
 		List<Image> firstAlbumsPhoto = new ArrayList<>(albums.keySet());
 		showPage(photos, imagesPaneForPhotos, actualPhotosPage, PHOTOS_GALLERY);
 		showPage(firstAlbumsPhoto, imagesPaneForAlbums, actualAlbumsPage, ALBUMS_GALLERY);
@@ -237,11 +235,11 @@ public class AllPostsPane extends JPanel {
 	}
 
 	private JPanel createImagesPane(byte gallery) {
-		
+
 		JPanel photosPane = new JPanel();
 		photosPane.setLayout(new FlowLayout(0, 0, 0));
 		photosPane.setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 500));
-		
+
 		return photosPane;
 	}
 
@@ -266,7 +264,7 @@ public class AllPostsPane extends JPanel {
 				image.getScaledInstance(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 3 - 4, 120, Image.SCALE_SMOOTH)));
 
 		// Añadimos el listener para que aparezca la foto o el álbum
-		
+
 		if (gallery == PHOTOS_GALLERY)
 			imageIcon.addMouseListener(new MouseAdapter() {
 				@Override
@@ -331,14 +329,14 @@ public class AllPostsPane extends JPanel {
 			super();
 			setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 70));
 			setLayout(null);
-			
+
 			List<Image> images;
-			
+
 			// Distinguimos foto de álbum
 			if (gallery == PHOTOS_GALLERY) {
 				images = photos;
 			}
-			
+
 			else {
 				List<Image> firstAlbumsPhoto = new ArrayList<>(albums.keySet());
 				images = firstAlbumsPhoto;
@@ -364,13 +362,10 @@ public class AllPostsPane extends JPanel {
 				add(leftIconLabel);
 				leftIconLabel.setVisible(false);
 
-				rightIconLabel.addMouseListener(
-						new ButtonListener(rightIconLabel, leftIconLabel, gallery));
-				leftIconLabel.addMouseListener(
-						new ButtonListener(rightIconLabel, leftIconLabel, gallery));
+				rightIconLabel.addMouseListener(new ButtonListener(rightIconLabel, leftIconLabel, gallery));
+				leftIconLabel.addMouseListener(new ButtonListener(rightIconLabel, leftIconLabel, gallery));
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -388,9 +383,9 @@ public class AllPostsPane extends JPanel {
 		byte gallery;
 
 		public ButtonListener(JLabel rightIconLabel, JLabel leftIconLabel, byte gallery) {
-			
+
 			this.gallery = gallery;
-			
+
 			// Distinguimos foto de álbum
 			if (gallery == PHOTOS_GALLERY) {
 				this.images = photos;
@@ -398,7 +393,7 @@ public class AllPostsPane extends JPanel {
 				this.numPages = numPhotosPage;
 				this.imagesPane = imagesPaneForPhotos;
 			}
-			
+
 			else {
 				List<Image> firstAlbumsPhoto = new ArrayList<>(albums.keySet());
 				this.images = firstAlbumsPhoto;
@@ -406,7 +401,7 @@ public class AllPostsPane extends JPanel {
 				this.numPages = numAlbumsPage;
 				this.imagesPane = imagesPaneForAlbums;
 			}
-			
+
 			this.rightIconLabel = rightIconLabel;
 			this.leftIconLabel = leftIconLabel;
 		}
@@ -435,7 +430,7 @@ public class AllPostsPane extends JPanel {
 				}
 				rightIconLabel.setVisible(true);
 			}
-			
+
 			imagesPane.removeAll();
 			showPage(images, imagesPane, actualPage, gallery);
 		}
@@ -443,7 +438,7 @@ public class AllPostsPane extends JPanel {
 		public void mouseEntered(MouseEvent e) {
 			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
-		
+
 		public void mouseExited(MouseEvent e) {
 			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}

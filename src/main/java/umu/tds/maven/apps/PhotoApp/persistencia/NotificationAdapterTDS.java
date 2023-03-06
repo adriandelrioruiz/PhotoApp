@@ -16,34 +16,33 @@ import umu.tds.maven.apps.PhotoApp.modelo.Notification;
 import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 
 public class NotificationAdapterTDS extends AdapterTDS implements INotificationAdapterDAO {
-	
+
 	public static final String NOTIFICATION = "notification";
 	public static final String DATE = "date";
 	public static final String PHOTO = "photo";
-	
+
 	private static NotificationAdapterTDS instance;
 	private SimpleDateFormat dateFormat;
-	
+
 	public static NotificationAdapterTDS getInstance() {
 		if (instance == null)
 			instance = new NotificationAdapterTDS();
 		return instance;
 	}
-	
-	public NotificationAdapterTDS() {	
+
+	public NotificationAdapterTDS() {
 		super();
 		dateFormat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 	}
-	
-	
+
 	@Override
 	protected Entidad objectToEntity(DomainObject o) {
 		Entidad eNotification = new Entidad();
 		Notification notification = (Notification) o;
 
 		eNotification.setNombre(NOTIFICATION);
-		eNotification.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(new Propiedad(DATE, dateFormat.format(notification.getDate())),
+		eNotification.setPropiedades(
+				new ArrayList<Propiedad>(Arrays.asList(new Propiedad(DATE, dateFormat.format(notification.getDate())),
 						new Propiedad(PHOTO, String.valueOf(notification.getPhoto().getCode())))));
 
 		return eNotification;
@@ -55,7 +54,7 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		// Estos serán los atributos del Post que queremos recuperar
 		Date date;
 		Photo photo;
-		
+
 		// Recuperamos los atributos de la persistencia
 		date = null;
 		try {
@@ -63,13 +62,14 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		photo = PhotoAdapterTDS.getInstance().getPhoto(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, PHOTO)));
-		
+
+		photo = PhotoAdapterTDS.getInstance()
+				.getPhoto(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, PHOTO)));
+
 		Notification notification = new Notification(date, photo);
-		
+
 		notification.setCode(en.getId());
-		
+
 		return notification;
 	}
 
@@ -81,13 +81,13 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		// Recuperamos la entidad
 		eNotification = servPersistencia.recuperarEntidad(code);
 		if (eNotification != null)
-		// Convertimos la entidad en un objeto notification
-		try {
-			notification = (Notification) entityToObject(eNotification);
-			
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
+			// Convertimos la entidad en un objeto notification
+			try {
+				notification = (Notification) entityToObject(eNotification);
+
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
 		return notification;
 	}
 
@@ -101,7 +101,7 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		}
 		if (eNotification != null)
 			return;
-		
+
 		// Creamos entidad post
 		eNotification = objectToEntity(notification);
 		// registrar entidad post
@@ -109,7 +109,7 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		// asignar identificador unico
 		// Se aprovecha el que genera el servicio de persistencia
 		notification.setCode(eNotification.getId());
-		
+
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		Entidad eNotification = servPersistencia.recuperarEntidad(code);
 		servPersistencia.borrarEntidad(eNotification);
 	}
-	
+
 	@Override
 	public int getNotificationCodeByPost(int postCode) {
 		List<Entidad> entities = servPersistencia.recuperarEntidades(NOTIFICATION);
@@ -127,12 +127,12 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 					if (p.getValor().equals(String.valueOf(postCode)))
 						return entity.getId();
 				}
-					
+
 		return 0;
 	}
-	
-	
-	// Usamos esta función para obtener notifications a través de un string con varios códigos
+
+	// Usamos esta función para obtener notifications a través de un string con
+	// varios códigos
 	public List<Notification> getAllNotificationsFromCodes(String codes) {
 		List<Notification> notificationsList = new LinkedList<>();
 		if (codes != null && !codes.isEmpty()) {
@@ -144,7 +144,7 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		}
 		return notificationsList;
 	}
-	
+
 	public String getCodesFromAllNotifications(List<Notification> notifications) {
 		String codes = "";
 		for (Notification notification : notifications) {
@@ -152,12 +152,11 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		}
 		return codes.trim();
 	}
-	
+
 	// TODO para pruebas
-		public void deleteAll() {
-			List<Entidad> entities = servPersistencia.recuperarEntidades(NOTIFICATION);
-			entities.stream().forEach((e)->servPersistencia.borrarEntidad(e));
-		}
-		
+	public void deleteAll() {
+		List<Entidad> entities = servPersistencia.recuperarEntidades(NOTIFICATION);
+		entities.stream().forEach((e) -> servPersistencia.borrarEntidad(e));
+	}
 
 }

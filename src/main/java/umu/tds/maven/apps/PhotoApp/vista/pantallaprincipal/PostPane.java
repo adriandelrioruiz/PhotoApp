@@ -64,15 +64,15 @@ public class PostPane extends JPanel {
 	private void mostrarMenu(java.awt.event.MouseEvent e) {
 		JPopupMenu menu = new JPopupMenu();
 		Image image;
-		
+
 		try {
-			image = (ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "icon_lupa.png"))).getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+			image = (ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "icon_lupa.png"))).getScaledInstance(300, 300,
+					Image.SCALE_SMOOTH);
 			JLabel label = new JLabel();
 			label.setIcon(new ImageIcon(image));
 			menu.add(label);
 			menu.show(e.getComponent(), 5, -5);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		// menu.show(e.getComponent(), e.getX()-50, e.getY()-50);

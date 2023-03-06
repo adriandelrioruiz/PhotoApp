@@ -15,19 +15,19 @@ import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.AllPostsPane;
 
 @SuppressWarnings("serial")
 public class MyProfilePane extends ProfilePane {
-	
+
 	private JButton btnEditProfile;
 
 	public MyProfilePane(int userId) {
 		super(userId);
-		
+
 		initialize();
 	}
 
 	protected void createNorthPanel() {
-		
+
 		super.createNorthPanel();
-		
+
 		btnEditProfile = new JButton("Editar perfil");
 		btnEditProfile.setBackground(ViewConstants.APP_GREEN_COLOR);
 		btnEditProfile.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
@@ -36,22 +36,22 @@ public class MyProfilePane extends ProfilePane {
 		gbc_btnEditProfile.gridx = 2;
 		gbc_btnEditProfile.gridy = 3;
 		northPanel.add(btnEditProfile, gbc_btnEditProfile);
-		
+
 	}
-	
+
 	@Override
 	protected void addListeners() {
 		addEditProfileButtonListener(btnEditProfile);
 	}
-	
+
 	protected void addEditProfileButtonListener(JButton button) {
 		button.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				@SuppressWarnings("unused")
 				EditRegisterFrame frame = new EditRegisterFrame();
-				
+
 			}
 		});
 	}
@@ -62,5 +62,4 @@ public class MyProfilePane extends ProfilePane {
 		add(centerPanel, BorderLayout.CENTER);
 	}
 
-	
 }
