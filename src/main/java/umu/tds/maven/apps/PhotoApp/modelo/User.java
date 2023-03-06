@@ -111,7 +111,7 @@ public class User extends DomainObject {
 	public List<Photo> getPhotos() {
 		return Collections.unmodifiableList(photos);
 	}
-	
+
 	public List<Album> getAlbums() {
 		return Collections.unmodifiableList(albums);
 	}
@@ -119,7 +119,6 @@ public class User extends DomainObject {
 	public List<Notification> getNotifications() {
 		return Collections.unmodifiableList(notifications);
 	}
-
 
 	public boolean isPremium() {
 		return isPremium;
@@ -140,20 +139,20 @@ public class User extends DomainObject {
 	public void addPhoto(Photo photo) {
 		photos.add(photo);
 	}
-	
+
 	public void addAlbum(Album album) {
 		albums.add(album);
 	}
-	
+
 	public void addPhotoToAlbum(Photo photo, int id) {
-		Album a = albums.stream().filter((ab)->ab.getCode() == id).toList().get(0);
+		Album a = albums.stream().filter((ab) -> ab.getCode() == id).toList().get(0);
 		// Si la foto está contenida ya en el album, no la añadimos
-		if (a.getPhotos().stream().filter((p)->p.getCode() == photo.getCode()).toList().size() == 0)
+		if (a.getPhotos().stream().filter((p) -> p.getCode() == photo.getCode()).toList().size() == 0)
 			a.addPhoto(photo);
 	}
-	
+
 	public void deletePhotoFromAlbum(int photoId, int id) {
-		Album a = albums.stream().filter((ab)->ab.getCode() == id).toList().get(0);
+		Album a = albums.stream().filter((ab) -> ab.getCode() == id).toList().get(0);
 		a.removePhoto(photoId);
 	}
 
@@ -168,17 +167,17 @@ public class User extends DomainObject {
 	public void removeFollowed(User followedUser) {
 		followed.remove(followedUser);
 	}
-	
+
 	public void removePhoto(int id) {
-		Photo photo = photos.stream().filter((p)->p.getCode()==id).toList().get(0);
+		Photo photo = photos.stream().filter((p) -> p.getCode() == id).toList().get(0);
 		photos.remove(photo);
 	}
 
 	public void removeAlbum(int id) {
-		Album album = albums.stream().filter((a)->a.getCode()==id).toList().get(0);
+		Album album = albums.stream().filter((a) -> a.getCode() == id).toList().get(0);
 		albums.remove(album);
 	}
-	
+
 	public void removeNotification(int code) {
 		for (Notification n : notifications)
 			if (n.getCode() == code) {
@@ -198,13 +197,12 @@ public class User extends DomainObject {
 	public void setPhotos(List<Photo> photos) {
 		this.photos = photos;
 	}
-	
+
 	public void setAlbums(List<Album> albums) {
 		this.albums = albums;
 	}
 
 	// Método para ordenar los photos por fecha de publicación
-	// TODO cambiar este método o no
 	public void sortPosts() {
 		Collections.sort(photos);
 		Collections.sort(albums);

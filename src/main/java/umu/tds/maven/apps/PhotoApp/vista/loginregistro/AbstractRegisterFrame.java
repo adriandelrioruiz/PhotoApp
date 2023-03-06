@@ -29,21 +29,24 @@ import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.UploadPhotoFrame;
 
-/** Clase abstracta que engloba a la vista de registro normal que un usuario usa para registrarse
- * por primera vez y a la vista que el usuario usa para editar su perfil */
+/**
+ * Clase abstracta que engloba a la vista de registro normal que un usuario usa
+ * para registrarse por primera vez y a la vista que el usuario usa para editar
+ * su perfil
+ */
 
 @SuppressWarnings("serial")
 public abstract class AbstractRegisterFrame extends JFrame {
-	
+
 	// JPanels
 	protected JPanel northPanel;
 	protected JPanel centerPanel;
 	protected JPanel southPanel;
-	
+
 	protected JTextField txtUsername;
 	protected JTextField txtPassword;
 	protected PhotoAppController controller;
-	// TODO quitar atributos
+
 	protected JTextField txtEmail;
 	protected JTextField txtFullName;
 	protected JCalendar calendar;
@@ -51,18 +54,17 @@ public abstract class AbstractRegisterFrame extends JFrame {
 	// JLabels para los campos inválidos
 	protected JLabel lblEmptyPassword;
 	protected JLabel lblInvalidProfilePic;
-	
+
 	// Para elegir foto de perfil
 	protected JFileChooser fileChooser;
 	protected JButton fileChooserButton;
-	
+
 	// Frame para escribir la bio
 	protected SetBioFrame bioFrame;
 	private JButton btnDescribeYourself;
-	
+
 	// String que contiene la ruta de la foto de perfil
 	protected String profilePic;
-	
 
 	/**
 	 * Create the frame.
@@ -72,7 +74,6 @@ public abstract class AbstractRegisterFrame extends JFrame {
 		controller = PhotoAppController.getInstance();
 		fileChooser = new JFileChooser();
 	}
-	
 
 	protected void initialize() {
 		setTitle(ViewConstants.WINDOWS_TITLE);
@@ -85,7 +86,7 @@ public abstract class AbstractRegisterFrame extends JFrame {
 		setBounds();
 		setVisible(true);
 	}
-	
+
 	protected abstract void setBounds();
 
 	// Método para crear el panel que llevará el nombre de la aplicación
@@ -104,12 +105,12 @@ public abstract class AbstractRegisterFrame extends JFrame {
 
 	// Método para crear el panel que llevará el login
 	protected void createRegisterPane() {
-		
+
 		centerPanel = new JPanel();
 		centerPanel.setBackground(Color.WHITE);
 		centerPanel.setLayout(null);
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
-		
+
 		fileChooserButton = new JButton(ViewConstants.CHOOSE_AN_IMAGE_TEXT);
 		fileChooserButton.setForeground(Color.WHITE);
 		fileChooserButton.setBackground(ViewConstants.APP_GREEN_COLOR);
@@ -149,12 +150,10 @@ public abstract class AbstractRegisterFrame extends JFrame {
 		centerPanel.add(txtPassword);
 		txtPassword.setColumns(10);
 
-
-		/*ProfilePicPane north = new ProfilePicPane(this, "img/default-profpic.png");
-		north.setBounds(0, 0, 296, 108);
-		center.add(north);
-		north.setLayout(null);*/
-		
+		/*
+		 * ProfilePicPane north = new ProfilePicPane(this, "img/default-profpic.png");
+		 * north.setBounds(0, 0, 296, 108); center.add(north); north.setLayout(null);
+		 */
 
 		// Botón para acceder al texto de presentación
 		btnDescribeYourself = new JButton(ViewConstants.DESCRIBE_YOURSELF_TEXT);
@@ -170,12 +169,12 @@ public abstract class AbstractRegisterFrame extends JFrame {
 	}
 
 	protected void createSouthPane() {
-		
+
 		southPanel = new JPanel();
 		southPanel.setBackground(getContentPane().getBackground());
 		getContentPane().add(southPanel, BorderLayout.SOUTH);
 		southPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 15));
-	
+
 	}
 
 	protected void addErrorLabels() {
@@ -184,44 +183,45 @@ public abstract class AbstractRegisterFrame extends JFrame {
 		lblEmptyPassword.setForeground(Color.RED);
 		lblEmptyPassword.setBounds(35, txtPassword.getY() + txtPassword.getHeight(), 180, 13);
 		centerPanel.add(lblEmptyPassword);
-		
+
 		lblInvalidProfilePic = new JLabel("Introduce una imagen válida");
 		lblInvalidProfilePic.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 11));
 		lblInvalidProfilePic.setForeground(Color.RED);
 		lblInvalidProfilePic.setBounds(35, fileChooserButton.getY() + fileChooserButton.getHeight(), 180, 13);
 		centerPanel.add(lblInvalidProfilePic);
 	}
-	
+
 	protected void hideErrors() {
 		lblEmptyPassword.setVisible(false);
 		lblInvalidProfilePic.setVisible(false);
-		
+
 		Border border = new JTextField().getBorder();
 		txtPassword.setBorder(border);
 	}
-	
+
 	protected abstract void setTextFieldsDefault();
-	
+
 	protected boolean checkFields() {
 		boolean fieldsOkay = true;
 		hideErrors();
-		
-		// Intentamos leer la imagen desde la ruta. Si no es una imagen o no hay ningún archivo seleccionado, error.
-		
+
+		// Intentamos leer la imagen desde la ruta. Si no es una imagen o no hay ningún
+		// archivo seleccionado, error.
+
 		if (!UploadPhotoFrame.isValidImageFormat(profilePic)) {
 			lblInvalidProfilePic.setVisible(true);
 			fieldsOkay = false;
 		}
-		
+
 		else {
 			try {
 				ImageIO.read(new File(profilePic));
 			}
-			
+
 			catch (Exception e) {
 				e.printStackTrace();
 			}
-	
+
 			if (txtPassword.getText().isEmpty() || txtPassword.getText().equals(ViewConstants.PASSWORD_DEFAULT_TEXT)) {
 				lblEmptyPassword.setVisible(true);
 				txtPassword.setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -236,7 +236,7 @@ public abstract class AbstractRegisterFrame extends JFrame {
 		addFileChooseButtonHandler(fileChooserButton);
 		addBioButtonListener(btnDescribeYourself);
 	}
-		
+
 	protected final void addTextFieldListener(JTextField textField, String defaultText) {
 
 		textField.addMouseListener(new MouseAdapter() {
@@ -260,21 +260,21 @@ public abstract class AbstractRegisterFrame extends JFrame {
 			}
 		});
 	}
-	
+
 	private void addBioButtonListener(JButton button) {
 		button.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				bioFrame.setVisible(true);
 			}
 		});
-		
+
 	}
-	
+
 	private void addFileChooseButtonHandler(JButton button) {
 		button.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fileChooser.showOpenDialog(null);

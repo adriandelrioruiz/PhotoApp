@@ -24,7 +24,6 @@ public class ShowNewPhotoFrame extends ShowNewPostFrame {
 	private static final String DEFAULT_FRAME_NAME = "Subir una foto";
 
 	private static final String DEFAULT_TITULO_TEXT = "Ponle un título a tu foto";
-	
 
 	public ShowNewPhotoFrame(int userId, String path) {
 		super(userId, path);
@@ -67,7 +66,7 @@ public class ShowNewPhotoFrame extends ShowNewPostFrame {
 			if (!txtTitulo.getText().isEmpty() && !commentTxtArea.getText().isEmpty()
 					&& !txtTitulo.getText().equals(DEFAULT_TITULO_TEXT)
 					&& !commentTxtArea.getText().equals(DEFAULT_COMMENT_TEXT)) {
-				
+
 				controller.addPhoto(txtTitulo.getText(), commentTxtArea.getText(), path);
 				JButton btnAceptar = new JButton("Aceptar");
 				JOptionPane.showMessageDialog(btnAceptar, "La foto se ha subido con éxito");

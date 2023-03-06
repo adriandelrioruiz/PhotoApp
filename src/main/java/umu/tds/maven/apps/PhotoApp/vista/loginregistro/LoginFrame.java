@@ -1,6 +1,5 @@
 package umu.tds.maven.apps.PhotoApp.vista.loginregistro;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -33,19 +32,16 @@ public class LoginFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	private JTextField txtUsernameOrEmail;
 	private JTextField txtPassword;
 	private PhotoAppController controller;
-	
+
 	// JLabels para los campos inválidos
 	private JLabel lblEmptyEmUs;
 	private JLabel lblInvalidEmUs;
 	private JLabel lblEmptyPassword;
 	private JLabel lblInvalidPassword;
-	
-
 
 	/**
 	 * Create the frame.
@@ -55,46 +51,46 @@ public class LoginFrame extends JFrame {
 		controller = PhotoAppController.getInstance();
 		initialize();
 	}
-	
+
 	private void initialize() {
-		
+
 		setTitle(ViewConstants.WINDOWS_TITLE);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 306, 390);
 		getContentPane().setLayout(new BorderLayout());
 		setLocationRelativeTo(null);
-		
+
 		createTitlePane();
 		createLoginPane();
 		createRegisterPane();
-		
+
 		setVisible(true);
-		
+
 	}
-	
+
 	// Método para crear el panel que llevará el nombre de la aplicación
 	private void createTitlePane() {
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(getContentPane().getBackground());
 		getContentPane().add(northPanel, BorderLayout.NORTH);
 		northPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 15));
-		
+
 		// Añadimos etiqueta que mostrará en grande el nombre de la aplicación
 		JLabel lblNewLabel = new JLabel("PhotoApp");
 		lblNewLabel.setForeground(new Color(64, 128, 128));
 		lblNewLabel.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 32));
 		northPanel.add(lblNewLabel);
-		
+
 	}
-	
+
 	// Método para crear el panel que llevará el login
 	private void createLoginPane() {
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(getContentPane().getBackground());
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
 		centerPanel.setLayout(null);
-		
+
 		// Text field para el nombre de usuario o email
 		txtUsernameOrEmail = new JTextField(ViewConstants.USEM_DEFAULT_TEXT);
 		txtUsernameOrEmail.setForeground(Color.GRAY);
@@ -104,7 +100,7 @@ public class LoginFrame extends JFrame {
 		txtUsernameOrEmail.setColumns(10);
 		txtUsernameOrEmail.setFocusable(false);
 		addTextFieldHandler(txtUsernameOrEmail, ViewConstants.USEM_DEFAULT_TEXT);
-		
+
 		// Text field para la contraseña
 		txtPassword = new JPasswordField(ViewConstants.PASSWORD_DEFAULT_TEXT);
 		txtPassword.setForeground(Color.GRAY);
@@ -114,7 +110,7 @@ public class LoginFrame extends JFrame {
 		txtPassword.setColumns(10);
 		txtPassword.setFocusable(false);
 		addTextFieldHandler(txtPassword, ViewConstants.PASSWORD_DEFAULT_TEXT);
-		
+
 		// Botón de login
 		JButton loginButton = new JButton(ViewConstants.LOGIN_TEXT);
 		loginButton.setForeground(Color.WHITE);
@@ -122,7 +118,7 @@ public class LoginFrame extends JFrame {
 		loginButton.setBounds(35, txtPassword.getY() + txtPassword.getHeight() + 20, 219, 31);
 		centerPanel.add(loginButton);
 		addLoginButtonHandler(loginButton);
-		
+
 		// JLabels para tratar los campos inválidos
 		lblEmptyEmUs = new JLabel("Introduce un email o un nombre de usuario");
 		lblEmptyEmUs.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 11));
@@ -135,23 +131,22 @@ public class LoginFrame extends JFrame {
 		lblInvalidEmUs.setForeground(Color.RED);
 		lblInvalidEmUs.setBounds(35, 78, 247, 13);
 		centerPanel.add(lblInvalidEmUs);
-		
+
 		lblEmptyPassword = new JLabel("Introduce una contraseña");
 		lblEmptyPassword.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 11));
 		lblEmptyPassword.setForeground(Color.RED);
 		lblEmptyPassword.setBounds(35, txtPassword.getY() + txtPassword.getHeight(), 180, 13);
 		centerPanel.add(lblEmptyPassword);
-		
+
 		lblInvalidPassword = new JLabel("Contraseña incorrecta");
 		lblInvalidPassword.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 11));
 		lblInvalidPassword.setForeground(Color.RED);
 		lblInvalidPassword.setBounds(35, txtPassword.getY() + txtPassword.getHeight(), 180, 13);
 		centerPanel.add(lblInvalidPassword);
-		
+
 		hideErrors();
 	}
-	
-	
+
 	private void hideErrors() {
 		lblEmptyEmUs.setVisible(false);
 		lblInvalidEmUs.setVisible(false);
@@ -163,43 +158,44 @@ public class LoginFrame extends JFrame {
 		txtPassword.setBorder(border);
 
 	}
-	
+
 	// Método para crear el panel que llevará el registro
 	private void createRegisterPane() {
 		JPanel southPanel = new JPanel();
 		southPanel.setBackground(getContentPane().getBackground());
 		getContentPane().add(southPanel, BorderLayout.SOUTH);
 		southPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 15));
-		
+
 		// Añadimos etiqueta para indicar si el usuario se quiere registrar
 		JLabel haveAccountLabel = new JLabel(ViewConstants.NOT_REGISTERED_TEXT);
 		haveAccountLabel.setLocation(EXIT_ON_CLOSE, ABORT);
 		haveAccountLabel.setForeground(Color.GRAY);
 		haveAccountLabel.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
 		southPanel.add(haveAccountLabel);
-		
+
 		// Añadimos el botón de registro
 		JLabel registerLabel = new JLabel(ViewConstants.REGISTER_TEXT);
 		registerLabel.setForeground(new Color(64, 128, 128));
 		registerLabel.setFont(new Font(ViewConstants.APP_FONT, Font.BOLD, 13));
 		addRegisterLabelHandler(registerLabel);
 		southPanel.add(registerLabel);
-			
+
 	}
-	
+
 	private void addRegisterLabelHandler(JLabel registerLabel) {
 		registerLabel.addMouseListener(new MouseAdapter() {
-			// Para que cuando el ratón pase por encima de "Register" se ponga el cursor de la mano
+			// Para que cuando el ratón pase por encima de "Register" se ponga el cursor de
+			// la mano
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
-			
+
 			// Para que al clicar se abra la ventana de registro
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -209,14 +205,14 @@ public class LoginFrame extends JFrame {
 		});
 
 	}
-	
+
 	private boolean checkFields() {
 
 		boolean fieldsOkay = true;
 		hideErrors();
-		
 
-		if (txtUsernameOrEmail.getText().isEmpty() || txtUsernameOrEmail.getText().equals(ViewConstants.USEM_DEFAULT_TEXT)) {
+		if (txtUsernameOrEmail.getText().isEmpty()
+				|| txtUsernameOrEmail.getText().equals(ViewConstants.USEM_DEFAULT_TEXT)) {
 			lblEmptyEmUs.setVisible(true);
 			txtUsernameOrEmail.setBorder(BorderFactory.createLineBorder(Color.RED));
 			fieldsOkay = false;
@@ -231,22 +227,22 @@ public class LoginFrame extends JFrame {
 		return fieldsOkay;
 
 	}
-	
+
 	private void addLoginButtonHandler(JButton loginButton) {
 		loginButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				boolean fieldsOkay = checkFields();
-				
+
 				if (!fieldsOkay)
 					return;
-				
+
 				// Intentamos logearnos
 				Codes codes = controller.login(txtUsernameOrEmail.getText(), txtPassword.getText());
-				
-				switch(codes) {
-				
+
+				switch (codes) {
+
 				case INCORRECT_EMAIL_USERNAME:
 					lblInvalidEmUs.setVisible(true);
 					txtUsernameOrEmail.setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -255,24 +251,23 @@ public class LoginFrame extends JFrame {
 					lblInvalidPassword.setVisible(true);
 					txtPassword.setBorder(BorderFactory.createLineBorder(Color.RED));
 					break;
-					
+
 				default:
 					// Cerramos la ventana de login
 					dispose();
 					// Abrimos la app
 					new LoggedFrame();
 					break;
-					
+
 				}
 			}
 		});
 	}
-	
+
 	private void addTextFieldHandler(JTextField textField, String defaultText) {
-		
-		
+
 		textField.addMouseListener(new SetEmptyTextListener(defaultText, textField));
-		
+
 		textField.addFocusListener(new SetDefaultTextListener(defaultText, textField));
 	}
 }

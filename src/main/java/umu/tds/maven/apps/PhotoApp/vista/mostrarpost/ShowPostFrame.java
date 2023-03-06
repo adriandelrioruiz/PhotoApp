@@ -22,98 +22,97 @@ import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public abstract class ShowPostFrame extends JFrame {
-	
-	//--- TAMAÑOS PREDETERMINADOS ----
-	
+
+	// --- TAMAÑOS PREDETERMINADOS ----
+
 	// Tamaño de la ventana
 	private static final int FRAME_WIDTH = 700;
-	private static final int FRAME_HEIGHT = 500; 
-	
+	private static final int FRAME_HEIGHT = 500;
+
 	// Tamaños de los paneles
 	protected static final Dimension NORTH_PANEL_DIMENSION = new Dimension(FRAME_WIDTH, 40);
-	protected static final Dimension WEST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH/2, 400);
-	protected static final Dimension EAST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH/2-50, 400);
+	protected static final Dimension WEST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH / 2, 400);
+	protected static final Dimension EAST_PANEL_DIMENSION = new Dimension(FRAME_WIDTH / 2 - 50, 400);
 	protected static final Dimension SOUTH_PANEL_DIMENSION = new Dimension(FRAME_WIDTH, 40);
-	
+
 	// -----------------------
-	
+
 	// Controlador
 	protected PhotoAppController controller = PhotoAppController.getInstance();
-	
+
 	// Id del usuario del que mostrará el post
 	protected int userId;
-	
+
 	// Paneles que componen el frame
-	// Panel norte, que contendrá el título del post o el JText para escribir un título
+	// Panel norte, que contendrá el título del post o el JText para escribir un
+	// título
 	protected JPanel northPane;
 	// Panel oeste, que contendrá la imagen/imágenes del post
 	protected JPanel westPane;
-	// Panel este, que contendrá el JTextArea para comentar o dar una descripción al post
+	// Panel este, que contendrá el JTextArea para comentar o dar una descripción al
+	// post
 	protected JPanel eastPane;
-	// Panel sur, que contendrá los botones para salir, comentar, dar like, etc al post
+	// Panel sur, que contendrá los botones para salir, comentar, dar like, etc al
+	// post
 	protected JPanel southPane;
-	
+
 	// Botón para salir del frame
 	private JButton salirButton;
-	
+
 	// JTextArea para la descripción/comentario
 	protected JTextArea commentTxtArea;
-	
-	
+
 	// Constructor de la clase
 	public ShowPostFrame(int userId) {
-		
+
 		this.userId = userId;
-		
+
 	}
-	
+
 	// Método para inicializar los valores del Frame
 	protected void initialize() {
-		
-		// TODO centrar el frame, layout...
+
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		setResizable(false);
-		
-		
+
 		// Creamos los paneles
 		createNorthPane();
 		createWestPane();
 		createEastPane();
 		createSouthPane();
-		
+
 		// Añadimos los listeners
 		addListeners();
 	}
-	
-	// Método para crear el panel norte 
+
+	// Método para crear el panel norte
 	protected void createNorthPane() {
-		
+
 		northPane = new JPanel();
 		northPane.setPreferredSize(NORTH_PANEL_DIMENSION);
 		getContentPane().add(northPane, BorderLayout.NORTH);
 	}
-	
-	// Método para crear el panel oeste 
+
+	// Método para crear el panel oeste
 	protected void createWestPane() {
-		
+
 		westPane = new JPanel();
 		westPane.setPreferredSize(WEST_PANEL_DIMENSION);
 		westPane.setLayout(null);
 		getContentPane().add(westPane, BorderLayout.WEST);
-		
+
 	}
-	
-	// Método para crear el panel este 
+
+	// Método para crear el panel este
 	protected void createEastPane() {
-		
+
 		eastPane = new JPanel();
 		eastPane.setPreferredSize(EAST_PANEL_DIMENSION);
 		eastPane.setLayout(null);
 		getContentPane().add(eastPane, BorderLayout.EAST);
 
-		
 		commentTxtArea = new JTextArea();
 		commentTxtArea.setSize(280, 186);
 		commentTxtArea.setLocation(10, 10);
@@ -122,40 +121,39 @@ public abstract class ShowPostFrame extends JFrame {
 		commentTxtArea.setForeground(Color.GRAY);
 		commentTxtArea.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
 		eastPane.add(commentTxtArea);
-		
+
 	}
-	
-	// Método para crear el panel sur 
+
+	// Método para crear el panel sur
 	protected void createSouthPane() {
-		
+
 		southPane = new JPanel();
 		southPane.setPreferredSize(SOUTH_PANEL_DIMENSION);
 		getContentPane().add(southPane, BorderLayout.SOUTH);
-		
-		// Utilizamos el FlowLayout para que los botones se vayan añadiendo ordenadamente
+
+		// Utilizamos el FlowLayout para que los botones se vayan añadiendo
+		// ordenadamente
 		southPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		
+
 		// Creamos el botón para salir del frame
 		salirButton = new JButton("Salir");
 		salirButton.setBackground(ViewConstants.APP_GREEN_COLOR);
-		southPane.add(salirButton);		
+		southPane.add(salirButton);
 	}
-	
-	
+
 	// Método para crear los listeners
 	protected void addListeners() {
 
 		// Añadimos al botón de salir el listener para que cierre la ventana
 		salirButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Cerrar frame
 				dispose();
 			}
 		});
-		
+
 	}
 
-	
 }

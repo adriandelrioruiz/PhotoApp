@@ -24,11 +24,11 @@ public class Photo extends Post {
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
+
 	public Notification getNotification() {
 		return notification;
 	}
-	
+
 	public void setNotification(Notification notification) {
 		this.notification = notification;
 	}

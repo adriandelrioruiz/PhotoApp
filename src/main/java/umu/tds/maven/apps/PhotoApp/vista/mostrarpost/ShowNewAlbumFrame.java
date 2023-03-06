@@ -60,14 +60,13 @@ public class ShowNewAlbumFrame extends ShowNewPostFrame {
 
 	class SharePhotoButtonListener implements ActionListener {
 
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// Comprobamos que esten rellenos los campos
 			if (!txtTitulo.getText().isEmpty() && !commentTxtArea.getText().isEmpty()
 					&& !txtTitulo.getText().equals(DEFAULT_TITULO_TEXT)
 					&& !commentTxtArea.getText().equals(DEFAULT_COMMENT_TEXT)) {
-				
+
 				controller.addAlbum(txtTitulo.getText(), commentTxtArea.getText(), path);
 				JButton btnAceptar = new JButton("Aceptar");
 				JOptionPane.showMessageDialog(btnAceptar, "El álbum se ha subido con éxito");

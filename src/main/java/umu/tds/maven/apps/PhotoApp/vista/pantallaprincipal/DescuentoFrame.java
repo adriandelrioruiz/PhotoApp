@@ -15,41 +15,42 @@ import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 
 public class DescuentoFrame extends JFrame {
 	public DescuentoFrame() {
-		this.setSize(350,350);
+		this.setSize(350, 350);
 		this.setLocationRelativeTo(null);
-		JPanel conteiner= (JPanel) this.getContentPane();
+		JPanel conteiner = (JPanel) this.getContentPane();
 		conteiner.setLayout(new BoxLayout(conteiner, BoxLayout.Y_AXIS));
-		JLabel firstPanel=new JLabel("HAZTE PREMIUM");
+		JLabel firstPanel = new JLabel("HAZTE PREMIUM");
 		centrarTexto(firstPanel);
-		JLabel secondPanel=new JLabel("CON ESTE NUEVO DESCUENTO");
+		JLabel secondPanel = new JLabel("CON ESTE NUEVO DESCUENTO");
 		centrarTexto(secondPanel);
-		Double descuento=PhotoAppController.getInstance().getDiscount();
-		JLabel thirdPanel=new JLabel(descuento.toString()+" €");
+		Double descuento = PhotoAppController.getInstance().getDiscount();
+		JLabel thirdPanel = new JLabel(descuento.toString() + " €");
 		centrarTexto(thirdPanel);
-		JButton pagar=new JButton("PAGAR");
-		LoggedFrame.fixSize(pagar,500,50);
+		JButton pagar = new JButton("PAGAR");
+		LoggedFrame.fixSize(pagar, 500, 50);
 		pagar.setHorizontalAlignment(SwingConstants.CENTER);
 		conteiner.add(firstPanel);
 		conteiner.add(secondPanel);
 		conteiner.add(thirdPanel);
 		conteiner.add(pagar);
 		pagar.addActionListener(new ActionListener() {
-		      @Override
-		      public void actionPerformed(ActionEvent e) {
-		    	  PhotoAppController.getInstance().changeToPremium();
-		    	  cerrar();
-		      }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PhotoAppController.getInstance().changeToPremium();
+				cerrar();
+			}
 
-			
-		    });
+		});
 		this.setVisible(true);
 	}
-private void centrarTexto(JLabel component) {
-	LoggedFrame.fixSize(component,350,50);
-	component.setHorizontalAlignment(SwingConstants.CENTER);
-}
-private void cerrar() {
+
+	private void centrarTexto(JLabel component) {
+		LoggedFrame.fixSize(component, 350, 50);
+		component.setHorizontalAlignment(SwingConstants.CENTER);
+	}
+
+	private void cerrar() {
 		this.setVisible(false);
-		
+
 	}
 }
