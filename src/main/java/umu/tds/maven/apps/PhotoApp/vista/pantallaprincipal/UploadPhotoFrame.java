@@ -123,7 +123,7 @@ public class UploadPhotoFrame extends JFrame {
 
 	// Para saber si una imagen tiene un formato válido
 	public static boolean isValidImageFormat(String path) {
-		return (path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".jpg")
+		return !(path == null) && (path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".jpg")
 				|| path.endsWith(".bmp"));
 	}
 
