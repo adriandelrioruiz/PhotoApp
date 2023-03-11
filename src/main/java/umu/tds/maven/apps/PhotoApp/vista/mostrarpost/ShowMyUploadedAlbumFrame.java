@@ -26,7 +26,8 @@ public class ShowMyUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 	private JButton deleteAlbumButton;
 	// Botón para añadir foto a álbum
 	private JButton addPhotoToAlbumButton;
-	// TODO Botón para eliminar foto de álbum
+	// Botón para eliminar foto de álbum
+	private JButton deletePhotoFromAlbum;
 
 	public ShowMyUploadedAlbumFrame(int userId, int postId) {
 		super(userId, postId);
@@ -42,13 +43,29 @@ public class ShowMyUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 			Image image = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "iconUploadPhoto.png"));
 			ImageIcon addPhotoImage = new ImageIcon(image.getScaledInstance(DEFAULT_ICON_BUTTON_WIDTH,
 					DEFAULT_ICON_BUTTON_HEIGHT, DO_NOTHING_ON_CLOSE));
-			// Lo añadimos al panel oeste
+			// Lo añadimos al panel este
 			addPhotoToAlbumButton = new JButton(addPhotoImage);
 			addPhotoToAlbumButton.setSize(DEFAULT_ICON_BUTTON_WIDTH, DEFAULT_ICON_BUTTON_HEIGHT);
 			addPhotoToAlbumButton.setLocation(commentButton.getX() - DEFAULT_ICON_BUTTON_WIDTH - 10,
 					commentButton.getY());
 			addPhotoToAlbumButton.setLayout(null);
 			eastPane.add(addPhotoToAlbumButton);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// Creamos el botón para eliminar una foto del álbum
+		try {
+			Image image = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "basura.png"));
+			ImageIcon addPhotoImage = new ImageIcon(image.getScaledInstance(DEFAULT_ICON_BUTTON_WIDTH,
+					DEFAULT_ICON_BUTTON_HEIGHT, DO_NOTHING_ON_CLOSE));
+			// Lo añadimos al panel este
+			deletePhotoFromAlbum = new JButton(addPhotoImage);
+			deletePhotoFromAlbum.setSize(DEFAULT_ICON_BUTTON_WIDTH, DEFAULT_ICON_BUTTON_HEIGHT);
+			deletePhotoFromAlbum.setLocation(nPhotoLikes.getX(),
+					nPhotoLikes.getY() + nPhotoLikes.getHeight() + 10);
+			deletePhotoFromAlbum.setLayout(null);
+			eastPane.add(deletePhotoFromAlbum);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -115,6 +132,19 @@ public class ShowMyUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 					dispose();
 				}
 
+			}
+		});
+		
+		// Añadimos el listener para eliminar una foto de un álbum
+		deletePhotoFromAlbum.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.deletePhoto(photoIdList.get(photoCounter));
+				JButton btnAceptar = new JButton("Aceptar");
+				JOptionPane.showMessageDialog(btnAceptar, "La foto se ha eliminado con éxito");
+				LoggedFrame.getInstance().updateProfile();
+				dispose();
 			}
 		});
 	}

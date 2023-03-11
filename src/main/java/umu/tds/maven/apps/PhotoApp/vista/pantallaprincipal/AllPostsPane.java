@@ -259,7 +259,7 @@ public class AllPostsPane extends JPanel {
 	}
 
 	// Para pintar una imagen
-	public void addImage(Image image, Integer imageId, JPanel panel, byte gallery) {
+	public void addImage(Image image, int imageId, JPanel panel, byte gallery) {
 		JLabel imageIcon = new JLabel(new ImageIcon(
 				image.getScaledInstance(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 3 - 4, 120, Image.SCALE_SMOOTH)));
 
@@ -294,22 +294,37 @@ public class AllPostsPane extends JPanel {
 				}
 			});
 
-		// Añadimos el menú contextual en caso de que sea una foto nuestra
+		// Añadimos el menú contextual en caso de que sea una foto o álbum nuestro
 		if (deletable) {
 			JPopupMenu menuContextual = new JPopupMenu();
-			JMenuItem deletePhoto = new JMenuItem("Delete");
-			deletePhoto.addActionListener(new ActionListener() {
+			JMenuItem deleteMenuItem = new JMenuItem("Delete");
+			// Si es una foto
+			if (gallery == PHOTOS_GALLERY)
+				deleteMenuItem.addActionListener(new ActionListener() {
+	
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						panel.removeAll();
+						controller.deletePhoto(imageId);
+						LoggedFrame.getInstance().updateProfile();
+	
+					}
+				});
+			
+			// Si es un álbum
+			else {
+				deleteMenuItem.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						panel.removeAll();
+						controller.deleteAlbum(imageId);
+						LoggedFrame.getInstance().updateProfile();
+					}
+				});
+			}
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					panel.removeAll();
-					controller.deletePhoto(imageId);
-					LoggedFrame.getInstance().updateProfile();
-
-				}
-			});
-
-			menuContextual.add(deletePhoto);
+			menuContextual.add(deleteMenuItem);
 			imageIcon.setComponentPopupMenu(menuContextual);
 		}
 
