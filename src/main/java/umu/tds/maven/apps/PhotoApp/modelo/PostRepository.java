@@ -99,7 +99,7 @@ public class PostRepository {
 		photo.getUser().getFollowers().stream()
 				.forEach((u) -> u.removeNotification((photo.getNotification().getCode())));
 		// Eliminarmos la foto y la devolvemos
-		return photosById.remove(id);
+		return photo;
 
 	}
 
