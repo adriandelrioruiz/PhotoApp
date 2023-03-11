@@ -10,12 +10,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.EventObject;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import pulsador.IEncendidoListener;
+import pulsador.Luz;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
@@ -80,6 +84,7 @@ public class MenuPane extends JPanel {
 				}
 			}
 		});
+		
 
 		this.add(txtSearch);
 		txtSearch.setColumns(10);
@@ -136,6 +141,26 @@ public class MenuPane extends JPanel {
 				frame.changeToFeedPanel();
 			}
 		});
+		
+		// Añadimos el componente luz
+		Luz luz = new Luz();
+		luz.setBounds(0, 0, 15, 15);
+		luz.addEncendidoListener(new IEncendidoListener() {
+			
+			@Override
+			public void enteradoCambioEncendido(EventObject arg0) {
+				String path;
+				
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.showOpenDialog(null);
+				if (fileChooser.getSelectedFile() != null) {
+					path = fileChooser.getSelectedFile().toString();
+					controller.cargarFotos(path);
+				}
+				
+			}
+		});
+		this.add(luz);
 	}
 
 	private ImageIcon getIcon(int width, int height, String path) {

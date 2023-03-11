@@ -23,7 +23,7 @@ public class PruebasPersistencia {
 	}
 
 	public static void main(String[] args) {
-		// deleteAllDatabase();System.exit(0);
+		deleteAllDatabase();System.exit(0);
 		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password",
 				new Date(), "myPhoto", "myBio");
 		/*

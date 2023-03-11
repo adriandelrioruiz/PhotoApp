@@ -115,5 +115,4 @@ public abstract class ShowNewPostFrame extends ShowPostFrame {
 		commentTxtArea.addMouseListener(new SetEmptyTextListener(DEFAULT_COMMENT_TEXT, commentTxtArea));
 		commentTxtArea.addFocusListener(new SetDefaultTextListener(DEFAULT_COMMENT_TEXT, commentTxtArea));
 	}
-
 }

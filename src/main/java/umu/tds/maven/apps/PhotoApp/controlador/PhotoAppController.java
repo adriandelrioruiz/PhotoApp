@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +19,10 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
+import fotos.ComponenteCargadorFotos;
+import fotos.Foto;
+import fotos.FotosEvent;
+import fotos.IBuscadorFotos;
 import umu.tds.maven.apps.PhotoApp.modelo.Album;
 import umu.tds.maven.apps.PhotoApp.modelo.Comment;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
@@ -36,6 +41,7 @@ import umu.tds.maven.apps.PhotoApp.persistencia.IPhotoAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 public class PhotoAppController {
 
@@ -723,6 +729,27 @@ public class PhotoAppController {
 		user.addNotification(notification);
 		// Volcamos los cambios del usuario en la persistencia del usuario
 		userAdapter.updateUser(user, UserAdapterTDS.NOTIFICATIONS);
+	}
+	
+	// Para el componente cargador de fotos
+	public void cargarFotos(String path) {
+		ComponenteCargadorFotos cargador = new ComponenteCargadorFotos();
+		cargador.addHayFotosListener(new IBuscadorFotos() {
+			
+			@Override
+			public void hayFotos(EventObject arg) {
+				// TODO cargar las fotos
+				FotosEvent event = (FotosEvent) arg;
+				List<Foto> fotos = event.getFotos();
+				// Vamos añadiendo todas las fotos
+				for (Foto foto : fotos) {
+					addPhoto(foto.getTitulo(), foto.getDescripcion(), foto.getPath());
+					LoggedFrame.getInstance().updateProfile();
+				}
+			}
+		});
+		
+		cargador.setArchivoFotos(path);
 	}
 
 }
