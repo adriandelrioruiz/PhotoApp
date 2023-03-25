@@ -53,7 +53,6 @@ public class SearchFrame extends JFrame {
 		
 		// Vemos si se trata de una lista de posts o de usuarios
 		if (resultados.get(0) instanceof User) {
-			
 			// Añadimos todos los usuarios
 			for (int i = 0; i < resultados.size(); i++) {
 				User u = (User) resultados.get(i);

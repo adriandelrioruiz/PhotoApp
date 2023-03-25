@@ -105,7 +105,7 @@ public class MenuPane extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String query = txtSearch.getText();
 				System.out.println("query: " + query);
-				new SearchFrame(query);
+				//new SearchFrame(query);
 			}
 		});
 		userButton.addActionListener(new ActionListener() {

@@ -11,6 +11,8 @@ import umu.tds.maven.apps.PhotoApp.persistencia.CommentAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.NotificationAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
+import umu.tds.maven.apps.PhotoApp.vista.search.SearchFrame;
 public class PruebasPersistencia {
 	
 	public static void deleteAllDatabase() {
@@ -42,7 +44,7 @@ public class PruebasPersistencia {
 		
 		PhotoAppController.getInstance().addPhotoToAlbum("ola", "asd", "asdasd", a.getCode());
 		
-		PhotoAppController.getInstance().deletePhoto(p.getCode());
+		//PhotoAppController.getInstance().deletePhoto(p.getCode());
 		
 		PhotoAppController.getInstance().deleteAlbum(a.getCode());
 		
@@ -54,7 +56,7 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().unLogin();
 		PhotoAppController.getInstance().login("adri@gmail", "password");
 		//PhotoAppController.getInstance().getFeed();	
-		
+		new SearchFrame("adri");
 		
 	}
 }
