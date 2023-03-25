@@ -231,17 +231,6 @@ public class RegisterFrame extends AbstractRegisterFrame {
 				String bio = bioFrame.getBio();
 				if (bio.equals(ViewConstants.BIO_DEFAULT_TEXT))
 					bio = "";
-<<<<<<< HEAD
-				
-				Codes code = controller.registerUser(txtFullName.getText(), txtEmail.getText(), 
-						txtUsername.getText(), txtPassword.getText(), 
-						calendar.getDate(), fileChooser.getSelectedFile().getAbsolutePath(), bio);
-				
-				switch(code) {
-				
-				case INVALID_USERNAME:
-				{
-=======
 
 				Codes code = controller.registerUser(txtFullName.getText(), txtEmail.getText(), txtUsername.getText(),
 						txtPassword.getText(), calendar.getDate(), fileChooser.getSelectedFile().getAbsolutePath(),
@@ -250,7 +239,6 @@ public class RegisterFrame extends AbstractRegisterFrame {
 				switch (code) {
 
 				case INVALID_USERNAME: {
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 					lblInvalidUsername.setVisible(true);
 					txtUsername.setBorder(BorderFactory.createLineBorder(Color.RED));
 					break;

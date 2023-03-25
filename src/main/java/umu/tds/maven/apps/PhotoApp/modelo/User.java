@@ -143,18 +143,6 @@ public class User extends DomainObject {
 	public void addAlbum(Album album) {
 		albums.add(album);
 	}
-	
-	public void addPhotoToAlbum(Photo photo, int id) {
-		Album a = albums.stream().filter((ab)->ab.getCode() == id).toList().get(0);
-		// Si la foto está contenida ya en el album, no la añadimos
-		if (a.getPhotos().stream().filter((p)->p.getCode() == photo.getCode()).toList().size() == 0)
-			a.addPhoto(photo);
-	}
-	
-	public void deletePhotoFromAlbum(int photoId, int id) {
-		Album a = albums.stream().filter((ab)->ab.getCode() == id).toList().get(0);
-		a.removePhoto(photoId);
-	}
 
 	public void addPhotoToAlbum(Photo photo, int id) {
 		Album a = albums.stream().filter((ab) -> ab.getCode() == id).toList().get(0);
@@ -179,24 +167,14 @@ public class User extends DomainObject {
 	public void removeFollowed(User followedUser) {
 		followed.remove(followedUser);
 	}
-<<<<<<< HEAD
-	
-	public void removePhoto(int id) {
-		Photo photo = photos.stream().filter((p)->p.getCode()==id).toList().get(0);
-=======
 
 	public void removePhoto(int id) {
 		Photo photo = photos.stream().filter((p) -> p.getCode() == id).toList().get(0);
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		photos.remove(photo);
 	}
 
 	public void removeAlbum(int id) {
-<<<<<<< HEAD
-		Album album = albums.stream().filter((a)->a.getCode()==id).toList().get(0);
-=======
 		Album album = albums.stream().filter((a) -> a.getCode() == id).toList().get(0);
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		albums.remove(album);
 	}
 

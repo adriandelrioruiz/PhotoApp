@@ -43,12 +43,6 @@ public class EditRegisterFrame extends AbstractRegisterFrame {
 	}
 
 	@Override
-	protected void initialize() {
-		super.initialize();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-	
-	@Override
 	protected void setBounds() {
 		setBounds(100, 100, 310, 550);
 		setLocationRelativeTo(null);
@@ -78,11 +72,7 @@ public class EditRegisterFrame extends AbstractRegisterFrame {
 		btnExit.setForeground(Color.WHITE);
 		btnExit.setBackground(ViewConstants.APP_GREEN_COLOR);
 		btnExit.addActionListener(new ActionListener() {
-<<<<<<< HEAD
-			
-=======
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -117,19 +107,11 @@ public class EditRegisterFrame extends AbstractRegisterFrame {
 					controller.changeProfilePic(profilePic);
 				if (!bioFrame.getBio().equals(controller.getBio(controller.getId())))
 					controller.changeBio(bioFrame.getBio());
-<<<<<<< HEAD
-				
-				// Actualizamos la vista
-				LoggedFrame.getInstance().updateProfilePic();
-				dispose();
-				
-=======
 
 				// Actualizamos la vista
 				LoggedFrame.getInstance().updateProfilePic();
 				dispose();
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 			}
 		});
 	}

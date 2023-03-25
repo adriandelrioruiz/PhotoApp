@@ -62,16 +62,9 @@ public abstract class AbstractRegisterFrame extends JFrame {
 	// Frame para escribir la bio
 	protected SetBioFrame bioFrame;
 	private JButton btnDescribeYourself;
-<<<<<<< HEAD
-	
-	// String que contiene la ruta de la foto de perfil
-	protected String profilePic;
-	
-=======
 
 	// String que contiene la ruta de la foto de perfil
 	protected String profilePic;
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
 	/**
 	 * Create the frame.
@@ -211,32 +204,14 @@ public abstract class AbstractRegisterFrame extends JFrame {
 	protected boolean checkFields() {
 		boolean fieldsOkay = true;
 		hideErrors();
-<<<<<<< HEAD
-		
-		// Intentamos leer la imagen desde la ruta. Si no es una imagen o no hay ningún archivo seleccionado, error.
-		
-=======
 
 		// Intentamos leer la imagen desde la ruta. Si no es una imagen o no hay ningún
 		// archivo seleccionado, error.
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		if (!UploadPhotoFrame.isValidImageFormat(profilePic)) {
 			lblInvalidProfilePic.setVisible(true);
 			fieldsOkay = false;
 		}
-<<<<<<< HEAD
-		
-		else {
-			try {
-				ImageIO.read(new File(profilePic));
-			}
-			
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-	
-=======
 
 		else {
 			try {
@@ -247,7 +222,6 @@ public abstract class AbstractRegisterFrame extends JFrame {
 				e.printStackTrace();
 			}
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 			if (txtPassword.getText().isEmpty() || txtPassword.getText().equals(ViewConstants.PASSWORD_DEFAULT_TEXT)) {
 				lblEmptyPassword.setVisible(true);
 				txtPassword.setBorder(BorderFactory.createLineBorder(Color.RED));

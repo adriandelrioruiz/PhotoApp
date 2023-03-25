@@ -83,24 +83,10 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 			e.printStackTrace();
 		}
 		description = servPersistencia.recuperarPropiedadEntidad(en, DESCRIPTION);
-<<<<<<< HEAD
-		likes = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, LIKES)); 
-		
-		
-		// Recuperamos los atributos que son listas 
-=======
 		likes = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, LIKES));
 
 		// Recuperamos los atributos que son listas
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		List<String> hashtags = getHashtagsFromString(servPersistencia.recuperarPropiedadEntidad(en, HASHTAGS));
-<<<<<<< HEAD
-		List<Comment> comments = CommentAdapterTDS.getInstance().getCommentsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, COMMENTS));
-		List<Photo> photos = PhotoAdapterTDS.getInstance().getAllPhotosFromCodes(servPersistencia.recuperarPropiedadEntidad(en, PHOTOS));
-		
-		user = photos.get(0).getUser();
-	
-=======
 		List<Comment> comments = CommentAdapterTDS.getInstance()
 				.getCommentsFromCodes(servPersistencia.recuperarPropiedadEntidad(en, COMMENTS));
 		List<Photo> photos = PhotoAdapterTDS.getInstance()
@@ -108,7 +94,6 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 
 		user = photos.get(0).getUser();
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		Album album = new Album(title, date, description, user);
 		album.setLikes(likes);
 		album.setHashtags(hashtags);
@@ -146,11 +131,7 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 		}
 		if (eAlbum != null)
 			return;
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		// Creamos entidad album
 		eAlbum = objectToEntity(album);
 		// registrar entidad album
@@ -165,14 +146,9 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 	public void deleteAlbum(int id) {
 		Entidad eAlbum = servPersistencia.recuperarEntidad(id);
 		// Borramos todas las fotos del álbum
-<<<<<<< HEAD
-		List<Photo> photos = PhotoAdapterTDS.getInstance().getAllPhotosFromCodes(servPersistencia.recuperarPropiedadEntidad(eAlbum, PHOTOS));
-		photos.stream().forEach((p)->PhotoAdapterTDS.getInstance().deletePhoto(p.getCode()));
-=======
 		List<Photo> photos = PhotoAdapterTDS.getInstance()
 				.getAllPhotosFromCodes(servPersistencia.recuperarPropiedadEntidad(eAlbum, PHOTOS));
 		photos.stream().forEach((p) -> PhotoAdapterTDS.getInstance().deletePhoto(p.getCode()));
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		servPersistencia.borrarEntidad(eAlbum);
 	}
 
@@ -265,21 +241,11 @@ public class AlbumAdapterTDS extends AdapterTDS implements IAlbumAdapterDAO {
 
 		return albums;
 	}
-<<<<<<< HEAD
-	
-	// TODO para pruebas
-	public void deleteAll() {
-		List<Entidad> entities = servPersistencia.recuperarEntidades(ALBUM);
-		entities.stream().forEach((e)->servPersistencia.borrarEntidad(e));
-	}
-	
-=======
 
 	// TODO para pruebas
 	public void deleteAll() {
 		List<Entidad> entities = servPersistencia.recuperarEntidades(ALBUM);
 		entities.stream().forEach((e) -> servPersistencia.borrarEntidad(e));
 	}
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
 }

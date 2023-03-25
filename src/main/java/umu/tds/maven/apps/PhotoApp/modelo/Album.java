@@ -25,18 +25,11 @@ public class Album extends Post {
 	public void addPhoto(Photo photo) {
 		photos.add(photo);
 	}
-<<<<<<< HEAD
-	
-	public void removePhoto(int id) {
-		Photo photo = photos.stream().filter((p)->p.getCode()==id).toList().get(0);
-		photos.remove(photo);
-=======
 
 	public void removePhoto(int id) {
 		List<Photo> photo = photos.stream().filter((p) -> p.getCode() == id).toList();
 		if (!photo.isEmpty())
 			photos.remove(photo.get(0));
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	}
 
 	public void like() {

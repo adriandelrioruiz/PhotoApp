@@ -43,8 +43,6 @@ public class UserRepository {
 			users.stream().forEach((u) -> u.sortPosts());
 
 			// Los introducimos en nuestro mapa
-			for (User user : users) 
-				usersById.put(user.getCode(), user);
 			for (User user : users)
 				usersById.put(user.getCode(), user);
 			for (User user : users)
@@ -65,13 +63,8 @@ public class UserRepository {
 	// Método para eliminar un usuario
 	public void deleteUser(User user) {
 		// Si eliminamos un usuario, tenemos que eliminar todos sus posts
-<<<<<<< HEAD
-		user.getPhotos().stream().forEach((p->PostRepository.getInstance().deletePhoto(p.getCode())));
-		user.getAlbums().stream().forEach((a->PostRepository.getInstance().deleteAlbum(a.getCode())));
-=======
 		user.getPhotos().stream().forEach((p -> PostRepository.getInstance().deletePhoto(p.getCode())));
 		user.getAlbums().stream().forEach((a -> PostRepository.getInstance().deleteAlbum(a.getCode())));
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		usersById.remove(user.getCode());
 	}
 
@@ -90,11 +83,6 @@ public class UserRepository {
 		return user;
 	}
 
-	// Método para devolver un usuario a partir de su id
-	public User getUser(int id) {
-		return usersById.get(id);
-	}
-	
 	// Método para devolver un usuario a partir de su id
 	public User getUser(int id) {
 		return usersById.get(id);

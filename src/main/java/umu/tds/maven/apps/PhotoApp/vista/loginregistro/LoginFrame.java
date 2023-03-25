@@ -263,20 +263,11 @@ public class LoginFrame extends JFrame {
 			}
 		});
 	}
-<<<<<<< HEAD
-	
-	private void addTextFieldHandler(JTextField textField, String defaultText) {
-		
-		
-		textField.addMouseListener(new SetEmptyTextListener(defaultText, textField));
-		
-=======
 
 	private void addTextFieldHandler(JTextField textField, String defaultText) {
 
 		textField.addMouseListener(new SetEmptyTextListener(defaultText, textField));
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		textField.addFocusListener(new SetDefaultTextListener(defaultText, textField));
 	}
 }
