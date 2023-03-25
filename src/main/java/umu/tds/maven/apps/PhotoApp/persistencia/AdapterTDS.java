@@ -21,4 +21,6 @@ public abstract class AdapterTDS {
 	protected abstract Entidad objectToEntity(DomainObject o);
 
 	protected abstract DomainObject entityToObject(Entidad en);
+	
+
 }
