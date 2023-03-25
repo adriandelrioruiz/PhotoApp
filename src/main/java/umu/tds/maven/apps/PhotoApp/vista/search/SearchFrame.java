@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
+import umu.tds.maven.apps.PhotoApp.modelo.Post;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 
 /** Esta clase muestra todos los objetos que se han encontrado a partir de un query */
@@ -63,11 +64,16 @@ public class SearchFrame extends JFrame {
 		}
 			
 		else {
-			
-			
-			
+			if (resultados.get(0) instanceof Post) {
+			// Añadimos todos los usuarios
+				for (int i = 0; i < resultados.size(); i++) {
+					Post p = (Post) resultados.get(i);
+					ShowPostSearchPane panel = new ShowPostSearchPane(p.getCode(), this);
+		            panel.setBackground(Color.LIGHT_GRAY);
+		            searchListPane.add(panel);
+				}
+			}else dispose();
 		}
-		
 		// Crear JScrollPane y añadir el panelList
         scrollPane = new JScrollPane(searchListPane);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -77,6 +83,4 @@ public class SearchFrame extends JFrame {
 		
 		setVisible(true);
 	}
-	
-	
 }
