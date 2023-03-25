@@ -34,13 +34,17 @@ public class ViewConstants {
 	public static final int BIO_LENGTH = 200;
 	public static final String BIO_DIALOG_LENGHT_EXCEEDED = "Máximo " + String.valueOf(BIO_LENGTH) + " caracteres";
 	public static final String BIO_DEFAULT_TEXT = "Descríbete (" + BIO_DIALOG_LENGHT_EXCEEDED + ")";
-	
+
 	// LoggedFrame
 	public static final int LOGGEDFRAME_WINDOW_WIDTH = 800;
 	public static final int LOGGEDFRAME_WINDOW_HEIGHT = 800;
 
 	//
+<<<<<<< HEAD
 	public static String RUTA_FOTOS =  "C:\\Users\\adria\\eclipse-workspace\\PhotoApp2\\img\\";
+=======
+	public static String RUTA_FOTOS = "C:\\Users\\adria\\eclipse-workspace\\PhotoApp3\\img\\";
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
 	public static ImageIcon getIcon(int width, int height, String filename) {
 		Image image;

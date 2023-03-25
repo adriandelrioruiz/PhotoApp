@@ -6,6 +6,7 @@ import java.awt.event.FocusEvent;
 import javax.swing.text.JTextComponent;
 
 public class SetDefaultTextListener extends FocusAdapter {
+<<<<<<< HEAD
 	
 	// Texto por defecto
 		private String defaultText;
@@ -15,6 +16,17 @@ public class SetDefaultTextListener extends FocusAdapter {
 			this.defaultText = defaultText;
 			this.componente = componente;
 		}
+=======
+
+	// Texto por defecto
+	private String defaultText;
+	private JTextComponent componente;
+
+	public SetDefaultTextListener(String defaultText, JTextComponent componente) {
+		this.defaultText = defaultText;
+		this.componente = componente;
+	}
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
 	@Override
 	public void focusLost(FocusEvent e) {

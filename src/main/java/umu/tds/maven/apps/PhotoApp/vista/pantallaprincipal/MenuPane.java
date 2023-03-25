@@ -10,12 +10,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+<<<<<<< HEAD
+=======
+import java.util.EventObject;
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+<<<<<<< HEAD
+=======
+import javax.swing.JFileChooser;
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import pulsador.IEncendidoListener;
+import pulsador.Luz;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
@@ -30,11 +40,17 @@ public class MenuPane extends JPanel {
 	public static final int MENU_HEIGHT = 90;
 	private static final int SEARCH_HEIGHT = 25;
 	private static final int SEARCH_WIDTH = 100;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	private JTextField txtSearch;
 	private JButton uploadButton, lupaButton, userButton, premiumButton, titulo;
 	private LoggedFrame frame;
 	
+	private PhotoAppController controller;
+
 	private PhotoAppController controller;
 
 	// PARTE DE ARRIBA DE LA PANTALLA
@@ -55,7 +71,12 @@ public class MenuPane extends JPanel {
 		this.setButton(titulo, 0, TITULO_WIDTH, MENU_HEIGHT);
 
 		// Botón para subir foto
+<<<<<<< HEAD
 		uploadButton = new JButton(this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + "iconUploadPhoto.png"));
+=======
+		uploadButton = new JButton(
+				this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + "iconUploadPhoto.png"));
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		this.setButton(uploadButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		// Buscar
@@ -67,6 +88,7 @@ public class MenuPane extends JPanel {
 		txtSearch.setEditable(true);
 		txtSearch.setOpaque(true);
 		txtSearch.setFocusable(false);
+<<<<<<< HEAD
 		
 		txtSearch.addMouseListener(new MouseAdapter() {
 			
@@ -80,18 +102,48 @@ public class MenuPane extends JPanel {
 			}
 		});
 		
+=======
+
+		txtSearch.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!txtSearch.isFocusable()) {
+					txtSearch.setFocusable(true);
+					txtSearch.grabFocus();
+					txtSearch.setText("");
+				}
+			}
+		});
+		
+
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		this.add(txtSearch);
 		txtSearch.setColumns(10);
 		// Bonton lupa
+<<<<<<< HEAD
 		lupaButton = new JButton(this.getIcon(BUTTON_WIDTH, SEARCH_HEIGHT, ViewConstants.RUTA_FOTOS +  "icon_lupa.png"));
+=======
+		lupaButton = new JButton(this.getIcon(BUTTON_WIDTH, SEARCH_HEIGHT, ViewConstants.RUTA_FOTOS + "icon_lupa.png"));
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		this.setButton(lupaButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 + 50, BUTTON_WIDTH, BUTTON_HEIGHT);
 		// FOTO USER
 
+<<<<<<< HEAD
 		userButton = new JButton(this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));
+=======
+		userButton = new JButton(
+				this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		this.setButton(userButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 100, USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT);
 		// BOTON PREMIUN
+<<<<<<< HEAD
 		premiumButton = new JButton(this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + 
 				"icon_tres_lineas.png"));
+=======
+		premiumButton = new JButton(
+				this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + "icon_tres_lineas.png"));
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		setButton(premiumButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 50, BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		uploadButton.addActionListener(new ActionListener() {
@@ -126,14 +178,34 @@ public class MenuPane extends JPanel {
 
 			}
 		});
-		
+
 		titulo.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				frame.changeToFeedPanel();
 			}
 		});
+		
+		// Añadimos el componente luz
+		Luz luz = new Luz();
+		luz.setBounds(0, 0, 15, 15);
+		luz.addEncendidoListener(new IEncendidoListener() {
+			
+			@Override
+			public void enteradoCambioEncendido(EventObject arg0) {
+				String path;
+				
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.showOpenDialog(null);
+				if (fileChooser.getSelectedFile() != null) {
+					path = fileChooser.getSelectedFile().toString();
+					controller.cargarFotos(path);
+				}
+				
+			}
+		});
+		this.add(luz);
 	}
 
 	private ImageIcon getIcon(int width, int height, String path) {
@@ -146,6 +218,7 @@ public class MenuPane extends JPanel {
 	}
 
 	/*
+<<<<<<< HEAD
 	private void setComponent(JComponent component, int x, int y, int width, int height) {
 		component.setAlignmentX(x);
 		LoggedFrame.fixSize(component, TITULO_WIDTH, MENU_HEIGHT);
@@ -165,6 +238,20 @@ public class MenuPane extends JPanel {
 		menu.add(paste);
 		// menu.show(e.getComponent(), e.getX(), e.getY());
 	}*/
+=======
+	 * private void setComponent(JComponent component, int x, int y, int width, int
+	 * height) { component.setAlignmentX(x); LoggedFrame.fixSize(component,
+	 * TITULO_WIDTH, MENU_HEIGHT); this.add(component); }
+	 * 
+	 * private void mostrarMenu(ActionEvent e) { // PopupMenu menu = new
+	 * PopupMenu(); JPopupMenu menu = new JPopupMenu(); JMenuItem cut = new
+	 * JMenuItem("Cut"); JMenuItem copy = new JMenuItem("Copy"); JMenuItem paste =
+	 * new JMenuItem("Paste");
+	 * 
+	 * // menu.add(open); menu.add(cut); menu.add(copy); menu.add(paste); //
+	 * menu.show(e.getComponent(), e.getX(), e.getY()); }
+	 */
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
 	private void setButton(JButton boton, int x, int width, int height) {
 		this.add(boton);
@@ -174,6 +261,16 @@ public class MenuPane extends JPanel {
 		boton.setBackground(null);
 		boton.setBorderPainted(false);
 		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+<<<<<<< HEAD
+=======
+	}
+
+	public void updateProfilePic() {
+		userButton.setIcon(getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));
+		revalidate();
+		repaint();
+
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	}
 	
 	public void updateProfilePic() {

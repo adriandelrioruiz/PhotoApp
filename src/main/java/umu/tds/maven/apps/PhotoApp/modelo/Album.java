@@ -6,38 +6,45 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Album extends Post {
-	
+
 	private List<Photo> photos;
-	
+
 	public Album(String title, Date date, String description, User user) {
 		super(title, date, description, user);
 		photos = new LinkedList<>();
 	}
-	
-	
+
 	public List<Photo> getPhotos() {
 		return Collections.unmodifiableList(photos);
 	}
-	
+
 	public void setPhotos(List<Photo> photos) {
 		this.photos = photos;
 	}
-	
+
 	public void addPhoto(Photo photo) {
 		photos.add(photo);
 	}
+<<<<<<< HEAD
 	
 	public void removePhoto(int id) {
 		Photo photo = photos.stream().filter((p)->p.getCode()==id).toList().get(0);
 		photos.remove(photo);
+=======
+
+	public void removePhoto(int id) {
+		List<Photo> photo = photos.stream().filter((p) -> p.getCode() == id).toList();
+		if (!photo.isEmpty())
+			photos.remove(photo.get(0));
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	}
-	
+
 	public void like() {
 		// Damos like al propio álbum
 		super.like();
-		
+
 		// Damos like a cada una de las fotos que lo conforman
 		photos.stream().forEach((p) -> p.like());
-		
+
 	}
 }

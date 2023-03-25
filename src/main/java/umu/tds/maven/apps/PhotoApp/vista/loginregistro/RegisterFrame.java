@@ -27,7 +27,6 @@ public class RegisterFrame extends AbstractRegisterFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-
 	private JCalendar calendar;
 
 	// JLabels para los campos inválidos
@@ -36,7 +35,6 @@ public class RegisterFrame extends AbstractRegisterFrame {
 	private JLabel lblInvalidUsername;
 	private JLabel lblEmptyEmail;
 	private JLabel lblInvalidEmail;
-	
 
 	/**
 	 * Create the frame.
@@ -55,7 +53,7 @@ public class RegisterFrame extends AbstractRegisterFrame {
 
 	@Override
 	protected void createRegisterPane() {
-		
+
 		super.createRegisterPane();
 		txtPassword.setFocusable(false);
 
@@ -71,17 +69,17 @@ public class RegisterFrame extends AbstractRegisterFrame {
 		calendar.setBounds(35, bioFrame.getY() + 100, 219, 150);
 		centerPanel.add(calendar);
 
-		/*ProfilePicPane north = new ProfilePicPane(this, "img/default-profpic.png");
-		north.setBounds(0, 0, 296, 108);
-		center.add(north);
-		north.setLayout(null);*/
+		/*
+		 * ProfilePicPane north = new ProfilePicPane(this, "img/default-profpic.png");
+		 * north.setBounds(0, 0, 296, 108); center.add(north); north.setLayout(null);
+		 */
 
 	}
-	
+
 	@Override
 	protected void addErrorLabels() {
 		super.addErrorLabels();
-		
+
 		lblEmptyFullName = new JLabel("Introduce tu nombre completo");
 		lblEmptyFullName.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 11));
 		lblEmptyFullName.setForeground(Color.RED);
@@ -113,7 +111,7 @@ public class RegisterFrame extends AbstractRegisterFrame {
 		centerPanel.add(lblInvalidEmail);
 
 	}
-	
+
 	@Override
 	protected void addListeners() {
 		super.addListeners();
@@ -158,7 +156,7 @@ public class RegisterFrame extends AbstractRegisterFrame {
 		southPanel.add(loginLabel);
 
 	}
-	
+
 	@Override
 	protected void setTextFieldsDefault() {
 		txtFullName.setText(ViewConstants.FULLNAME_DEFAULT_TEXT);
@@ -195,8 +193,6 @@ public class RegisterFrame extends AbstractRegisterFrame {
 	protected boolean checkFields() {
 
 		boolean fieldsOkay = super.checkFields();
-		// TODO QUITAR????
-
 
 		if (txtFullName.getText().isEmpty() || txtFullName.getText().equals(ViewConstants.FULLNAME_DEFAULT_TEXT)) {
 			lblEmptyFullName.setVisible(true);
@@ -216,27 +212,26 @@ public class RegisterFrame extends AbstractRegisterFrame {
 			fieldsOkay = false;
 		}
 
-
 		return fieldsOkay;
 
 	}
 
 	private void addRegisterButtonHandler(JButton button) {
 		button.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Comprobamos que los campos sean válidos
 				boolean fieldsAreValid = checkFields();
-				
+
 				if (!fieldsAreValid)
 					return;
-				
-				
+
 				// Intentamos registrar el nuevo user con los datos
 				String bio = bioFrame.getBio();
 				if (bio.equals(ViewConstants.BIO_DEFAULT_TEXT))
 					bio = "";
+<<<<<<< HEAD
 				
 				Codes code = controller.registerUser(txtFullName.getText(), txtEmail.getText(), 
 						txtUsername.getText(), txtPassword.getText(), 
@@ -246,39 +241,43 @@ public class RegisterFrame extends AbstractRegisterFrame {
 				
 				case INVALID_USERNAME:
 				{
+=======
+
+				Codes code = controller.registerUser(txtFullName.getText(), txtEmail.getText(), txtUsername.getText(),
+						txtPassword.getText(), calendar.getDate(), fileChooser.getSelectedFile().getAbsolutePath(),
+						bio);
+
+				switch (code) {
+
+				case INVALID_USERNAME: {
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 					lblInvalidUsername.setVisible(true);
 					txtUsername.setBorder(BorderFactory.createLineBorder(Color.RED));
 					break;
 				}
-				
-				case INVALID_EMAIL:
-				{
+
+				case INVALID_EMAIL: {
 					lblInvalidEmail.setVisible(true);
 					txtEmail.setBorder(BorderFactory.createLineBorder(Color.RED));
 					break;
 				}
-				
-				case OK:
-				{
-					// TODO meter constantes?
+
+				case OK: {
 					JButton btnGoToLogin = new JButton("Volver al login");
 					JOptionPane.showMessageDialog(btnGoToLogin, "El registro se ha completado con éxito");
 					dispose();
 					new LoginFrame();
 				}
-				
-				default:
-				{
+
+				default: {
 					break;
 				}
-				
-				
-				}	
-				
+
+				}
+
 			}
 
 		});
 	}
-
 
 }

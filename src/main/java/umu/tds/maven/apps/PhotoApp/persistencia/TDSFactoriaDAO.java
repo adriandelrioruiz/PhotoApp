@@ -6,12 +6,12 @@ public class TDSFactoriaDAO extends FactoriaDAO {
 	public IUserAdapterDAO getUserDAO() {
 		return UserAdapterTDS.getInstance();
 	}
-	
+
 	@Override
 	public IPhotoAdapterDAO getPhotoDAO() {
 		return PhotoAdapterTDS.getInstance();
 	}
-	
+
 	@Override
 	public IAlbumAdapterDAO getAlbumDAO() {
 		return AlbumAdapterTDS.getInstance();
@@ -26,6 +26,5 @@ public class TDSFactoriaDAO extends FactoriaDAO {
 	public INotificationAdapterDAO getNotificationDAO() {
 		return NotificationAdapterTDS.getInstance();
 	}
-	
-	
+
 }

@@ -24,6 +24,7 @@ public class ShowNewPhotoFrame extends ShowNewPostFrame {
 	private static final String DEFAULT_FRAME_NAME = "Subir una foto";
 
 	private static final String DEFAULT_TITULO_TEXT = "Ponle un título a tu foto";
+<<<<<<< HEAD
 	
 
 	public ShowNewPhotoFrame(int userId, String path) {
@@ -68,6 +69,51 @@ public class ShowNewPhotoFrame extends ShowNewPostFrame {
 					&& !txtTitulo.getText().equals(DEFAULT_TITULO_TEXT)
 					&& !commentTxtArea.getText().equals(DEFAULT_COMMENT_TEXT)) {
 				
+=======
+
+	public ShowNewPhotoFrame(int userId, String path) {
+		super(userId, path);
+
+	}
+
+	@Override
+	protected void initialize() {
+		super.initialize();
+
+		setTitle(DEFAULT_FRAME_NAME);
+		setVisible(true);
+	}
+
+	@Override
+	protected void createNorthPane() {
+		super.createNorthPane();
+
+		txtTitulo.setText(DEFAULT_TITULO_TEXT);
+		txtTitulo.setForeground(Color.GRAY);
+		txtTitulo.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
+	}
+
+	@Override
+	protected void addListeners() {
+		super.addListeners();
+
+		txtTitulo.addMouseListener(new SetEmptyTextListener(DEFAULT_TITULO_TEXT, txtTitulo));
+		txtTitulo.addFocusListener(new SetDefaultTextListener(DEFAULT_TITULO_TEXT, txtTitulo));
+
+		shareButton.addActionListener(new SharePhotoButtonListener());
+
+	}
+
+	class SharePhotoButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// Comprobamos que esten rellenos los campos
+			if (!txtTitulo.getText().isEmpty() && !commentTxtArea.getText().isEmpty()
+					&& !txtTitulo.getText().equals(DEFAULT_TITULO_TEXT)
+					&& !commentTxtArea.getText().equals(DEFAULT_COMMENT_TEXT)) {
+
+>>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 				controller.addPhoto(txtTitulo.getText(), commentTxtArea.getText(), path);
 				JButton btnAceptar = new JButton("Aceptar");
 				JOptionPane.showMessageDialog(btnAceptar, "La foto se ha subido con éxito");

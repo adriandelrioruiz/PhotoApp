@@ -23,9 +23,9 @@ import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 @SuppressWarnings("serial")
 public class SetBioFrame extends JFrame {
-	
+
 	private JTextArea textArea;
-	
+
 	public SetBioFrame(String text) {
 		textArea = new JTextArea(text);
 		textArea.setColumns(10);
@@ -36,30 +36,29 @@ public class SetBioFrame extends JFrame {
 		// La hacemos scrollable
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		add(scrollPane, BorderLayout.CENTER);
-		
+
 		// Panel botones
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new FlowLayout());
-		
+
 		// Botón aceptar
 		JButton btnAccept = new JButton("Aceptar");
 		btnAccept.setForeground(Color.WHITE);
 		btnAccept.setBackground(ViewConstants.APP_GREEN_COLOR);
 		addAcceptButtonListener(btnAccept);
 		buttonsPanel.add(btnAccept);
-		
+
 		add(buttonsPanel, BorderLayout.SOUTH);
-		
+
 		setSize(400, 300);
 		setLocationRelativeTo(null);
 		setUndecorated(true);
-		
+
 	}
-	
-	
+
 	private void addAcceptButtonListener(JButton button) {
 		button.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (textArea.getText().length() > ViewConstants.BIO_LENGTH)
@@ -69,8 +68,7 @@ public class SetBioFrame extends JFrame {
 			}
 		});
 	}
-	
-	
+
 	private void addTextFieldHandler(JTextComponent textField, String defaultText) {
 
 		textField.addMouseListener(new MouseAdapter() {
@@ -95,7 +93,7 @@ public class SetBioFrame extends JFrame {
 			}
 		});
 	}
-	
+
 	public String getBio() {
 		// Si está puesto el texto por defecto, devolvemos la cadena vacía
 		if (textArea.getText().equals(ViewConstants.BIO_DEFAULT_TEXT))
