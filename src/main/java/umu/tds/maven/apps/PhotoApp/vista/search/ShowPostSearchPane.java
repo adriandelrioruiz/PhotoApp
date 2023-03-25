@@ -14,12 +14,5 @@ public class ShowPostSearchPane extends ShowSearchPane{
 		this.postId = postId;
 		initialize();
 	}
-	private void initialize() {
-		
-		
-		
-		
-	}
-	
 
 }
