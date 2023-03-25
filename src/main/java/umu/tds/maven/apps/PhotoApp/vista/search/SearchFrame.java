@@ -64,6 +64,8 @@ public class SearchFrame extends JFrame {
 			
 		else {
 			
+			
+			
 		}
 		
 		// Crear JScrollPane y añadir el panelList
