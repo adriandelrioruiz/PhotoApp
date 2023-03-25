@@ -23,9 +23,6 @@ import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowNewPhotoFrame;
 
 @SuppressWarnings("serial")
 public class UploadPhotoFrame extends JFrame {
-	
-	public static final byte ADD_PHOTO = 1;
-	public static final byte ADD_ALBUM = 2;
 
 	public static final byte ADD_PHOTO = 1;
 	public static final byte ADD_ALBUM = 2;
@@ -37,27 +34,13 @@ public class UploadPhotoFrame extends JFrame {
 			+ ". </p>";
 	private static final String ALBUM_DESCRIPTION_TEXT = "<h1>Agregar Album</h1><p>An&iacute;mate a compartir un álbum con tus amigos. <br> "
 			+ "Escoge la foto que será la portada de tu álbum. Puedes arrastrar el fichero aqu&iacute;. <br>"
-<<<<<<< HEAD
-			+ "Podrás añadir más fotos al álbum desde tu perfil"
-			+ ". </p>";
-	private static final String ADD_PHOTO_TO_ALBUM_TEXT = "";
-	
-=======
 			+ "Podrás añadir más fotos al álbum desde tu perfil" + ". </p>";
 	private static final String ADD_PHOTO_TO_ALBUM_TEXT = "";
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	private JFileChooser fileChooser;
-	
-	// Para saber si se trata de un álbum o de una foto
-	private byte frameType;
-	
 
-<<<<<<< HEAD
-=======
 	// Para saber si se trata de un álbum o de una foto
 	private byte frameType;
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
 	public UploadPhotoFrame(byte frameType) {
 		this.frameType = frameType;
@@ -73,11 +56,7 @@ public class UploadPhotoFrame extends JFrame {
 		getContentPane().add(editorPane, BorderLayout.CENTER);
 		// editorPane.setPreferredSize(new Dimension(400, 200));
 		editorPane.setContentType("text/html");
-<<<<<<< HEAD
-		switch(frameType) {
-=======
 		switch (frameType) {
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		case ADD_PHOTO:
 			editorPane.setText(PHOTO_DESCRIPTION_TEXT);
 			break;
@@ -126,27 +105,10 @@ public class UploadPhotoFrame extends JFrame {
 		// Cerramos la ventana
 		dispose();
 		if (!isValidImageFormat(path)) {
-<<<<<<< HEAD
-			JOptionPane.showMessageDialog(null, "Introduce una imagen válida", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-=======
 			JOptionPane.showMessageDialog(null, "Introduce una imagen válida", "Mensaje",
 					JOptionPane.INFORMATION_MESSAGE);
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 			return;
 		}
-<<<<<<< HEAD
-		
-		
-		switch(frameType) {
-		case ADD_PHOTO:
-			ShowNewPhotoFrame newPhoto = new ShowNewPhotoFrame(PhotoAppController.getInstance().getId(), path);
-			break;
-		case ADD_ALBUM:
-			ShowNewAlbumFrame newAlbum = new ShowNewAlbumFrame(PhotoAppController.getInstance().getId(), path);
-			break;
-		}
-		
-=======
 
 		switch (frameType) {
 		case ADD_PHOTO:
@@ -157,24 +119,12 @@ public class UploadPhotoFrame extends JFrame {
 			break;
 		}
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	}
-<<<<<<< HEAD
-	
-	// Para saber si una imagen tiene un formato válido
-	public static boolean isValidImageFormat(String path) {
-		return (path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".jpg") || path.endsWith(".bmp"));
-=======
 
 	// Para saber si una imagen tiene un formato válido
 	public static boolean isValidImageFormat(String path) {
 		return !(path == null) && (path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".jpg")
 				|| path.endsWith(".bmp"));
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	}
-<<<<<<< HEAD
-	
-=======
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
 }

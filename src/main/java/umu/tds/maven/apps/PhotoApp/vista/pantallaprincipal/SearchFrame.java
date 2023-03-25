@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
-
-public class SearchFrame {
-	
-	
-}
-=======
 package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 
 import javax.swing.JFrame;
@@ -41,4 +33,3 @@ public class SearchFrame extends JFrame {
 	}
 
 }
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git

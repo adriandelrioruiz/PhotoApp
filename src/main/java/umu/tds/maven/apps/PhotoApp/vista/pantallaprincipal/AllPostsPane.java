@@ -28,13 +28,10 @@ import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowMyUploadedAlbumFrame;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowMyUploadedPhotoFrame;
-<<<<<<< HEAD
-=======
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedAlbumFrame;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedPhotoFrame;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowUploadedAlbumFrame;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowUploadedPhotoFrame;
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
 /**
  * Clase que define el panel que mostrará todas las fotos y álbumes de un
@@ -63,12 +60,6 @@ public class AllPostsPane extends JPanel {
 	// Para saber si las imágenes se pueden borrar o no
 	private boolean deletable;
 
-<<<<<<< HEAD
-	// Para saber en que página de la galería de álbumes o fotos estamos
-	private PageCounter actualPhotosPage = new PageCounter();
-	private PageCounter actualAlbumsPage = new PageCounter();
-	
-=======
 	// Id del usuario que se muestra el perfil
 	private int userId;
 
@@ -76,7 +67,6 @@ public class AllPostsPane extends JPanel {
 	private PageCounter actualPhotosPage = new PageCounter();
 	private PageCounter actualAlbumsPage = new PageCounter();
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	// Panel que contendrá las imagenes en sí
 	private JPanel imagesPaneForPhotos;
 	private JPanel imagesPaneForAlbums;
@@ -102,38 +92,6 @@ public class AllPostsPane extends JPanel {
 		this.photosId = controller.getPhotos(userId);
 		this.albumsId = controller.getAlbums(userId);
 
-<<<<<<< HEAD
-		// Creamos la lista de fotos
-		photosId.stream().forEach((p) -> {
-			try {
-				this.photos.add(ImageIO.read(new File(controller.getPath(p))));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-
-		// Creamos la lista de álbumes
-		for (int albumId : albumsId) {
-			// Tomamos la lista de fotos a partir del id del album
-			List<Integer> albumPhotos = controller.getPhotosOfAlbum(albumId);
-
-			// Tomamos la clave como la primera foto del album
-			Image key = null;
-			try {
-				key = ImageIO.read(new File(controller.getPath(albumId)));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			// Creamos una lista con todas las fotos del álbum
-			List<Image> photosInAlbum = new ArrayList<>();
-			albumPhotos.stream().forEach((p) -> {
-				try {
-					photosInAlbum.add(ImageIO.read(new File(controller.getPath(p))));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-=======
 		this.userId = userId;
 
 		// Creamos la lista de fotos
@@ -166,7 +124,6 @@ public class AllPostsPane extends JPanel {
 					photosInAlbum.add(ImageIO.read(new File(controller.getPath(p))));
 				} catch (IOException e) {
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 					e.printStackTrace();
 				}
 			});
@@ -261,20 +218,6 @@ public class AllPostsPane extends JPanel {
 		photosOrAlbumsPane.add(photosPane, "photos");
 		imagesPaneForPhotos = createImagesPane(PHOTOS_GALLERY);
 		photosPane.add(imagesPaneForPhotos, BorderLayout.CENTER);
-<<<<<<< HEAD
-		photosPane.add(new MovePagePane(PHOTOS_GALLERY),
-				BorderLayout.SOUTH);
-
-		// Creamos el panel de la galería los álbumes
-		albumsPane = new JPanel(new BorderLayout());
-		photosOrAlbumsPane.add(albumsPane, "albums");
-		imagesPaneForAlbums = createImagesPane(ALBUMS_GALLERY);
-		albumsPane.add(imagesPaneForAlbums, BorderLayout.CENTER);
-		albumsPane.add(new MovePagePane(ALBUMS_GALLERY),
-				BorderLayout.SOUTH);
-		albumsPane.setVisible(false);
-		
-=======
 		photosPane.add(new MovePagePane(PHOTOS_GALLERY), BorderLayout.SOUTH);
 
 		// Creamos el panel de la galería los álbumes
@@ -285,7 +228,6 @@ public class AllPostsPane extends JPanel {
 		albumsPane.add(new MovePagePane(ALBUMS_GALLERY), BorderLayout.SOUTH);
 		albumsPane.setVisible(false);
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		List<Image> firstAlbumsPhoto = new ArrayList<>(albums.keySet());
 		showPage(photos, imagesPaneForPhotos, actualPhotosPage, PHOTOS_GALLERY);
 		showPage(firstAlbumsPhoto, imagesPaneForAlbums, actualAlbumsPage, ALBUMS_GALLERY);
@@ -293,19 +235,11 @@ public class AllPostsPane extends JPanel {
 	}
 
 	private JPanel createImagesPane(byte gallery) {
-<<<<<<< HEAD
-		
-		JPanel photosPane = new JPanel();
-		photosPane.setLayout(new FlowLayout(0, 0, 0));
-		photosPane.setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 500));
-		
-=======
 
 		JPanel photosPane = new JPanel();
 		photosPane.setLayout(new FlowLayout(0, 0, 0));
 		photosPane.setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 500));
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		return photosPane;
 	}
 
@@ -325,152 +259,12 @@ public class AllPostsPane extends JPanel {
 	}
 
 	// Para pintar una imagen
-<<<<<<< HEAD
-	public void addImage(Image image, Integer imageId, JPanel panel, byte gallery) {
-		JLabel imageIcon = new JLabel(new ImageIcon(
-				image.getScaledInstance(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 3 - 4, 120, Image.SCALE_SMOOTH)));
-
-		// Añadimos el listener para que aparezca la foto o el álbum
-		
-		if (gallery == PHOTOS_GALLERY)
-			imageIcon.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					@SuppressWarnings("unused")
-					ShowMyUploadedPhotoFrame frame = new ShowMyUploadedPhotoFrame(controller.getId(), imageId);
-				}
-			});
-		else
-			imageIcon.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					@SuppressWarnings("unused")
-					ShowMyUploadedAlbumFrame frame = new ShowMyUploadedAlbumFrame(controller.getId(), imageId);
-				}
-			});
-
-		// Añadimos el menú contextual en caso de que sea una foto nuestra
-		if (deletable) {
-			JPopupMenu menuContextual = new JPopupMenu();
-			JMenuItem deletePhoto = new JMenuItem("Delete");
-			deletePhoto.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					panel.removeAll();
-					controller.deletePhoto(imageId);
-					LoggedFrame.getInstance().updateProfile();
-
-				}
-			});
-
-			menuContextual.add(deletePhoto);
-			imageIcon.setComponentPopupMenu(menuContextual);
-		}
-=======
 	public void addImage(Image image, int imageId, JPanel panel, byte gallery) {
 		JLabel imageIcon = new JLabel(new ImageIcon(
 				image.getScaledInstance(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 3 - 4, 120, Image.SCALE_SMOOTH)));
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
-<<<<<<< HEAD
-		// Añadimos el label al panel
-		panel.add(imageIcon);
-
-	}
-=======
 		// Añadimos el listener para que aparezca la foto o el álbum
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
-<<<<<<< HEAD
-	@SuppressWarnings("serial")
-	// Panel para el paso de fotos o álbumes de la galería
-	class MovePagePane extends JPanel {
-
-		private JLabel leftIconLabel;
-		private JLabel rightIconLabel;
-
-		public MovePagePane(byte gallery) {
-			super();
-			setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 70));
-			setLayout(null);
-			
-			List<Image> images;
-			
-			// Distinguimos foto de álbum
-			if (gallery == PHOTOS_GALLERY) {
-				images = photos;
-			}
-			
-			else {
-				List<Image> firstAlbumsPhoto = new ArrayList<>(albums.keySet());
-				images = firstAlbumsPhoto;
-			}
-
-			Image rightImage;
-			Image leftImage;
-			try {
-				rightImage = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "flecha_derecha.png"));
-				leftImage = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "flecha_izquierda.png"));
-
-				rightIconLabel = new JLabel(new ImageIcon(rightImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-				rightIconLabel.setSize(100, 30);
-				rightIconLabel.setName("right");
-				rightIconLabel.setLocation(400, 10);
-				if (images.size() > MAX_IMAGES_PER_PAGE)
-					add(rightIconLabel);
-
-				leftIconLabel = new JLabel(new ImageIcon(leftImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-				leftIconLabel.setName("left");
-				leftIconLabel.setSize(100, 30);
-				leftIconLabel.setLocation(238, 10);
-				add(leftIconLabel);
-				leftIconLabel.setVisible(false);
-
-				rightIconLabel.addMouseListener(
-						new ButtonListener(rightIconLabel, leftIconLabel, gallery));
-				leftIconLabel.addMouseListener(
-						new ButtonListener(rightIconLabel, leftIconLabel, gallery));
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
-	// Handler para el botón que pasa a la siguiente página de la galería
-	class ButtonListener extends MouseAdapter {
-
-		PageCounter actualPage;
-		List<Image> images;
-		JPanel imagesPane;
-		int numPages;
-		JLabel rightIconLabel;
-		JLabel leftIconLabel;
-		byte gallery;
-
-		public ButtonListener(JLabel rightIconLabel, JLabel leftIconLabel, byte gallery) {
-			
-			this.gallery = gallery;
-			
-			// Distinguimos foto de álbum
-			if (gallery == PHOTOS_GALLERY) {
-				this.images = photos;
-				this.actualPage = actualPhotosPage;
-				this.numPages = numPhotosPage;
-				this.imagesPane = imagesPaneForPhotos;
-			}
-			
-			else {
-				List<Image> firstAlbumsPhoto = new ArrayList<>(albums.keySet());
-				this.images = firstAlbumsPhoto;
-				this.actualPage = actualAlbumsPage;
-				this.numPages = numAlbumsPage;
-				this.imagesPane = imagesPaneForAlbums;
-			}
-			
-=======
 		if (gallery == PHOTOS_GALLERY)
 			imageIcon.addMouseListener(new MouseAdapter() {
 				@Override
@@ -623,7 +417,6 @@ public class AllPostsPane extends JPanel {
 				this.imagesPane = imagesPaneForAlbums;
 			}
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 			this.rightIconLabel = rightIconLabel;
 			this.leftIconLabel = leftIconLabel;
 		}
@@ -652,11 +445,7 @@ public class AllPostsPane extends JPanel {
 				}
 				rightIconLabel.setVisible(true);
 			}
-<<<<<<< HEAD
-			
-=======
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 			imagesPane.removeAll();
 			showPage(images, imagesPane, actualPage, gallery);
 		}
@@ -664,11 +453,7 @@ public class AllPostsPane extends JPanel {
 		public void mouseEntered(MouseEvent e) {
 			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		public void mouseExited(MouseEvent e) {
 			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}

@@ -60,16 +60,6 @@ public class ShowNewAlbumFrame extends ShowNewPostFrame {
 
 	class SharePhotoButtonListener implements ActionListener {
 
-<<<<<<< HEAD
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// Comprobamos que esten rellenos los campos
-			if (!txtTitulo.getText().isEmpty() && !commentTxtArea.getText().isEmpty()
-					&& !txtTitulo.getText().equals(DEFAULT_TITULO_TEXT)
-					&& !commentTxtArea.getText().equals(DEFAULT_COMMENT_TEXT)) {
-				
-=======
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// Comprobamos que esten rellenos los campos
@@ -77,7 +67,6 @@ public class ShowNewAlbumFrame extends ShowNewPostFrame {
 					&& !txtTitulo.getText().equals(DEFAULT_TITULO_TEXT)
 					&& !commentTxtArea.getText().equals(DEFAULT_COMMENT_TEXT)) {
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 				controller.addAlbum(txtTitulo.getText(), commentTxtArea.getText(), path);
 				JButton btnAceptar = new JButton("Aceptar");
 				JOptionPane.showMessageDialog(btnAceptar, "El álbum se ha subido con éxito");

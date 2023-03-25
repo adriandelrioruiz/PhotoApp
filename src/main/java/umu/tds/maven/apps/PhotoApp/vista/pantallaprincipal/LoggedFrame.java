@@ -21,33 +21,16 @@ public class LoggedFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	// El centerPane podra ir variando su contenido entre myProfilePane y feedPane
 	private JPanel centerPane;
-<<<<<<< HEAD
-	private MyProfilePane myProfilePane;
-=======
 	private ProfilePane myProfilePane;
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	private FeedPane feedPane;
-<<<<<<< HEAD
-	
-	// Controlador
-	private PhotoAppController controller;
-	
-=======
 
 	// Controlador
 	private PhotoAppController controller;
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	private MenuPane menuPane;
-	
-	private static LoggedFrame lf;
 
 	private static LoggedFrame lf;
 
@@ -56,18 +39,11 @@ public class LoggedFrame extends JFrame {
 		controller = PhotoAppController.getInstance();
 		initialize();
 	}
-<<<<<<< HEAD
-	
-	public static LoggedFrame getInstance() {
-		return lf;
-	}
-=======
 
 	public static LoggedFrame getInstance() {
 		return lf;
 	}
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	private void initialize() {
 		setResizable(true);
 		setLayout(new BorderLayout());
@@ -92,24 +68,13 @@ public class LoggedFrame extends JFrame {
 		centerPane = new JPanel(new CardLayout()); // Crea un panel secundario
 		getContentPane().add(centerPane, BorderLayout.CENTER); // Agrega el panel secundario al contenedor principal
 
-<<<<<<< HEAD
-	    feedPane = new FeedPane(controller.getFeed());
-	    centerPane.add(feedPane, "feed"); // Agrega el panel feedPane al panel secundario con el nombre "feed"
-=======
 		feedPane = new FeedPane(controller.getFeed());
 		centerPane.add(feedPane, "feed"); // Agrega el panel feedPane al panel secundario con el nombre "feed"
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 
-<<<<<<< HEAD
-	    myProfilePane = new MyProfilePane(controller.getId());
-	    centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre "profile"
-	    myProfilePane.setVisible(false); // Lo deja no visible
-=======
 		myProfilePane = new MyProfilePane(controller.getId());
 		centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre
 													// "profile"
 		myProfilePane.setVisible(false); // Lo deja no visible
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	}
 
 	public static void fixSize(JComponent c, int x, int y) {
@@ -138,27 +103,10 @@ public class LoggedFrame extends JFrame {
 
 	public void changeToProfilePanel() {
 		CardLayout cl = (CardLayout) centerPane.getLayout();
-<<<<<<< HEAD
-		cl.show(centerPane, "profile"); 
-=======
 		cl.show(centerPane, "profile");
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		revalidate();
 		repaint();
 	}
-<<<<<<< HEAD
-	
-	// Para que se actualice la vista del perfil en caso de que se suba una nueva foto
-	public void updateProfile() {
-		centerPane.remove(myProfilePane);
-		myProfilePane = new MyProfilePane(controller.getId());
-	    centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre "profile"
-	    changeToProfilePanel();
-		revalidate();
-		repaint();
-	}
-	
-=======
 
 	// Para que se actualice la vista del perfil en caso de que se suba una nueva
 	// foto
@@ -172,7 +120,6 @@ public class LoggedFrame extends JFrame {
 		repaint();
 	}
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	// Para que se actualice la foto de perfil en caso de que se suba una nueva foto
 	public void updateProfilePic() {
 		updateProfile();

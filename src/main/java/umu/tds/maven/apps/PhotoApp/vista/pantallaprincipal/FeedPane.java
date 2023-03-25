@@ -14,39 +14,23 @@ import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 public class FeedPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	
-	// Lista de fotos por id
-	private List<Integer> photoIds;
-	
-	// Controlador
-	private PhotoAppController controller;
 
-<<<<<<< HEAD
-=======
 	// Lista de fotos por id
 	private List<Integer> photoIds;
 
 	// Controlador
 	private PhotoAppController controller;
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 	public FeedPane(List<Integer> photoIds) {
 		this.controller = PhotoAppController.getInstance();
 		this.photoIds = photoIds;
 		setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, MenuPane.MENU_HEIGHT));
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-<<<<<<< HEAD
-		
-		// Añadimos los PostPanes a partir de la lista de ids
-		anadirPostPanes(panel);
-		
-=======
 
 		// Añadimos los PostPanes a partir de la lista de ids
 		anadirPostPanes(panel);
 
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 		JScrollPane sp = new JScrollPane(this);
 		sp.setViewportView(panel);
 		sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);

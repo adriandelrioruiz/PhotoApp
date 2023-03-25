@@ -64,17 +64,6 @@ public class PostPane extends JPanel {
 	private void mostrarMenu(java.awt.event.MouseEvent e) {
 		JPopupMenu menu = new JPopupMenu();
 		Image image;
-<<<<<<< HEAD
-		
-		try {
-			image = (ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "icon_lupa.png"))).getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-			JLabel label = new JLabel();
-			label.setIcon(new ImageIcon(image));
-			menu.add(label);
-			menu.show(e.getComponent(), 5, -5);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-=======
 
 		try {
 			image = (ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "icon_lupa.png"))).getScaledInstance(300, 300,
@@ -84,7 +73,6 @@ public class PostPane extends JPanel {
 			menu.add(label);
 			menu.show(e.getComponent(), 5, -5);
 		} catch (IOException e1) {
->>>>>>> branch 'main' of https://github.com/adriandelrioruiz/PhotoApp.git
 			e1.printStackTrace();
 		}
 		// menu.show(e.getComponent(), e.getX()-50, e.getY()-50);
