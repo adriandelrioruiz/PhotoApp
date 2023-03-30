@@ -22,6 +22,7 @@ import pulsador.IEncendidoListener;
 import pulsador.Luz;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.search.SearchFrame;
 
 public class MenuPane extends JPanel {
 

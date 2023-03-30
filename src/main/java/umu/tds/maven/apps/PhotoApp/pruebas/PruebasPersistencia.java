@@ -11,6 +11,7 @@ import umu.tds.maven.apps.PhotoApp.persistencia.CommentAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.NotificationAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 public class PruebasPersistencia {
 
@@ -60,6 +61,9 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().unLogin();
 		PhotoAppController.getInstance().login("adri@gmail", "password");
 		// PhotoAppController.getInstance().getFeed();
+		
+		LoggedFrame fr=new LoggedFrame();
+		fr.setVisible(true);
 
 	}
 }

@@ -56,7 +56,7 @@ public class ShowUserSearchPane extends ShowSearchPane {
 			String path = PhotoAppController.getInstance().getProfilePic(userId);
 			Image image = ImageIO.read(new File(path));
 			ImageIcon icon = new ImageIcon(
-					image.getScaledInstance((int) this.image.getWidth() - 20, (int) this.image.getHeight() - 60, 0));
+			image.getScaledInstance((int) this.image.getWidth() - 20, (int) this.image.getHeight() - 60, 0));
 			// Lo añadimos al panel oeste
 			this.image.setIcon(icon);
 		}
