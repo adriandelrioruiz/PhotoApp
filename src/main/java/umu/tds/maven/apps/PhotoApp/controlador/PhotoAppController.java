@@ -541,8 +541,9 @@ public class PhotoAppController {
 	}
 
 	// TODO
-	public void generatePDF() throws FileNotFoundException, DocumentException  {
-		 	Document document = new Document();
+	public boolean generatePDF(){
+		try { 	
+			Document document = new Document();
 	        PdfWriter.getInstance(document, new FileOutputStream("seguidores.pdf"));
 	        document.open();
 	        PdfPTable table = new PdfPTable(3); // 3 columnas
@@ -559,6 +560,10 @@ public class PhotoAppController {
 	        }
 	        document.add(table);
 	        document.close();
+		} catch(DocumentException | FileNotFoundException e) {
+			return false;
+		}
+		return true;
 	}
 
 	public boolean generateExcel(String path) {
