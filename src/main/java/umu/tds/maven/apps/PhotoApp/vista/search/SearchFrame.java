@@ -12,6 +12,8 @@ import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
 import umu.tds.maven.apps.PhotoApp.modelo.Post;
 import umu.tds.maven.apps.PhotoApp.modelo.User;
+import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedPhotoFrame;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 /** Esta clase muestra todos los objetos que se han encontrado a partir de un query */
 
@@ -24,17 +26,17 @@ public class SearchFrame extends JFrame {
 	
 	// Panel que contendrá todos los paneles de cada elemento encontrado
 	private JPanel searchListPane;
-	
+	private LoggedFrame loggedFrame;
 	// JScrollPane
 	private JScrollPane scrollPane;
 	
 	// Resultados de la búsqueda
 	private List<DomainObject> resultados;
 	
-	public SearchFrame(String query) {
+	public SearchFrame(String query,LoggedFrame logged) {
 		
 		this.resultados = PhotoAppController.getInstance().search(query);
-		
+		this.loggedFrame=logged;
 		if (!resultados.isEmpty()) {
 			initialize();
 		}
@@ -83,4 +85,16 @@ public class SearchFrame extends JFrame {
 		
 		setVisible(true);
 	}
+	protected void ChangeToOtherProfile(int userId) {
+		this.loggedFrame.changeToOtherProfile(userId);
+		// Cerramos el frame
+		this.dispose();
+	}
+	protected void showOtherPost(int postId) {
+			int userId=PhotoAppController.getInstance().getId(PhotoAppController.getInstance().getOwnerOfPhoto(postId));
+			new ShowOtherUploadedPhotoFrame(userId,postId);
+			// Cerramos el frame
+			this.dispose();
+			
+		}
 }

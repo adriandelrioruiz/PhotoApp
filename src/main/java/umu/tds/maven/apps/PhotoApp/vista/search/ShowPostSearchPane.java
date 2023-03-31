@@ -2,6 +2,8 @@ package umu.tds.maven.apps.PhotoApp.vista.search;
 
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -13,6 +15,7 @@ import javax.swing.border.Border;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.search.ShowUserSearchPane.ShowProfileHandler;
 
 public class ShowPostSearchPane extends ShowSearchPane{
 	/**
@@ -60,6 +63,26 @@ public class ShowPostSearchPane extends ShowSearchPane{
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	protected void addListeners() {
+		this.addMouseListener(new ShowPostHandler(this.postId,this.frame));
+		
+	}
+	protected class ShowPostHandler extends MouseAdapter {
+		private int postid;
+		private SearchFrame frame;
+
+		public  ShowPostHandler(int id,SearchFrame frame) {
+			this.postid=id;
+			this.frame=frame;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// Mostramos el perfil
+			this.frame.showOtherPost(postId);
+		}
+
 	}
 
 }

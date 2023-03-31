@@ -13,7 +13,8 @@ import javax.swing.border.Border;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
-
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 /** Clase para mostrar un resultado de la búsqueda de un usuario */
 
 @SuppressWarnings("serial")
@@ -30,6 +31,7 @@ public class ShowUserSearchPane extends ShowSearchPane {
 		this.userId = userId;
 
 		initialize();
+		this.addListeners();
 	}
 
 	@Override
@@ -65,5 +67,25 @@ public class ShowUserSearchPane extends ShowSearchPane {
 			e.printStackTrace();
 		}
 	}
+	protected void addListeners() {
+		this.addMouseListener(new ShowProfileHandler(this.userId,this.frame));
+		
+	}
+	protected class ShowProfileHandler extends MouseAdapter {
+		private int id;
+		private SearchFrame frame;
 
+		public  ShowProfileHandler(int id,SearchFrame frame) {
+			this.id=id;
+			this.frame=frame;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// Mostramos el perfil
+			this.frame.ChangeToOtherProfile(userId);
+			
+		}
+
+	}
 }

@@ -119,7 +119,15 @@ public class LoggedFrame extends JFrame {
 		revalidate();
 		repaint();
 	}
-
+	public void changeToOtherProfile(int userId) {
+		centerPane.remove(myProfilePane);
+		myProfilePane = new OthersProfilePane(userId,controller.getId());
+		centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre
+													// "profile"
+		changeToProfilePanel();
+		revalidate();
+		repaint();
+	}
 	// Para que se actualice la foto de perfil en caso de que se suba una nueva foto
 	public void updateProfilePic() {
 		updateProfile();

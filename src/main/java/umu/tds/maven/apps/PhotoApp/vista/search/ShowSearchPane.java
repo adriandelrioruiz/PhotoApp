@@ -53,7 +53,7 @@ public abstract class ShowSearchPane extends JPanel {
 
 		createWestPane();
 		createEastPane();
-		addListeners();
+		//addListeners();
 	}
 
 	protected void createWestPane() {
@@ -93,19 +93,4 @@ public abstract class ShowSearchPane extends JPanel {
 
 	}
 
-	protected void addListeners() {
-		image.addMouseListener(new ShowProfileHandler());
-	}
-
-	protected class ShowProfileHandler extends MouseAdapter {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// Mostramos el perfil
-			
-			// Cerramos el frame
-			frame.dispose();
-		}
-
-	}
 }
