@@ -1,5 +1,6 @@
 package umu.tds.maven.apps.PhotoApp.controlador;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -44,6 +45,7 @@ import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 import java.io.FileOutputStream;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -539,7 +541,7 @@ public class PhotoAppController {
 	}
 
 	// TODO
-	public void generatePDF() {
+	public void generatePDF() throws FileNotFoundException, DocumentException  {
 		 	Document document = new Document();
 	        PdfWriter.getInstance(document, new FileOutputStream("seguidores.pdf"));
 	        document.open();
