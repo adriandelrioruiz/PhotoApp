@@ -22,6 +22,7 @@ import pulsador.IEncendidoListener;
 import pulsador.Luz;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.notificacion.NotificationFrame;
 import umu.tds.maven.apps.PhotoApp.vista.search.SearchFrame;
 
 public class MenuPane extends JPanel {
@@ -37,7 +38,7 @@ public class MenuPane extends JPanel {
 	private static final int SEARCH_WIDTH = 100;
 
 	private JTextField txtSearch;
-	private JButton uploadButton, lupaButton, userButton, premiumButton, titulo;
+	private JButton uploadButton, lupaButton, userButton, premiumButton, titulo,notiButton;
 	private LoggedFrame frame;
 
 	private PhotoAppController controller;
@@ -92,11 +93,16 @@ public class MenuPane extends JPanel {
 		// Bonton lupa
 		lupaButton = new JButton(this.getIcon(BUTTON_WIDTH, SEARCH_HEIGHT, ViewConstants.RUTA_FOTOS + "icon_lupa.png"));
 		this.setButton(lupaButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 + 50, BUTTON_WIDTH, BUTTON_HEIGHT);
+		
 		// FOTO USER
 
 		userButton = new JButton(
 				this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));
 		this.setButton(userButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 100, USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT);
+		//BOTON NOTIFICATION
+		notiButton = new JButton(
+				this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));
+		this.setButton(notiButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 150, USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT);
 		// BOTON PREMIUN
 		premiumButton = new JButton(
 				this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + "icon_tres_lineas.png"));
@@ -134,7 +140,12 @@ public class MenuPane extends JPanel {
 
 			}
 		});
-
+		notiButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Mostrar notificaciones
+				new NotificationFrame();
+			}
+		});
 		titulo.addActionListener(new ActionListener() {
 
 			@Override

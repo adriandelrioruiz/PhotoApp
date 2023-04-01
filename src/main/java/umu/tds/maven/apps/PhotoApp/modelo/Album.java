@@ -8,6 +8,7 @@ import java.util.List;
 public class Album extends Post {
 
 	private List<Photo> photos;
+	private Notification notification;
 
 	public Album(String title, Date date, String description, User user) {
 		super(title, date, description, user);
@@ -39,5 +40,12 @@ public class Album extends Post {
 		// Damos like a cada una de las fotos que lo conforman
 		photos.stream().forEach((p) -> p.like());
 
+	}
+	public Notification getNotification() {
+		return notification;
+	}
+
+	public void setNotification(Notification notification) {
+		this.notification = notification;
 	}
 }

@@ -5,19 +5,24 @@ import java.util.Date;
 public class Notification extends DomainObject {
 
 	private final Date date;
-	private final Photo photo;
-
-	public Notification(Date date, Photo photo) {
+	private final Post post;
+	private final boolean isAlbum;
+	public Notification(Date date, Post post,boolean isAlbum) {
 		this.date = date;
-		this.photo = photo;
+		this.post = post;
+		this.isAlbum=isAlbum;
 	}
 
 	public Date getDate() {
 		return date;
 	}
 
-	public Photo getPhoto() {
-		return photo;
+	public Post getPost() {
+		return post;
+	}
+	
+	public boolean getisAlbum() {
+		return isAlbum;
 	}
 
 }

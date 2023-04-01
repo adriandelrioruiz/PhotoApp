@@ -243,8 +243,7 @@ public class PhotoAppController {
 
 		Date now = new Date();
 		Photo photo = new Photo(title, now, description, path, user);
-		Notification notification = new Notification(now, photo);
-		photo.setNotification(notification);
+		
 
 		try {
 			// Extraer hashtags y meter en la foto
@@ -259,6 +258,8 @@ public class PhotoAppController {
 			user.addPhoto(photo);
 			// añadir la foto en la persistencia del usuario
 			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
+			Notification notification = new Notification(now, photo,false);//no es un album
+			photo.setNotification(notification);
 			// Habrá que mandar una notificación a todos los seguidores
 			user.getFollowers().stream().forEach((u) -> notify(u, notification));
 
@@ -269,7 +270,7 @@ public class PhotoAppController {
 			e.showDialog();
 			return null;
 		}
-
+		
 		return photo;
 	}
 
@@ -343,7 +344,8 @@ public class PhotoAppController {
 		catch (InvalidHashtagException e) {
 			e.showDialog();
 		}
-
+		Notification notification = new Notification(now, album,true);// es un album
+		album.setNotification(notification);
 		return album;
 	}
 

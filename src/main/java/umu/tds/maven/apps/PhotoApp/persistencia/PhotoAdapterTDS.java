@@ -108,12 +108,12 @@ public class PhotoAdapterTDS extends AdapterTDS implements IPhotoAdapterDAO {
 
 		// Recuperamos la entidad
 		ePhoto = servPersistencia.recuperarEntidad(code);
-		// Convertimos la entidad en un objeto usuario
+		// Convertimos la entidad en un objeto foto
 		try {
 			photo = (Photo) entityToObject(ePhoto);
 
 		} catch (NullPointerException e) {
-			System.out.println("El photo con el id " + code + " no está registrado");
+			System.out.println("La photo con el id " + code + " no está registrado");
 		}
 		return photo;
 	}

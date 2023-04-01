@@ -14,13 +14,17 @@ import beans.Propiedad;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
 import umu.tds.maven.apps.PhotoApp.modelo.Notification;
 import umu.tds.maven.apps.PhotoApp.modelo.Photo;
+import umu.tds.maven.apps.PhotoApp.modelo.Post;
 
 public class NotificationAdapterTDS extends AdapterTDS implements INotificationAdapterDAO {
 
 	public static final String NOTIFICATION = "notification";
 	public static final String DATE = "date";
+	public static final String POST = "post";
 	public static final String PHOTO = "photo";
-
+	public static final String ALBUM = "post";
+	public static final String ISALBUM = "isAlbum";
+	
 	private static NotificationAdapterTDS instance;
 	private SimpleDateFormat dateFormat;
 
@@ -43,7 +47,8 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		eNotification.setNombre(NOTIFICATION);
 		eNotification.setPropiedades(
 				new ArrayList<Propiedad>(Arrays.asList(new Propiedad(DATE, dateFormat.format(notification.getDate())),
-						new Propiedad(PHOTO, String.valueOf(notification.getPhoto().getCode())))));
+						new Propiedad(POST, String.valueOf(notification.getPost().getCode())),
+								new Propiedad(ISALBUM,String.valueOf(notification.getisAlbum())))));
 
 		return eNotification;
 	}
@@ -53,8 +58,9 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 
 		// Estos serán los atributos del Post que queremos recuperar
 		Date date;
-		Photo photo;
-
+		Post post;
+		boolean isAlbum;
+		isAlbum= Boolean.parseBoolean(servPersistencia.recuperarPropiedadEntidad(en, ISALBUM));
 		// Recuperamos los atributos de la persistencia
 		date = null;
 		try {
@@ -62,11 +68,15 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
-		photo = PhotoAdapterTDS.getInstance()
-				.getPhoto(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, PHOTO)));
-
-		Notification notification = new Notification(date, photo);
+		if(isAlbum) {
+			post=AlbumAdapterTDS.getInstance().getAlbum(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, ALBUM)));
+		}else {
+			post = PhotoAdapterTDS.getInstance()
+					.getPhoto(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, PHOTO)));
+			
+		}
+		
+		Notification notification = new Notification(date, post,isAlbum);
 
 		notification.setCode(en.getId());
 
@@ -123,7 +133,7 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 		List<Entidad> entities = servPersistencia.recuperarEntidades(NOTIFICATION);
 		for (Entidad entity : entities)
 			for (Propiedad p : entity.getPropiedades())
-				if (p.getNombre().equals(PHOTO)) {
+				if (p.getNombre().equals(POST)) {
 					if (p.getValor().equals(String.valueOf(postCode)))
 						return entity.getId();
 				}
