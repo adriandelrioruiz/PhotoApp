@@ -25,6 +25,7 @@ public class PruebaVista extends JFrame {
 		 * LoggedFrame(); lf.setLocationRelativeTo(null);
 		 * lf.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		 */
+		
 		ShowMyUploadedAlbumFrame showPhoto = new ShowMyUploadedAlbumFrame(8481, 8533);
 	}
 

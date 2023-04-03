@@ -1,5 +1,6 @@
 package umu.tds.maven.apps.PhotoApp.controlador;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -42,6 +43,13 @@ import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
+import java.io.FileOutputStream;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.Phrase;
 
 public class PhotoAppController {
 
@@ -235,8 +243,7 @@ public class PhotoAppController {
 
 		Date now = new Date();
 		Photo photo = new Photo(title, now, description, path, user);
-		Notification notification = new Notification(now, photo);
-		photo.setNotification(notification);
+		
 
 		try {
 			// Extraer hashtags y meter en la foto
@@ -251,6 +258,8 @@ public class PhotoAppController {
 			user.addPhoto(photo);
 			// añadir la foto en la persistencia del usuario
 			userAdapter.updateUser(user, UserAdapterTDS.PHOTOS);
+			Notification notification = new Notification(now, photo,false);//no es un album
+			photo.setNotification(notification);
 			// Habrá que mandar una notificación a todos los seguidores
 			user.getFollowers().stream().forEach((u) -> notify(u, notification));
 
@@ -261,7 +270,7 @@ public class PhotoAppController {
 			e.showDialog();
 			return null;
 		}
-
+		
 		return photo;
 	}
 
@@ -335,7 +344,8 @@ public class PhotoAppController {
 		catch (InvalidHashtagException e) {
 			e.showDialog();
 		}
-
+		Notification notification = new Notification(now, album,true);// es un album
+		album.setNotification(notification);
 		return album;
 	}
 
@@ -533,8 +543,29 @@ public class PhotoAppController {
 	}
 
 	// TODO
-	public void generatePDF() {
-
+	public boolean generatePDF(){
+		try { 	
+			Document document = new Document();
+	        PdfWriter.getInstance(document, new FileOutputStream("seguidores.pdf"));
+	        document.open();
+	        PdfPTable table = new PdfPTable(3); // 3 columnas
+	        PdfPCell cell1 = new PdfPCell(new Phrase("Nombre"));//nombre usuario
+	        PdfPCell cell2 = new PdfPCell(new Phrase("Email"));//email usuario
+	        PdfPCell cell3 = new PdfPCell(new Phrase("Descripción"));//descripción usuario
+	        table.addCell(cell1);
+	        table.addCell(cell2);
+	        table.addCell(cell3);
+	        for (User user : user.getFollowers()) {
+		        table.addCell(user.getUserName());
+		        table.addCell(user.getEmail());
+		        table.addCell(user.getBio());
+	        }
+	        document.add(table);
+	        document.close();
+		} catch(DocumentException | FileNotFoundException e) {
+			return false;
+		}
+		return true;
 	}
 
 	public boolean generateExcel(String path) {
