@@ -64,8 +64,10 @@ public class NotificationPane extends JPanel{
 			Album a=(Album) noti.getPost();
 			ShowOtherUploadedAlbumFrame other= new ShowOtherUploadedAlbumFrame(a.getUser().getCode(),a.getCode());
 		}else {
-			Photo p=(Photo) noti.getPost();
-			ShowOtherUploadedPhotoFrame other= new ShowOtherUploadedPhotoFrame(p.getUser().getCode(),p.getCode());
+			if(noti.getPost() instanceof Photo) {
+				Photo p=(Photo) noti.getPost();
+				ShowOtherUploadedPhotoFrame other= new ShowOtherUploadedPhotoFrame(p.getUser().getCode(),p.getCode());
+			}
 		}
 		//CERRAR EL FRAME
 		frame.cerrar();

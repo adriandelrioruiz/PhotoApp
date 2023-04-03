@@ -2,15 +2,20 @@ package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 
 import org.w3c.dom.events.MouseEvent;
 
+import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 public class Atributos extends JPanel {
@@ -25,42 +30,26 @@ public class Atributos extends JPanel {
 	 * foto
 	 */
 	private static final long serialVersionUID = 1L;
-	private JButton likeButton, commentButton, userfoto;
+	private JPanel northPanel,southPanel;
+	private JButton likeButton, commentButton;
 	private JLabel megustas, userimagen;
-	private int likes;
-
-	public Atributos(String usuario, int likes) {
-		this.likes = likes;
+	private int likes,id;
+	private String user;
+	private PhotoAppController controller;
+	public Atributos(int id) {
+		this.controller = PhotoAppController.getInstance();
+		this.id = id;
+		//this.user=usuario;
 		fixSize(this, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - PostPane.IMAGE_WIDTH, PostPane.PUBLICACION_HEIGHT);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setOpaque(true);
+		createNorthPanel();
+		createSouthPanel();
+		
 		// TOP PANEL
-		JPanel topPanel = new JPanel();
-		fixSize(topPanel, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - PostPane.IMAGE_WIDTH,
-				PostPane.PUBLICACION_HEIGHT / 2);
-		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-		JButton likeButton = new JButton(ViewConstants.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, LIKE_ICON));
-		// likeButton.setPreferredSize(new Dimension(60,BUTTON_HEIGHT));
-		fixSize(likeButton, BUTTON_WIDTH, BUTTON_HEIGHT);
-		LoggedFrame.setButton(likeButton);
-		topPanel.add(likeButton);
-		JButton commentButton = new JButton(ViewConstants.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, COMMENT_ICON));
-		fixSize(commentButton, BUTTON_WIDTH, BUTTON_HEIGHT);
-		LoggedFrame.setButton(commentButton);
-		topPanel.add(commentButton);
-		megustas = new JLabel(likes + " Me gustas");
-		topPanel.add(megustas);
-		this.add(topPanel, BorderLayout.NORTH);
+		
 		// bottomPanel
-		JPanel bottomPanel = new JPanel();
-		fixSize(bottomPanel, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - PostPane.IMAGE_WIDTH,
-				PostPane.PUBLICACION_HEIGHT / 2);
-		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
-
-		userimagen = new JLabel(ViewConstants.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, COMMENT_ICON));
-		userimagen.setText(usuario);
-		bottomPanel.add(userimagen);
-		this.add(bottomPanel, BorderLayout.SOUTH);
+		
 
 		likeButton.addActionListener(new ActionListener() {
 			@Override
@@ -74,19 +63,72 @@ public class Atributos extends JPanel {
 				comentario();
 			}
 		});
+		userimagen.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				//Mostrar perfil del user
+				mostrarPerfil();
+			}
+
+			
+		});
+	}
+	
+	private void createSouthPanel() {
+		 southPanel = new JPanel();
+		fixSize(southPanel, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - PostPane.IMAGE_WIDTH,
+				PostPane.PUBLICACION_HEIGHT / 2);
+		southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.X_AXIS));
+		userimagen = new JLabel();
+		fixSize(southPanel,BUTTON_WIDTH,BUTTON_HEIGHT);
+		String path=PhotoAppController.getInstance().getProfilePic(PhotoAppController.getInstance().getId(PhotoAppController.getInstance().getOwnerOfPhoto(id)));
+		try {
+			Image image = (ImageIO.read(new File(path))).getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT,Image.SCALE_SMOOTH);
+			userimagen.setIcon((Icon)image);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		userimagen.setText(user);
+		southPanel.add(userimagen);
+		this.add(southPanel, BorderLayout.SOUTH);
+		
+	}
+
+	private void createNorthPanel() {
+		northPanel = new JPanel();
+		fixSize(northPanel, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - PostPane.IMAGE_WIDTH,PostPane.PUBLICACION_HEIGHT / 2);
+		northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.X_AXIS));
+		//boton like
+		likeButton = new JButton(ViewConstants.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, LIKE_ICON));
+		fixSize(likeButton, BUTTON_WIDTH, BUTTON_HEIGHT);
+		LoggedFrame.setButton(likeButton);
+		northPanel.add(likeButton);
+		//boton comentario
+		commentButton = new JButton(ViewConstants.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, COMMENT_ICON));
+		fixSize(commentButton, BUTTON_WIDTH, BUTTON_HEIGHT);
+		LoggedFrame.setButton(commentButton);
+		northPanel.add(commentButton);
+		megustas = new JLabel(likes + " Me gustas");
+		northPanel.add(megustas);
+		this.add(northPanel, BorderLayout.NORTH);
+		
 	}
 
 	private void comentario() {
 		// Mostrar una ventana de di�logo para escribir un comentario
 		String comment = JOptionPane.showInputDialog("Ingrese un comentario:");
+		controller.comment(id, comment);
 		System.out.println("Comentario: " + comment);
 	}
 
 	private void sumarLikes() {
 		likes++;
+		controller.like(id);
 		megustas.setText(likes + " Me gustas");
 	}
-
+	private void mostrarPerfil() {
+		// TODO Auto-generated method stub
+		
+	}
 	private void fixSize(JComponent c, int x, int y) {
 		c.setMinimumSize(new Dimension(x, y));
 		c.setPreferredSize(new Dimension(x, y));

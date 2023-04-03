@@ -12,22 +12,20 @@ import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 
 public class FeedPane extends JPanel {
-
 	private static final long serialVersionUID = 1L;
-
 	// Lista de fotos por id
 	private List<Integer> photoIds;
-
-	// Controlador
-	private PhotoAppController controller;
-
+	
 	public FeedPane(List<Integer> photoIds) {
-		this.controller = PhotoAppController.getInstance();
 		this.photoIds = photoIds;
+		initialize();
+		
+	}
+	private void initialize() {
+		
 		setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, MenuPane.MENU_HEIGHT));
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
 		// Añadimos los PostPanes a partir de la lista de ids
 		anadirPostPanes(panel);
 
@@ -37,10 +35,12 @@ public class FeedPane extends JPanel {
 		sp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(sp);
 	}
+	
+	
 
 	public void anadirPostPanes(JPanel panel) {
 		for (Integer id : photoIds) {
-			add(new PostPane(controller.getPath(id), controller.getOwnerOfPhoto(id), controller.getLikes(id)));
+			add(new PostPane(id));
 		}
 	}
 }

@@ -695,7 +695,9 @@ public class PhotoAppController {
 	public boolean isFollowed(int idUser1, int idUser2) {
 		return userRepository.getUser(idUser1).getFollowers().stream().anyMatch((u) -> u.getCode() == idUser2);
 	}
-
+	public Post getPost(int id) {
+		return postRepository.getPost(id);
+	}
 	// Obtener el path de una foto a partir de su id
 	public String getPath(int id) {
 		Post post = postRepository.getPost(id);
