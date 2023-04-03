@@ -24,7 +24,7 @@ public class PruebasPersistencia {
 	}
 
 	public static void main(String[] args) {
-		deleteAllDatabase();System.exit(0);
+		//deleteAllDatabase();System.exit(0);
 		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password",
 				new Date(), "myPhoto", "myBio");
 		/*
@@ -49,7 +49,7 @@ public class PruebasPersistencia {
 
 		PhotoAppController.getInstance().addPhotoToAlbum("ola", "asd", "asdasd", a.getCode());
 
-		PhotoAppController.getInstance().deletePhoto(p.getCode());
+		//PhotoAppController.getInstance().deletePhoto(p.getCode());
 
 		PhotoAppController.getInstance().deleteAlbum(a.getCode());
 

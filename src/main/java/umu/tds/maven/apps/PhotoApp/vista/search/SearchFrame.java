@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -40,8 +41,8 @@ public class SearchFrame extends JFrame {
 		if (!resultados.isEmpty()) {
 			initialize();
 		}
-		else
-			dispose();
+		else sinResultados(query);
+			//dispose();
 	}
 	
 	private void initialize() {
@@ -97,4 +98,13 @@ public class SearchFrame extends JFrame {
 			this.dispose();
 			
 		}
+	private void sinResultados(String query) {
+		setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		setTitle("Resultados: " + String.valueOf(resultados.size()));
+		JLabel label=new JLabel("No hay resultados para la busqueda"+query);
+		this.getContentPane().add(label);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setVisible(true);
+	}
 }

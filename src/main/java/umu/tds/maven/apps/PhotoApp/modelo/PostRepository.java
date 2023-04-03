@@ -1,5 +1,7 @@
 package umu.tds.maven.apps.PhotoApp.modelo;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -139,24 +141,31 @@ public class PostRepository {
 
 	// Método para obtener las últimas 10 fotos de los usuarios a los que sigue un
 	// usuario
-	public List<Photo> getFeed(List<User> followed) {
+	public List<Post> getFeed(List<User> followed) {
 		// Obtenemos todas las fotos de los seguidos por el usuario ordenados por fecha
 		// en orden ascendente
 		List<Photo> photosOfFollowed = photosById.values().stream().filter((p) -> followed.contains(p.getUser()))
 				.sorted().toList();
+		List<Album> albumOfFollowed = albumsById.values().stream().filter((p) -> followed.contains(p.getUser()))
+				.sorted().toList();
+		
+		
+		List<Post> feed= new LinkedList<Post>();
 		for (Photo p : photosOfFollowed)
-			photosOfFollowed.add((Photo) p);
+			feed.add((Post) p);
+		for (Album a : albumOfFollowed)
+			feed.add((Post) a);
 
 		// Nos quedamos con los últimos 10, o en caso de que haya menos de 10, con todos
 		// ellos
-		if (photosOfFollowed.size() <= POSTS_IN_FEED)
-			return photosOfFollowed;
-		List<Photo> photosOfFeed = new LinkedList<>();
+		if (feed.size() <= POSTS_IN_FEED)
+			return feed;
+		
 		// Vamos añadiendo los posts
-		for (int i = photosOfFollowed.size() - POSTS_IN_FEED - 1; i < photosOfFollowed.size() - 1; i++) {
-			photosOfFeed.add(photosOfFollowed.get(i));
-		}
-		return photosOfFeed;
+		Collections.sort(feed, new PostDateComparator());
+		List<Post> ultimos10Posts = feed.subList(Math.max(feed.size() - 10, 0), feed.size());
+		
+		return ultimos10Posts;
 	}
 
 	public List<Post> getPostsByHashtagsContaining(String hashtagsSubset) {
@@ -185,5 +194,11 @@ public class PostRepository {
 
 		return validPosts;
 	}
-
+	 class PostDateComparator implements Comparator<Post> {
+		    @Override
+		    public int compare(Post post1, Post post2) {
+		        return post1.getDate().compareTo(post2.getDate());
+		    }
+		}
 }
+

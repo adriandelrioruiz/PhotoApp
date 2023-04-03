@@ -101,7 +101,7 @@ public class MenuPane extends JPanel {
 		this.setButton(userButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 100, USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT);
 		//BOTON NOTIFICATION
 		notiButton = new JButton(
-				this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));
+				this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "icon_notifications.png"));
 		this.setButton(notiButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 150, USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT);
 		// BOTON PREMIUN
 		premiumButton = new JButton(
@@ -168,8 +168,7 @@ public class MenuPane extends JPanel {
 				if (fileChooser.getSelectedFile() != null) {
 					path = fileChooser.getSelectedFile().toString();
 					controller.cargarFotos(path);
-				}
-				
+				}		
 			}
 		});
 		this.add(luz);
@@ -212,7 +211,6 @@ public class MenuPane extends JPanel {
 		userButton.setIcon(getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));
 		revalidate();
 		repaint();
-
 	}
 
 }

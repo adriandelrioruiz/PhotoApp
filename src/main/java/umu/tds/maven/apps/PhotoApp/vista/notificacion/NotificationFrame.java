@@ -37,7 +37,8 @@ public class NotificationFrame extends JFrame{
 				initialize();
 			}
 			else//No TIENES NOTIFICACIONES
-				dispose();
+				sinNotifications();
+				//dispose();
 		}
 		
 		private void initialize() {
@@ -71,6 +72,15 @@ public class NotificationFrame extends JFrame{
 		}
 	protected void cerrar() {
 		dispose();
+	}
+	private void sinNotifications() {
+		setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		setTitle("Notificaciones");
+		JLabel label=new JLabel("No tienes notificaciones");
+		this.getContentPane().add(label);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setVisible(true);
 	}
 	
 

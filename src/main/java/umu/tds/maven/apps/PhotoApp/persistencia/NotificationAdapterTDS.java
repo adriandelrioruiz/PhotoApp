@@ -69,9 +69,9 @@ public class NotificationAdapterTDS extends AdapterTDS implements INotificationA
 			e.printStackTrace();
 		}
 		if(isAlbum) {
-			post=AlbumAdapterTDS.getInstance().getAlbum(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, ALBUM)));
+			post= (Post) AlbumAdapterTDS.getInstance().getAlbum(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, ALBUM)));
 		}else {
-			post = PhotoAdapterTDS.getInstance()
+			post = (Post) PhotoAdapterTDS.getInstance()
 					.getPhoto(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(en, PHOTO)));
 			
 		}
