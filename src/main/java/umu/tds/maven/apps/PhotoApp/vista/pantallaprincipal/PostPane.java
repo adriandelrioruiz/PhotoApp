@@ -33,13 +33,15 @@ public class PostPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int IMAGE_WIDTH = 220;
 	public static final int PUBLICACION_HEIGHT = 100;
+	private FeedPane pane;
 	private int id;
 	private JLabel lbimagen;
 	private PhotoAppController controller=PhotoAppController.getInstance();
 	// private Image image;
 	// Es necesario saber foto,me gustas,propietario
-	public PostPane(int id) {
+	public PostPane(int id,FeedPane f) {
 		this.id=id;
+		this.pane=f;
 		initialize();
 	}
 
@@ -59,7 +61,7 @@ public class PostPane extends JPanel {
 				mostrarFoto();
 			}
 		});
-		JPanel atributos = new Atributos(id);
+		JPanel atributos = new Atributos(id,this);
 		this.add(lbimagen);
 		this.add(atributos, BorderLayout.WEST);
 		
@@ -69,12 +71,15 @@ public class PostPane extends JPanel {
 		try {
 			Image image = (ImageIO.read(new File(controller.getPath(id)))).getScaledInstance(IMAGE_WIDTH, PUBLICACION_HEIGHT,
 					Image.SCALE_SMOOTH);
-			lbimagen.setIcon((Icon)image);
+			ImageIcon i= new ImageIcon(image);
+			lbimagen.setIcon(i);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
-
+	public void changeOtherProfile(int Userid) {
+		this.pane.changeOtherProfile(Userid);
+	}
 	private void mostrarFoto() {
 		//TO-DO si es un Album TO-DO
 		if(controller.getPost(id) instanceof Album) {

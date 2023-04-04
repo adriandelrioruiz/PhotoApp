@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 
-import org.w3c.dom.events.MouseEvent;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
@@ -30,15 +29,18 @@ public class Atributos extends JPanel {
 	 * foto
 	 */
 	private static final long serialVersionUID = 1L;
+	private PostPane p;
 	private JPanel northPanel,southPanel;
 	private JButton likeButton, commentButton;
-	private JLabel megustas, userimagen;
+	private JLabel megustas, userimagen,username;
 	private int likes,id;
 	private String user;
 	private PhotoAppController controller;
-	public Atributos(int id) {
+	public Atributos(int id,PostPane p) {
 		this.controller = PhotoAppController.getInstance();
 		this.id = id;
+		this.user=controller.getOwnerOfPhoto(id);
+		this.p=p;
 		//this.user=usuario;
 		fixSize(this, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - PostPane.IMAGE_WIDTH, PostPane.PUBLICACION_HEIGHT);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -79,16 +81,19 @@ public class Atributos extends JPanel {
 				PostPane.PUBLICACION_HEIGHT / 2);
 		southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.X_AXIS));
 		userimagen = new JLabel();
-		fixSize(southPanel,BUTTON_WIDTH,BUTTON_HEIGHT);
+		fixSize(userimagen, BUTTON_WIDTH, BUTTON_HEIGHT);
 		String path=PhotoAppController.getInstance().getProfilePic(PhotoAppController.getInstance().getId(PhotoAppController.getInstance().getOwnerOfPhoto(id)));
 		try {
 			Image image = (ImageIO.read(new File(path))).getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT,Image.SCALE_SMOOTH);
-			userimagen.setIcon((Icon)image);
+			ImageIcon i= new ImageIcon(image);
+			userimagen.setIcon(i);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		userimagen.setText(user);
+		username = new JLabel(user);
+		fixSize(username, BUTTON_WIDTH+50, BUTTON_HEIGHT);
 		southPanel.add(userimagen);
+		southPanel.add(username);
 		this.add(southPanel, BorderLayout.SOUTH);
 		
 	}
@@ -127,6 +132,7 @@ public class Atributos extends JPanel {
 	}
 	private void mostrarPerfil() {
 		// TODO Auto-generated method stub
+		this.p.changeOtherProfile(controller.getId(user));
 		
 	}
 	private void fixSize(JComponent c, int x, int y) {

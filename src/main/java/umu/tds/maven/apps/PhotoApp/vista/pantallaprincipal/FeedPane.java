@@ -15,9 +15,10 @@ public class FeedPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	// Lista de fotos por id
 	private List<Integer> photoIds;
-	
-	public FeedPane(List<Integer> photoIds) {
+	private LoggedFrame frame;
+	public FeedPane(List<Integer> photoIds,LoggedFrame fr) {
 		this.photoIds = photoIds;
+		this.frame=fr;
 		initialize();
 		
 	}
@@ -40,7 +41,10 @@ public class FeedPane extends JPanel {
 
 	public void anadirPostPanes(JPanel panel) {
 		for (Integer id : photoIds) {
-			add(new PostPane(id));
+			add(new PostPane(id,this ));
 		}
+	}
+	public void changeOtherProfile(int UserId) {
+		this.frame.changeToOtherProfile(UserId);
 	}
 }

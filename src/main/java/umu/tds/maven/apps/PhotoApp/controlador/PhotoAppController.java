@@ -543,10 +543,12 @@ public class PhotoAppController {
 	}
 
 	// TODO
-	public boolean generatePDF(){
+	public boolean generatePDF(String path){
+
+
 		try { 	
 			Document document = new Document();
-	        PdfWriter.getInstance(document, new FileOutputStream("seguidores.pdf"));
+	        PdfWriter.getInstance(document, new FileOutputStream(path+"\\seguidores.pdf"));
 	        document.open();
 	        PdfPTable table = new PdfPTable(3); // 3 columnas
 	        PdfPCell cell1 = new PdfPCell(new Phrase("Nombre"));//nombre usuario
@@ -556,9 +558,12 @@ public class PhotoAppController {
 	        table.addCell(cell2);
 	        table.addCell(cell3);
 	        for (User user : user.getFollowers()) {
-		        table.addCell(user.getUserName());
-		        table.addCell(user.getEmail());
-		        table.addCell(user.getBio());
+	        	 cell1 = new PdfPCell(new Phrase(user.getUserName()));//nombre usuario
+	 	         cell2 = new PdfPCell(new Phrase(user.getEmail()));//email usuario
+	 	         cell3 = new PdfPCell(new Phrase(user.getBio()));//descripción usuario
+	 	        table.addCell(cell1);
+		        table.addCell(cell2);
+		        table.addCell(cell3);
 	        }
 	        document.add(table);
 	        document.close();
