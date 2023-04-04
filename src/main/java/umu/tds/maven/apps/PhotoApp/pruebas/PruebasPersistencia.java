@@ -59,8 +59,11 @@ public class PruebasPersistencia {
 		//List<Photo> top = PhotoAppController.getInstance().getTopPhotosByLikes();
 		// PhotoAppController.getInstance().comment(post, "hola soy juan comentando");
 		//PhotoAppController.getInstance().search("hermana ines");
+		PhotoAppController.getInstance().follow("adriandelrio");
 		PhotoAppController.getInstance().unLogin();
+		
 		PhotoAppController.getInstance().login("adri@gmail", "password");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"\\itza.jpeg");
 		// PhotoAppController.getInstance().getFeed();
 		
 		LoggedFrame fr=new LoggedFrame();

@@ -134,7 +134,7 @@ public class MenuPane extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (PhotoAppController.getInstance().isPremium(controller.getId())) {
 					PremiumMenu menu= new PremiumMenu();
-					menu.show(premiumButton, premiumButton.getX()-700, premiumButton.getY());
+					menu.show(premiumButton, 0,0);
 				} else {
 					new DescuentoFrame();
 				}
@@ -208,12 +208,6 @@ public class MenuPane extends JPanel {
 		boton.setBackground(null);
 		boton.setBorderPainted(false);
 		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	}
-	public void PremiumMenu() {
-		//PremiumMenu menu= new PremiumMenu(this.frame);
-		
-		//new PremiumFrame(this.frame);// llamar a la clase ventana premium para mostrar frame
-		
 	}
 	public void updateProfilePic() {
 		userButton.setIcon(getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));

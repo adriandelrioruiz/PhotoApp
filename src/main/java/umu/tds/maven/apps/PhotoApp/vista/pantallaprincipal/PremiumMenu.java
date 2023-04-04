@@ -8,6 +8,7 @@ import javax.swing.JPopupMenu;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.topLikes.TopLikesFrame;
 
 public class PremiumMenu extends JPopupMenu{
 	private static final long serialVersionUID = 1L;
@@ -58,6 +59,6 @@ public class PremiumMenu extends JPopupMenu{
 	}
 	public void topLikes() {
 		// TODO Auto-generated method stub
-		
+		new TopLikesFrame();
 	}
 }

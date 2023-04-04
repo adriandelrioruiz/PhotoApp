@@ -558,12 +558,12 @@ public class PhotoAppController {
 	        table.addCell(cell2);
 	        table.addCell(cell3);
 	        for (User user : user.getFollowers()) {
-	        	 cell1 = new PdfPCell(new Phrase(user.getUserName()));//nombre usuario
-	 	         cell2 = new PdfPCell(new Phrase(user.getEmail()));//email usuario
-	 	         cell3 = new PdfPCell(new Phrase(user.getBio()));//descripción usuario
-	 	        table.addCell(cell1);
-		        table.addCell(cell2);
-		        table.addCell(cell3);
+	        	PdfPCell cell4 = new PdfPCell(new Phrase(user.getUserName()));//nombre usuario
+	        	PdfPCell cell5 = new PdfPCell(new Phrase(user.getEmail()));//email usuario
+	        	PdfPCell cell6 = new PdfPCell(new Phrase(user.getBio()));//descripción usuario
+	 	        table.addCell(cell4);
+		        table.addCell(cell5);
+		        table.addCell(cell6);
 	        }
 	        document.add(table);
 	        document.close();
