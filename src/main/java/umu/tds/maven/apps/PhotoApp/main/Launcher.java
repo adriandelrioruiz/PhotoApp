@@ -14,8 +14,8 @@ public class Launcher {
 					LoginFrame ventana =  new LoginFrame();
 					// Hacemos visible la ventana
 					ventana.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (Exception e ) {
+					e.printStackTrace(); 
 				}
 			}
 		});

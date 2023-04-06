@@ -47,7 +47,6 @@ public class PruebasControlador {
 	@Test
 	public void prueba1Registro() {
 
-		System.out.println("1");
 		ArrayList<Codes> codesEsperados = new ArrayList<>();
 		ArrayList<Codes> codesReales = new ArrayList<>();
 
