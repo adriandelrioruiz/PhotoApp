@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EventObject;
@@ -20,6 +21,13 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import fotos.ComponenteCargadorFotos;
 import fotos.Foto;
 import fotos.FotosEvent;
@@ -27,7 +35,9 @@ import fotos.IBuscadorFotos;
 import umu.tds.maven.apps.PhotoApp.modelo.Album;
 import umu.tds.maven.apps.PhotoApp.modelo.Comment;
 import umu.tds.maven.apps.PhotoApp.modelo.DomainObject;
+import umu.tds.maven.apps.PhotoApp.modelo.ExcelGenerator;
 import umu.tds.maven.apps.PhotoApp.modelo.Notification;
+import umu.tds.maven.apps.PhotoApp.modelo.PdfGenerator;
 import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 import umu.tds.maven.apps.PhotoApp.modelo.Post;
 import umu.tds.maven.apps.PhotoApp.modelo.PostRepository;
@@ -43,13 +53,6 @@ import umu.tds.maven.apps.PhotoApp.persistencia.IUserAdapterDAO;
 import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
-import java.io.FileOutputStream;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.Phrase;
 
 public class PhotoAppController {
 
@@ -474,6 +477,8 @@ public class PhotoAppController {
 		// posts
 		if (search.startsWith("#")) {
 			objetos.addAll(postRepository.getPostsByHashtagsContaining(search));
+			
+			return objetos;
 		}
 
 		// Si no, buscamos usuarios
@@ -484,13 +489,21 @@ public class PhotoAppController {
 			objetos.addAll(userRepository.getUsersByNameStartingWith(search));
 			// Luego buscamos si los hay a partir del email
 			objetos.addAll(userRepository.getUsersByEmailContaining(search));
+			
+			// Eliminamos duplicados
+			Set<DomainObject> conjuntoUnico = new HashSet<>(objetos);
+			List<DomainObject> listaUnica = new ArrayList<>(conjuntoUnico);
+			
+			// Nos eliminamos a nosotros mismos
+			for (DomainObject o : listaUnica) {
+				if (((User)o).getUserName().equals(user.getUserName())) {
+					listaUnica.remove(o);
+					break;
+				}
+			}
+			
+			return listaUnica;
 		}
-
-		// Eliminamos duplicados
-		Set<DomainObject> conjuntoUnico = new HashSet<>(objetos);
-		List<DomainObject> listaUnica = new ArrayList<>(conjuntoUnico);
-
-		return listaUnica;
 	}
 
 	// -------------------- FUNCIONALIDAD PREMIUM ----------------a
@@ -498,14 +511,12 @@ public class PhotoAppController {
 	public void changeToPremium() {
 		// Aquí es donde se realizaría el pago, pero esto queda fuera de los que se pide
 		// en la especificación
+
 		user.setPremium(true);
+		// Volcamos los cambios del usuario en la persistencia del usuario
+		userAdapter.updateUser(user, UserAdapterTDS.PREMIUM);
 	}
 
-	public void changeToNotPremium() {
-		if (user == null)
-			return;
-		user.setPremium(false);
-	}
 
 	private double getDiscountByLikes() {
 		if (user == null)
@@ -522,17 +533,17 @@ public class PhotoAppController {
 	}
 
 	private double getDiscountByAge() {
+	    Date dateOfBirth = user.getDateOfBirth();
+	    LocalDate date = dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	    Period age = Period.between(date, LocalDate.now());
+	    int yearsOfUser = age.getYears();
 
-		LocalDate date = LocalDate.of(user.getDateOfBirth().getYear(), user.getDateOfBirth().getMonth(),
-				user.getDateOfBirth().getDay());
-		Period age = Period.between(date, LocalDate.now());
-		int yearsOfUser = age.getYears();
+	    if (yearsOfUser <= YOUNG_AGE_DISCOUNT || yearsOfUser >= OLD_AGE_DISCOUNT)
+	        return (1 - AGE_DISCOUNT) * PREMIUM_PRICE;
 
-		if (yearsOfUser <= YOUNG_AGE_DISCOUNT || yearsOfUser >= OLD_AGE_DISCOUNT)
-			return (1 - AGE_DISCOUNT) * PREMIUM_PRICE;
-
-		return PREMIUM_PRICE;
+	    return PREMIUM_PRICE;
 	}
+
 
 	public double getDiscount() {
 		return Math.min(getDiscountByAge(), getDiscountByLikes());
@@ -542,70 +553,15 @@ public class PhotoAppController {
 		return user.getPhotos().stream().sorted(new PhotoComparatorByLikes()).limit(NUMBER_OF_TOP_PHOTOS).toList();
 	}
 
-	// TODO
+	
 	public boolean generatePDF(String path){
-
-
-		try { 	
-			Document document = new Document();
-	        PdfWriter.getInstance(document, new FileOutputStream(path+"\\seguidores.pdf"));
-	        document.open();
-	        PdfPTable table = new PdfPTable(3); // 3 columnas
-	        PdfPCell cell1 = new PdfPCell(new Phrase("Nombre"));//nombre usuario
-	        PdfPCell cell2 = new PdfPCell(new Phrase("Email"));//email usuario
-	        PdfPCell cell3 = new PdfPCell(new Phrase("Descripción"));//descripción usuario
-	        table.addCell(cell1);
-	        table.addCell(cell2);
-	        table.addCell(cell3);
-	        for (User user : user.getFollowers()) {
-	        	PdfPCell cell4 = new PdfPCell(new Phrase(user.getUserName()));//nombre usuario
-	        	PdfPCell cell5 = new PdfPCell(new Phrase(user.getEmail()));//email usuario
-	        	PdfPCell cell6 = new PdfPCell(new Phrase(user.getBio()));//descripción usuario
-	 	        table.addCell(cell4);
-		        table.addCell(cell5);
-		        table.addCell(cell6);
-	        }
-	        document.add(table);
-	        document.close();
-		} catch(DocumentException | FileNotFoundException e) {
-			return false;
-		}
-		return true;
+		PdfGenerator generator = new PdfGenerator(user);
+		return generator.generatePdf(path);
 	}
 
 	public boolean generateExcel(String path) {
-		HSSFWorkbook workbook = new HSSFWorkbook();
-		HSSFSheet sheet = workbook.createSheet("lista-seguidores");
-
-		// Contador de filas
-		int i = 0;
-		// Creamos una fila para cada seguidor
-		for (User user : user.getFollowers()) {
-			Row row = sheet.createRow(i);
-
-			Cell cellName = row.createCell(0, CellType.STRING);
-			Cell cellEmail = row.createCell(1, CellType.STRING);
-			Cell cellBio = row.createCell(2, CellType.STRING);
-
-			cellName.setCellValue(user.getUserName());
-			cellEmail.setCellValue(user.getEmail());
-			cellBio.setCellValue(user.getBio());
-
-			i++;
-		}
-
-		FileOutputStream out;
-		try {
-			out = new FileOutputStream(path + "\\lista-seguidores.xlsx");
-			workbook.write(out);
-			out.close();
-			workbook.close();
-		} catch (IOException e) {
-			return false;
-		}
-
-		return true;
-
+		ExcelGenerator generator = new ExcelGenerator(user);
+		return generator.generateExcel(path);
 	}
 
 	// -------------------------------------------------------------

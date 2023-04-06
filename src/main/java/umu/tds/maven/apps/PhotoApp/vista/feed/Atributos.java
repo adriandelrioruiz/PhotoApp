@@ -1,4 +1,4 @@
-package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
+package umu.tds.maven.apps.PhotoApp.vista.feed;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -16,6 +16,7 @@ import javax.swing.event.MouseInputAdapter;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 public class Atributos extends JPanel {
 

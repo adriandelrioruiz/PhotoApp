@@ -59,6 +59,7 @@ public class UploadPhotoFrame extends JFrame {
 		switch (frameType) {
 		case ADD_PHOTO:
 			editorPane.setText(PHOTO_DESCRIPTION_TEXT);
+			
 			break;
 		case ADD_ALBUM:
 			editorPane.setText(ALBUM_DESCRIPTION_TEXT);

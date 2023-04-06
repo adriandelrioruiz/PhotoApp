@@ -1,6 +1,7 @@
 package umu.tds.maven.apps.PhotoApp.vista.ventanausuario;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -11,7 +12,6 @@ import javax.swing.JButton;
 
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.loginregistro.EditRegisterFrame;
-import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.AllPostsPane;
 
 @SuppressWarnings("serial")
 public class MyProfilePane extends ProfilePane {
@@ -31,6 +31,7 @@ public class MyProfilePane extends ProfilePane {
 		btnEditProfile = new JButton("Editar perfil");
 		btnEditProfile.setBackground(ViewConstants.APP_GREEN_COLOR);
 		btnEditProfile.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 13));
+		btnEditProfile.setForeground(Color.white);
 		GridBagConstraints gbc_btnEditProfile = new GridBagConstraints();
 		gbc_btnEditProfile.insets = new Insets(0, 0, 5, 5);
 		gbc_btnEditProfile.gridx = 2;

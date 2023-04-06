@@ -12,7 +12,7 @@ public class ViewConstants {
 	public static final String WINDOWS_TITLE = "PhotoApp";
 
 	// Colors
-	public static final Color APP_GREEN_COLOR = new Color(64, 128, 128);
+	public static final Color APP_GREEN_COLOR = new Color(0, 128, 128);
 
 	// Fonts
 	public static final String APP_FONT = "Microsoft Sans Serif";
@@ -40,8 +40,8 @@ public class ViewConstants {
 	public static final int LOGGEDFRAME_WINDOW_HEIGHT = 800;
 
 	//
-	public static String RUTA_FOTOS = "C:\\Users\\elcrio\\git\\PhotoApp\\img\\";
-	public static String RUTA_FOTOS_USER = "C:\\Users\\elcrio\\git\\PhotoApp\\img_users\\";
+	public static String RUTA_FOTOS = "C:\\Users\\Adrián\\eclipse-workspace\\PhotoApp\\img\\";
+	public static String RUTA_FOTOS_USER = "C:\\Users\\Adrián\\eclipse-workspace\\PhotoApp\\img_users\\";
 	public static ImageIcon getIcon(int width, int height, String filename) {
 		Image image;
 		image = Toolkit.getDefaultToolkit().getImage(ViewConstants.RUTA_FOTOS + filename);

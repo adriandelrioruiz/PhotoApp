@@ -1,7 +1,8 @@
-package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
+package umu.tds.maven.apps.PhotoApp.vista.ventanausuario;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -32,6 +33,7 @@ import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedAlbumFrame
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedPhotoFrame;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowUploadedAlbumFrame;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowUploadedPhotoFrame;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 /**
  * Clase que define el panel que mostrará todas las fotos y álbumes de un
@@ -82,7 +84,6 @@ public class AllPostsPane extends JPanel {
 
 	private JButton seePhotosButton;
 	private JButton seeAlbumsButton;
-	private JButton addPhotoToAlbumButton;
 
 	// Controlador
 	private PhotoAppController controller = PhotoAppController.getInstance();
@@ -166,21 +167,19 @@ public class AllPostsPane extends JPanel {
 		changeGalleryPane.setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 50));
 
 		// Botón para ver las fotos
-		seePhotosButton = new JButton("VER FOTOS");
+		seePhotosButton = new JButton("Ver fotos");
 		seePhotosButton.setBackground(ViewConstants.APP_GREEN_COLOR);
+		seePhotosButton.setForeground(Color.white);
 		seePhotosButton.setVisible(false);
 		changeGalleryPane.add(seePhotosButton);
 
 		// Botón para ver los álbumes
-		seeAlbumsButton = new JButton("VER ALBUMES");
+		seeAlbumsButton = new JButton("Ver álbumes");
 		seeAlbumsButton.setBackground(ViewConstants.APP_GREEN_COLOR);
+		seeAlbumsButton.setForeground(Color.white);
 		changeGalleryPane.add(seeAlbumsButton);
 
-		// Botón para añadir foto a álbum
-		addPhotoToAlbumButton = new JButton("AÑADIR FOTO A ALBUM");
-		addPhotoToAlbumButton.setBackground(ViewConstants.APP_GREEN_COLOR);
-		addPhotoToAlbumButton.setVisible(false);
-		changeGalleryPane.add(addPhotoToAlbumButton);
+		
 
 		seePhotosButton.addActionListener(new ActionListener() {
 
@@ -198,13 +197,6 @@ public class AllPostsPane extends JPanel {
 			}
 		});
 
-		addPhotoToAlbumButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Mostrar frame de añadir foto
-			}
-		});
 
 	}
 
@@ -464,7 +456,6 @@ public class AllPostsPane extends JPanel {
 		// Cambiamos botones del panel changeGalleryPane
 		seeAlbumsButton.setVisible(true);
 		seePhotosButton.setVisible(false);
-		addPhotoToAlbumButton.setVisible(false);
 
 		// Cambiamos panel photosOrAlbumsPanel gracias al CardLayout
 		CardLayout cl = (CardLayout) photosOrAlbumsPane.getLayout();
@@ -478,7 +469,6 @@ public class AllPostsPane extends JPanel {
 		// Cambiamos botones del panel changeGalleryPane
 		seeAlbumsButton.setVisible(false);
 		seePhotosButton.setVisible(true);
-		addPhotoToAlbumButton.setVisible(false);
 
 		// Cambiamos panel photosOrAlbumsPanel gracias al CardLayout
 		CardLayout cl = (CardLayout) photosOrAlbumsPane.getLayout();

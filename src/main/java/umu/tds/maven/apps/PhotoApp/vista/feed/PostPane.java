@@ -1,4 +1,4 @@
-package umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal;
+package umu.tds.maven.apps.PhotoApp.vista.feed;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -23,6 +23,8 @@ import pulsador.Luz;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.notificacion.NotificationFrame;
+import umu.tds.maven.apps.PhotoApp.vista.premium.DescuentoFrame;
+import umu.tds.maven.apps.PhotoApp.vista.premium.PremiumMenu;
 import umu.tds.maven.apps.PhotoApp.vista.search.SearchFrame;
 
 public class MenuPane extends JPanel {
@@ -57,7 +59,7 @@ public class MenuPane extends JPanel {
 
 		// Nombre de la aplicación
 		titulo = new JButton("PhotoTDS");
-		titulo.setFont(new Font("Book Antiqua", Font.BOLD, 22));
+		titulo.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 22));
 		this.setButton(titulo, 0, TITULO_WIDTH, MENU_HEIGHT);
 
 		// Botón para subir foto
@@ -70,7 +72,7 @@ public class MenuPane extends JPanel {
 		txtSearch.setAlignmentX(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 - 50);
 		LoggedFrame.fixSize(txtSearch, SEARCH_WIDTH, SEARCH_HEIGHT);
 		txtSearch.setText("Search");
-		txtSearch.setFont(new Font("Book Antiqua", Font.BOLD, 12));
+		txtSearch.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 12));
 		txtSearch.setEditable(true);
 		txtSearch.setOpaque(true);
 		txtSearch.setFocusable(false);

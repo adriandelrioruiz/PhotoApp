@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.feed.FeedPane;
 import umu.tds.maven.apps.PhotoApp.vista.ventanausuario.MyProfilePane;
 import umu.tds.maven.apps.PhotoApp.vista.ventanausuario.OthersProfilePane;
 import umu.tds.maven.apps.PhotoApp.vista.ventanausuario.ProfilePane;
@@ -24,7 +25,8 @@ public class LoggedFrame extends JFrame {
 
 	// El centerPane podra ir variando su contenido entre myProfilePane y feedPane
 	private JPanel centerPane;
-	private ProfilePane myProfilePane;
+	private MyProfilePane myProfilePane;
+	private OthersProfilePane otherProfilePane;
 	private FeedPane feedPane;
 
 	// Controlador
@@ -45,7 +47,7 @@ public class LoggedFrame extends JFrame {
 	}
 
 	private void initialize() {
-		setResizable(true);
+		setResizable(false);
 		setLayout(new BorderLayout());
 		setSize(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, ViewConstants.LOGGEDFRAME_WINDOW_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,16 +67,17 @@ public class LoggedFrame extends JFrame {
 
 	// Método para crear el panel centro que contendrá los paneles variables
 	private void createCenterPane() {
-		centerPane = new JPanel(new CardLayout()); // Crea un panel secundario
-		getContentPane().add(centerPane, BorderLayout.CENTER); // Agrega el panel secundario al contenedor principal
+		centerPane = new JPanel(new CardLayout());
+		getContentPane().add(centerPane, BorderLayout.CENTER);
 
 		feedPane = new FeedPane(controller.getFeed(),this);
-		centerPane.add(feedPane, "feed"); // Agrega el panel feedPane al panel secundario con el nombre "feed"
+		centerPane.add(feedPane, "feed");
 
 		myProfilePane = new MyProfilePane(controller.getId());
-		centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre
-													// "profile"
-		myProfilePane.setVisible(false); // Lo deja no visible
+		centerPane.add(myProfilePane, "profile"); 
+		
+		
+		myProfilePane.setVisible(false);
 	}
 
 	public static void fixSize(JComponent c, int x, int y) {
@@ -102,6 +105,7 @@ public class LoggedFrame extends JFrame {
 	}
 
 	public void changeToProfilePanel() {
+		myProfilePane = new MyProfilePane(controller.getId());
 		CardLayout cl = (CardLayout) centerPane.getLayout();
 		cl.show(centerPane, "profile");
 		revalidate();
@@ -120,11 +124,11 @@ public class LoggedFrame extends JFrame {
 		repaint();
 	}
 	public void changeToOtherProfile(int userId) {
-		centerPane.remove(myProfilePane);
-		myProfilePane = new OthersProfilePane(userId,controller.getId());
-		centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre
-													// "profile"
-		changeToProfilePanel();
+		otherProfilePane = new OthersProfilePane(userId,controller.getId());
+		centerPane.add(otherProfilePane, "otherprofile"); 
+		
+		CardLayout cl = (CardLayout) centerPane.getLayout();
+		cl.show(centerPane, "otherprofile");
 		revalidate();
 		repaint();
 	}

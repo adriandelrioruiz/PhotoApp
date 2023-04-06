@@ -12,7 +12,6 @@ import javax.swing.JButton;
 
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
-import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.AllPostsPane;
 
 @SuppressWarnings("serial")
 public class OthersProfilePane extends ProfilePane {
@@ -50,6 +49,7 @@ public class OthersProfilePane extends ProfilePane {
 		if (!controller.isFollowed(userId, myId)) {
 			btnFollow.setText("Seguir");
 			btnFollow.setBackground(ViewConstants.APP_GREEN_COLOR);
+			btnFollow.setForeground(Color.white);
 		} else {
 			btnFollow.setText("Dejar de seguir");
 			btnFollow.setBackground(Color.white);
@@ -79,6 +79,7 @@ public class OthersProfilePane extends ProfilePane {
 					if (ok) {
 						btnFollow.setText(IS_FOLLOWED_TEXT);
 						btnFollow.setBackground(Color.white);
+						btnFollow.setForeground(Color.black);
 						// Aumentamos el número de seguidores en la vista
 						lblNFollowers.setText(String.valueOf(Integer.valueOf(lblNFollowers.getText()) + 1));
 					}
@@ -90,6 +91,7 @@ public class OthersProfilePane extends ProfilePane {
 					if (ok) {
 						btnFollow.setText(NOT_FOLLOWED_TEXT);
 						btnFollow.setBackground(ViewConstants.APP_GREEN_COLOR);
+						btnFollow.setForeground(Color.white);
 						// Disminuimos el número de seguidores en la vista
 						lblNFollowers.setText(String.valueOf(Integer.valueOf(lblNFollowers.getText()) - 1));
 					}

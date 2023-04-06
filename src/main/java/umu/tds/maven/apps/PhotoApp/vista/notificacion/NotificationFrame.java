@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
@@ -74,13 +75,7 @@ public class NotificationFrame extends JFrame{
 		dispose();
 	}
 	private void sinNotifications() {
-		setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		setTitle("Notificaciones");
-		JLabel label=new JLabel("No tienes notificaciones");
-		this.getContentPane().add(label);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setVisible(true);
+		JOptionPane.showMessageDialog(this, "No tienes ninguna notificación");
 	}
 	
 

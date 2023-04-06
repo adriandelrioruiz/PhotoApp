@@ -78,7 +78,7 @@ public class LoginFrame extends JFrame {
 
 		// Añadimos etiqueta que mostrará en grande el nombre de la aplicación
 		JLabel lblNewLabel = new JLabel("PhotoApp");
-		lblNewLabel.setForeground(new Color(64, 128, 128));
+		lblNewLabel.setForeground(ViewConstants.APP_GREEN_COLOR);
 		lblNewLabel.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 32));
 		northPanel.add(lblNewLabel);
 
@@ -114,7 +114,7 @@ public class LoginFrame extends JFrame {
 		// Botón de login
 		JButton loginButton = new JButton(ViewConstants.LOGIN_TEXT);
 		loginButton.setForeground(Color.WHITE);
-		loginButton.setBackground(new Color(64, 128, 128));
+		loginButton.setBackground(ViewConstants.APP_GREEN_COLOR);
 		loginButton.setBounds(35, txtPassword.getY() + txtPassword.getHeight() + 20, 219, 31);
 		centerPanel.add(loginButton);
 		addLoginButtonHandler(loginButton);
@@ -175,7 +175,7 @@ public class LoginFrame extends JFrame {
 
 		// Añadimos el botón de registro
 		JLabel registerLabel = new JLabel(ViewConstants.REGISTER_TEXT);
-		registerLabel.setForeground(new Color(64, 128, 128));
+		registerLabel.setForeground(ViewConstants.APP_GREEN_COLOR);
 		registerLabel.setFont(new Font(ViewConstants.APP_FONT, Font.BOLD, 13));
 		addRegisterLabelHandler(registerLabel);
 		southPanel.add(registerLabel);

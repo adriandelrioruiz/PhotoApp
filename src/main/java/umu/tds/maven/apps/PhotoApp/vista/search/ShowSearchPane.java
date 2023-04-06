@@ -2,10 +2,9 @@ package umu.tds.maven.apps.PhotoApp.vista.search;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -49,11 +48,11 @@ public abstract class ShowSearchPane extends JPanel {
 	protected void initialize() {
 
 		setLayout(new BorderLayout());
-		setSize(300, 100);
+		setMaximumSize(new Dimension(500, 100));
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		createWestPane();
 		createEastPane();
-		//addListeners();
 	}
 
 	protected void createWestPane() {

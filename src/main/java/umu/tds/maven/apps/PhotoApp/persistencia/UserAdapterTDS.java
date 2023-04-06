@@ -170,13 +170,6 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 
 		Entidad eUser = servPersistencia.recuperarEntidad(code);
 		servPersistencia.borrarEntidad(eUser);
-		/*
-		 * // Si eliminamos a un usuario, tenemos que eliminar todos sus posts
-		 * user.getPhotos().stream().forEach((p)->PhotoAdapterTDS.getInstance().
-		 * deletePhoto(p.getCode()));
-		 * user.getAlbums().stream().forEach((a)->AlbumAdapterTDS.getInstance().
-		 * deleteAlbum(a));
-		 */
 
 	}
 
@@ -185,11 +178,12 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		Entidad eUser = servPersistencia.recuperarEntidad(user.getCode());
 		List<Propiedad> properties = new LinkedList<>();
 		for (Propiedad p : eUser.getPropiedades()) {
-			if (p.getNombre().equals(attribute))
+			if (p.getNombre().equals(attribute)) {
 				properties.add(p);
+				break;
+			}
 		}
-		// List<Propiedad> properties = eUser.getPropiedades().stream().filter((p) ->
-		// p.getNombre().equals(attribute)).toList();
+
 		// si la lista es vacía es que no hay nada con esa propiedad
 		if (properties.isEmpty())
 			return;
@@ -220,15 +214,20 @@ public class UserAdapterTDS extends AdapterTDS implements IUserAdapterDAO {
 		case FOLLOWED:
 			property.setValor(getCodesFromAllUsers(user.getFollowed()));
 			break;
+		case PREMIUM:
+			property.setValor(String.valueOf(user.isPremium()));
+			break;
 		case NOTIFICATIONS:
 			property.setValor(
 					NotificationAdapterTDS.getInstance().getCodesFromAllNotifications(user.getNotifications()));
 			break;
+		
+		default:
+			return;	
 
 		}
 
 		servPersistencia.modificarPropiedad(property);
-
 	}
 
 	public List<User> getAllUsers() {

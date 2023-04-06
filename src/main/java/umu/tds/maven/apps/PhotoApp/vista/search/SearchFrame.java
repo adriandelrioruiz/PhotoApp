@@ -1,11 +1,13 @@
 package umu.tds.maven.apps.PhotoApp.vista.search;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -22,8 +24,8 @@ import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 public class SearchFrame extends JFrame {
 	
 	// Ancho y alto del frame
-	private static final int FRAME_WIDTH = 320;
-	private static final int FRAME_HEIGHT = 420;
+	static final int FRAME_WIDTH = 334;
+	static final int FRAME_HEIGHT = 420;
 	
 	// Panel que contendrá todos los paneles de cada elemento encontrado
 	private JPanel searchListPane;
@@ -99,12 +101,6 @@ public class SearchFrame extends JFrame {
 			
 		}
 	private void sinResultados(String query) {
-		setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		setTitle("Resultados: " + String.valueOf(resultados.size()));
-		JLabel label=new JLabel("No hay resultados para la busqueda"+query);
-		this.getContentPane().add(label);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setVisible(true);
+		JOptionPane.showMessageDialog(this, "No se han encontrado resultados");
 	}
 }
