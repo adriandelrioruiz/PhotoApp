@@ -11,6 +11,7 @@ import umu.tds.maven.apps.PhotoApp.persistencia.CommentAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.NotificationAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.PhotoAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.UserAdapterTDS;
+import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 public class PruebasPersistencia {
@@ -26,7 +27,7 @@ public class PruebasPersistencia {
 	public static void main(String[] args) {
 		//deleteAllDatabase();System.exit(0);
 		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password",
-				new Date(), "myPhoto", "myBio");
+				new Date(), ViewConstants.RUTA_FOTOS_USER+"\\animal.jpeg", "myBio");
 		/*
 		 * PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan@gmail",
 		 * "juanhdz", "password", new Date(), "PhotoJuan", "BioJuan");
@@ -34,7 +35,7 @@ public class PruebasPersistencia {
 		 * "juan2@gmail", "juanhdz2", "password", new Date(), "PhotoJuan", "BioJuan");
 		 */
 		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan3@gmail", "juanhdz3", "password",
-				new Date(), "PhotoJuan", "BioJuan");
+				new Date(), ViewConstants.RUTA_FOTOS_USER+"\\animal2.jpeg", "BioJuan");
 		PhotoAppController.getInstance().login("adri@gmail", "password");
 		PhotoAppController.getInstance().follow("juanhdz3");
 		PhotoAppController.getInstance().unFollow("juanhdz3");
@@ -43,23 +44,26 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().login("juan3@gmail", "password");
 		// PhotoAppController.getInstance().generateExcel("C:\\Users\\adria\\OneDrive\\Escritorio");
 
-		Photo p = PhotoAppController.getInstance().addPhoto("foto", "HOLA SOY UNa fto", "pathconcomment");
+		Photo p = PhotoAppController.getInstance().addPhoto("paisaje", "HOLA SOY UNa fto", ViewConstants.RUTA_FOTOS_USER+"\\itza.jpeg");
 
-		Album a = PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", "pathconcomment");
+		Album a = PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"\\paisaje1.jpeg");
 
-		PhotoAppController.getInstance().addPhotoToAlbum("ola", "asd", "asdasd", a.getCode());
+		PhotoAppController.getInstance().addPhotoToAlbum("paisaje2", "astonishing",ViewConstants.RUTA_FOTOS_USER+"\\paisaje1.jpeg", a.getCode());
 
 		//PhotoAppController.getInstance().deletePhoto(p.getCode());
 
-		PhotoAppController.getInstance().deleteAlbum(a.getCode());
+		//PhotoAppController.getInstance().deleteAlbum(a.getCode());
 
 		// List<Integer> photos = PhotoAppController.getInstance().getPhotos();
 
-		List<Photo> top = PhotoAppController.getInstance().getTopPhotosByLikes();
+		//List<Photo> top = PhotoAppController.getInstance().getTopPhotosByLikes();
 		// PhotoAppController.getInstance().comment(post, "hola soy juan comentando");
-		PhotoAppController.getInstance().search("hermana ines");
+		//PhotoAppController.getInstance().search("hermana ines");
+		PhotoAppController.getInstance().follow("adriandelrio");
 		PhotoAppController.getInstance().unLogin();
+		
 		PhotoAppController.getInstance().login("adri@gmail", "password");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"\\itza.jpeg");
 		// PhotoAppController.getInstance().getFeed();
 		
 		LoggedFrame fr=new LoggedFrame();

@@ -41,7 +41,7 @@ public class ViewConstants {
 
 	//
 	public static String RUTA_FOTOS = "C:\\Users\\elcrio\\git\\PhotoApp\\img\\";
-
+	public static String RUTA_FOTOS_USER = "C:\\Users\\elcrio\\git\\PhotoApp\\img_users\\";
 	public static ImageIcon getIcon(int width, int height, String filename) {
 		Image image;
 		image = Toolkit.getDefaultToolkit().getImage(ViewConstants.RUTA_FOTOS + filename);

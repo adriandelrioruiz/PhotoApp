@@ -101,7 +101,7 @@ public class MenuPane extends JPanel {
 		this.setButton(userButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 100, USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT);
 		//BOTON NOTIFICATION
 		notiButton = new JButton(
-				this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, "icon_notifications.png"));
+				this.getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, ViewConstants.RUTA_FOTOS + "icon_notifications.png"));
 		this.setButton(notiButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 150, USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT);
 		// BOTON PREMIUN
 		premiumButton = new JButton(
@@ -133,12 +133,15 @@ public class MenuPane extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (PhotoAppController.getInstance().isPremium(controller.getId())) {
-					new PremiumFrame();// llamar a la clase ventana premium para mostrar frame
+					PremiumMenu menu= new PremiumMenu();
+					menu.show(premiumButton, 0,0);
 				} else {
 					new DescuentoFrame();
 				}
 
 			}
+
+		
 		});
 		notiButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -173,7 +176,7 @@ public class MenuPane extends JPanel {
 		});
 		this.add(luz);
 	}
-
+	
 	private ImageIcon getIcon(int width, int height, String path) {
 		Image image;
 		image = Toolkit.getDefaultToolkit().getImage(path);
@@ -206,7 +209,6 @@ public class MenuPane extends JPanel {
 		boton.setBorderPainted(false);
 		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 	}
-
 	public void updateProfilePic() {
 		userButton.setIcon(getIcon(USER_PHOTO_WIDTH, USER_PHOTO_HEIGHT, controller.getProfilePic(controller.getId())));
 		revalidate();

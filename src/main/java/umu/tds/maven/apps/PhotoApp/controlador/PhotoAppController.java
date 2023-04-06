@@ -543,10 +543,12 @@ public class PhotoAppController {
 	}
 
 	// TODO
-	public boolean generatePDF(){
+	public boolean generatePDF(String path){
+
+
 		try { 	
 			Document document = new Document();
-	        PdfWriter.getInstance(document, new FileOutputStream("seguidores.pdf"));
+	        PdfWriter.getInstance(document, new FileOutputStream(path+"\\seguidores.pdf"));
 	        document.open();
 	        PdfPTable table = new PdfPTable(3); // 3 columnas
 	        PdfPCell cell1 = new PdfPCell(new Phrase("Nombre"));//nombre usuario
@@ -556,9 +558,12 @@ public class PhotoAppController {
 	        table.addCell(cell2);
 	        table.addCell(cell3);
 	        for (User user : user.getFollowers()) {
-		        table.addCell(user.getUserName());
-		        table.addCell(user.getEmail());
-		        table.addCell(user.getBio());
+	        	PdfPCell cell4 = new PdfPCell(new Phrase(user.getUserName()));//nombre usuario
+	        	PdfPCell cell5 = new PdfPCell(new Phrase(user.getEmail()));//email usuario
+	        	PdfPCell cell6 = new PdfPCell(new Phrase(user.getBio()));//descripción usuario
+	 	        table.addCell(cell4);
+		        table.addCell(cell5);
+		        table.addCell(cell6);
 	        }
 	        document.add(table);
 	        document.close();
@@ -695,7 +700,9 @@ public class PhotoAppController {
 	public boolean isFollowed(int idUser1, int idUser2) {
 		return userRepository.getUser(idUser1).getFollowers().stream().anyMatch((u) -> u.getCode() == idUser2);
 	}
-
+	public Post getPost(int id) {
+		return postRepository.getPost(id);
+	}
 	// Obtener el path de una foto a partir de su id
 	public String getPath(int id) {
 		Post post = postRepository.getPost(id);

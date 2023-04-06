@@ -68,7 +68,7 @@ public class LoggedFrame extends JFrame {
 		centerPane = new JPanel(new CardLayout()); // Crea un panel secundario
 		getContentPane().add(centerPane, BorderLayout.CENTER); // Agrega el panel secundario al contenedor principal
 
-		feedPane = new FeedPane(controller.getFeed());
+		feedPane = new FeedPane(controller.getFeed(),this);
 		centerPane.add(feedPane, "feed"); // Agrega el panel feedPane al panel secundario con el nombre "feed"
 
 		myProfilePane = new MyProfilePane(controller.getId());
@@ -128,6 +128,17 @@ public class LoggedFrame extends JFrame {
 		revalidate();
 		repaint();
 	}
+	public void changeTopLikes() {
+		controller.getTopPhotosByLikes();
+		centerPane.remove(myProfilePane);
+		//myProfilePane = new OthersProfilePane(userId,controller.getId());
+		centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre
+													// "profile"
+		changeToProfilePanel();
+		revalidate();
+		repaint();
+	}
+	
 	// Para que se actualice la foto de perfil en caso de que se suba una nueva foto
 	public void updateProfilePic() {
 		updateProfile();
