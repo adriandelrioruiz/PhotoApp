@@ -468,12 +468,16 @@ public class PhotoAppController {
 
 	// Método para hacer una búsqueda. Devuelve una lista de objetos de dominio
 	public List<DomainObject> search(String search) {
+		if (user == null)
+			return null;
 		List<DomainObject> objetos = new LinkedList<>();
 
 		// Comprobamos si el query empieza por hashtag, en ese caso habrá que busar
 		// posts
 		if (search.startsWith("#")) {
 			objetos.addAll(postRepository.getPostsByHashtagsContaining(search));
+			
+			return objetos;
 		}
 
 		// Si no, buscamos usuarios
@@ -484,13 +488,23 @@ public class PhotoAppController {
 			objetos.addAll(userRepository.getUsersByNameStartingWith(search));
 			// Luego buscamos si los hay a partir del email
 			objetos.addAll(userRepository.getUsersByEmailContaining(search));
+			
+			// Eliminamos duplicados
+			Set<DomainObject> conjuntoUnico = new HashSet<>(objetos);
+			List<DomainObject> listaUnica = new ArrayList<>(conjuntoUnico);
+			
+			// Nos eliminamos a nosotros mismos
+			for (DomainObject o : listaUnica) {
+			    if (((User)o).getUserName().equals(user.getUserName())) {
+			    	listaUnica.remove(o);
+			    	break;
+			    }
+			}
+			
+			return listaUnica;
 		}
 
-		// Eliminamos duplicados
-		Set<DomainObject> conjuntoUnico = new HashSet<>(objetos);
-		List<DomainObject> listaUnica = new ArrayList<>(conjuntoUnico);
-
-		return listaUnica;
+		
 	}
 
 	// -------------------- FUNCIONALIDAD PREMIUM ----------------a
