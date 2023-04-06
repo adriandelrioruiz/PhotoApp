@@ -61,7 +61,7 @@ public abstract class AbstractRegisterFrame extends JFrame {
 
 	// Frame para escribir la bio
 	protected SetBioFrame bioFrame;
-	private JButton btnDescribeYourself;
+	protected JButton btnDescribeYourself;
 
 	// String que contiene la ruta de la foto de perfil
 	protected String profilePic;
