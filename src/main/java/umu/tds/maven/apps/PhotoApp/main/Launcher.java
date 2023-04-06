@@ -11,7 +11,7 @@ public class Launcher {
 				try {
 
 					// LoginView ventana = new LoginView();
-					LoginFrame ventana = new LoginFrame();
+					LoginFrame ventana =  new LoginFrame();
 					// Hacemos visible la ventana
 					ventana.setVisible(true);
 				} catch (Exception e) {
