@@ -35,6 +35,9 @@ public class RegisterFrame extends AbstractRegisterFrame {
 	private JLabel lblInvalidUsername;
 	private JLabel lblEmptyEmail;
 	private JLabel lblInvalidEmail;
+	
+	// JButton para registrarse
+	private JButton registerButton;
 
 	/**
 	 * Create the frame.
@@ -57,22 +60,18 @@ public class RegisterFrame extends AbstractRegisterFrame {
 		super.createRegisterPane();
 		txtPassword.setFocusable(false);
 
-		// Botón de registro
-		JButton registerButton = new JButton(ViewConstants.REGISTER_TEXT);
-		registerButton.setForeground(Color.WHITE);
-		registerButton.setBackground(ViewConstants.APP_GREEN_COLOR);
-		registerButton.setBounds(35, 547, 219, 31);
-		centerPanel.add(registerButton);
-		addRegisterButtonHandler(registerButton);
 
 		calendar = new JCalendar();
-		calendar.setBounds(35, bioFrame.getY() + 100, 219, 150);
+		calendar.setBounds(35, btnDescribeYourself.getY() + btnDescribeYourself.getHeight() + 20 , 219, 150);
 		centerPanel.add(calendar);
-
-		/*
-		 * ProfilePicPane north = new ProfilePicPane(this, "img/default-profpic.png");
-		 * north.setBounds(0, 0, 296, 108); center.add(north); north.setLayout(null);
-		 */
+		
+		// Botón de registro
+		registerButton = new JButton(ViewConstants.REGISTER_TEXT);
+		registerButton.setForeground(Color.WHITE);
+		registerButton.setBackground(ViewConstants.APP_GREEN_COLOR);
+		registerButton.setBounds(35, calendar.getY() + calendar.getHeight() + 40, 219, 31);
+		centerPanel.add(registerButton);
+		addRegisterButtonHandler(registerButton);
 
 	}
 
