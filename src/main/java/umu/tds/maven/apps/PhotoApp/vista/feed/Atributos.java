@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 
-
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
@@ -31,28 +30,28 @@ public class Atributos extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private PostPane p;
-	private JPanel northPanel,southPanel;
+	private JPanel northPanel, southPanel;
 	private JButton likeButton, commentButton;
-	private JLabel megustas, userimagen,username;
-	private int likes,id;
+	private JLabel megustas, userimagen, username;
+	private int likes, id;
 	private String user;
 	private PhotoAppController controller;
-	public Atributos(int id,PostPane p) {
+
+	public Atributos(int id, PostPane p) {
 		this.controller = PhotoAppController.getInstance();
 		this.id = id;
-		this.user=controller.getOwnerOfPhoto(id);
-		this.p=p;
-		//this.user=usuario;
+		this.user = controller.getOwnerOfPhoto(id);
+		this.p = p;
+		this.likes = controller.getPost(id).getLikes();
 		fixSize(this, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - PostPane.IMAGE_WIDTH, PostPane.PUBLICACION_HEIGHT);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setOpaque(true);
 		createNorthPanel();
 		createSouthPanel();
-		
+
 		// TOP PANEL
-		
+
 		// bottomPanel
-		
 
 		likeButton.addActionListener(new ActionListener() {
 			@Override
@@ -68,47 +67,49 @@ public class Atributos extends JPanel {
 		});
 		userimagen.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				//Mostrar perfil del user
+				// Mostrar perfil del user
 				mostrarPerfil();
 			}
 
-			
 		});
 	}
-	
+
 	private void createSouthPanel() {
-		 southPanel = new JPanel();
+		southPanel = new JPanel();
 		fixSize(southPanel, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - PostPane.IMAGE_WIDTH,
 				PostPane.PUBLICACION_HEIGHT / 2);
 		southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.X_AXIS));
 		userimagen = new JLabel();
 		fixSize(userimagen, BUTTON_WIDTH, BUTTON_HEIGHT);
-		String path=PhotoAppController.getInstance().getProfilePic(PhotoAppController.getInstance().getId(PhotoAppController.getInstance().getOwnerOfPhoto(id)));
+		String path = PhotoAppController.getInstance().getProfilePic(
+				PhotoAppController.getInstance().getId(PhotoAppController.getInstance().getOwnerOfPhoto(id)));
 		try {
-			Image image = (ImageIO.read(new File(path))).getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT,Image.SCALE_SMOOTH);
-			ImageIcon i= new ImageIcon(image);
+			Image image = (ImageIO.read(new File(path))).getScaledInstance(BUTTON_WIDTH, BUTTON_HEIGHT,
+					Image.SCALE_SMOOTH);
+			ImageIcon i = new ImageIcon(image);
 			userimagen.setIcon(i);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		username = new JLabel(user);
-		fixSize(username, BUTTON_WIDTH+50, BUTTON_HEIGHT);
+		fixSize(username, BUTTON_WIDTH + 50, BUTTON_HEIGHT);
 		southPanel.add(userimagen);
 		southPanel.add(username);
 		this.add(southPanel, BorderLayout.SOUTH);
-		
+
 	}
 
 	private void createNorthPanel() {
 		northPanel = new JPanel();
-		fixSize(northPanel, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - PostPane.IMAGE_WIDTH,PostPane.PUBLICACION_HEIGHT / 2);
+		fixSize(northPanel, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - PostPane.IMAGE_WIDTH,
+				PostPane.PUBLICACION_HEIGHT / 2);
 		northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.X_AXIS));
-		//boton like
+		// boton like
 		likeButton = new JButton(ViewConstants.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, LIKE_ICON));
 		fixSize(likeButton, BUTTON_WIDTH, BUTTON_HEIGHT);
 		LoggedFrame.setButton(likeButton);
 		northPanel.add(likeButton);
-		//boton comentario
+		// boton comentario
 		commentButton = new JButton(ViewConstants.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, COMMENT_ICON));
 		fixSize(commentButton, BUTTON_WIDTH, BUTTON_HEIGHT);
 		LoggedFrame.setButton(commentButton);
@@ -116,14 +117,16 @@ public class Atributos extends JPanel {
 		megustas = new JLabel(likes + " Me gustas");
 		northPanel.add(megustas);
 		this.add(northPanel, BorderLayout.NORTH);
-		
+
 	}
 
 	private void comentario() {
 		// Mostrar una ventana de di�logo para escribir un comentario
 		String comment = JOptionPane.showInputDialog("Ingrese un comentario:");
-		controller.comment(id, comment);
-		System.out.println("Comentario: " + comment);
+		if (!comment.isEmpty()) {
+			controller.comment(id, comment);
+			System.out.println("Comentario: " + comment);
+		}
 	}
 
 	private void sumarLikes() {
@@ -131,11 +134,12 @@ public class Atributos extends JPanel {
 		controller.like(id);
 		megustas.setText(likes + " Me gustas");
 	}
+
 	private void mostrarPerfil() {
-		// TODO Auto-generated method stub
 		this.p.changeOtherProfile(controller.getId(user));
-		
+
 	}
+
 	private void fixSize(JComponent c, int x, int y) {
 		c.setMinimumSize(new Dimension(x, y));
 		c.setPreferredSize(new Dimension(x, y));
