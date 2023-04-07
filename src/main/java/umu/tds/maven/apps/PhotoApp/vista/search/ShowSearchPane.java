@@ -87,7 +87,7 @@ public abstract class ShowSearchPane extends JPanel {
 		userNameLabel.setBorder(margin);
 		eastPane.add(userNameLabel);
 
-		eastPane.setPreferredSize(new Dimension(200, 100));
+		eastPane.setPreferredSize(new Dimension(202, 100));
 		add(eastPane, BorderLayout.EAST);
 
 	}
