@@ -4,20 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.modelo.Album;
@@ -25,6 +24,7 @@ import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedAlbumFrame;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedPhotoFrame;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 public class PostPane extends JPanel {
 	/**
@@ -36,6 +36,7 @@ public class PostPane extends JPanel {
 	private FeedPane pane;
 	private int id;
 	private JLabel lbimagen;
+	private Atributos atributos;
 	private PhotoAppController controller=PhotoAppController.getInstance();
 	// private Image image;
 	// Es necesario saber foto,me gustas,propietario
@@ -61,9 +62,10 @@ public class PostPane extends JPanel {
 				mostrarFoto();
 			}
 		});
-		JPanel atributos = new Atributos(id,this);
+		atributos = new Atributos(id,this);
 		this.add(lbimagen);
 		this.add(atributos, BorderLayout.WEST);
+		
 		
 	}
 	
@@ -81,13 +83,14 @@ public class PostPane extends JPanel {
 		this.pane.changeOtherProfile(Userid);
 	}
 	private void mostrarFoto() {
-		//TO-DO si es un Album TO-DO
-		if(controller.getPost(id) instanceof Album) {
-			new ShowOtherUploadedAlbumFrame(controller.getId(controller.getOwnerOfPhoto(id)),id);
-		}
-		//SI ES UNA FOTO
 		if(controller.getPost(id) instanceof Photo) {
-			new ShowOtherUploadedPhotoFrame(controller.getId(controller.getOwnerOfPhoto(id)),id);
+			JFrame frame = new ShowOtherUploadedPhotoFrame(controller.getId(controller.getOwnerOfPhoto(id)),id);
+			frame.addWindowListener(new WindowAdapter() {
+	            @Override
+	            public void windowClosing(WindowEvent e) {
+	                atributos.actualizarLikes();
+	            }
+	        });
 		}
 	}
 	private void fixSize(JComponent c, int x, int y) {

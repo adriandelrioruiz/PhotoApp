@@ -130,8 +130,12 @@ public class Atributos extends JPanel {
 	}
 
 	private void sumarLikes() {
-		likes++;
+		actualizarLikes();
 		controller.like(id);
+	}
+	
+	public void actualizarLikes() {
+		likes++;
 		megustas.setText(likes + " Me gustas");
 	}
 

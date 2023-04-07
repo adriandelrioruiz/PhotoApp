@@ -15,7 +15,6 @@ import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.feed.FeedPane;
 import umu.tds.maven.apps.PhotoApp.vista.ventanausuario.MyProfilePane;
 import umu.tds.maven.apps.PhotoApp.vista.ventanausuario.OthersProfilePane;
-import umu.tds.maven.apps.PhotoApp.vista.ventanausuario.ProfilePane;
 
 public class LoggedFrame extends JFrame {
 	/**
@@ -70,13 +69,12 @@ public class LoggedFrame extends JFrame {
 		centerPane = new JPanel(new CardLayout());
 		getContentPane().add(centerPane, BorderLayout.CENTER);
 
-		feedPane = new FeedPane(controller.getFeed(),this);
+		feedPane = new FeedPane(controller.getFeed(), this);
 		centerPane.add(feedPane, "feed");
 
 		myProfilePane = new MyProfilePane(controller.getId());
-		centerPane.add(myProfilePane, "profile"); 
-		
-		
+		centerPane.add(myProfilePane, "profile");
+
 		myProfilePane.setVisible(false);
 	}
 
@@ -117,32 +115,32 @@ public class LoggedFrame extends JFrame {
 	public void updateProfile() {
 		centerPane.remove(myProfilePane);
 		myProfilePane = new MyProfilePane(controller.getId());
-		centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre
-													// "profile"
+		centerPane.add(myProfilePane, "profile"); 
 		changeToProfilePanel();
 		revalidate();
 		repaint();
 	}
+
+
 	public void changeToOtherProfile(int userId) {
-		otherProfilePane = new OthersProfilePane(userId,controller.getId());
-		centerPane.add(otherProfilePane, "otherprofile"); 
-		
+		otherProfilePane = new OthersProfilePane(userId, controller.getId());
+		centerPane.add(otherProfilePane, "otherprofile");
+
 		CardLayout cl = (CardLayout) centerPane.getLayout();
 		cl.show(centerPane, "otherprofile");
 		revalidate();
 		repaint();
 	}
+
 	public void changeTopLikes() {
 		controller.getTopPhotosByLikes();
 		centerPane.remove(myProfilePane);
-		//myProfilePane = new OthersProfilePane(userId,controller.getId());
-		centerPane.add(myProfilePane, "profile"); // Agrega el panel myProfilePane al panel secundario con el nombre
-													// "profile"
+		centerPane.add(myProfilePane, "profile"); 
 		changeToProfilePanel();
 		revalidate();
 		repaint();
 	}
-	
+
 	// Para que se actualice la foto de perfil en caso de que se suba una nueva foto
 	public void updateProfilePic() {
 		updateProfile();

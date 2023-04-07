@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -17,6 +19,7 @@ import javax.swing.JLabel;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetDefaultTextListener;
 import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetEmptyTextListener;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 /** Clase para mostrar una ventana con un post que ya está subido */
 
@@ -100,6 +103,7 @@ public abstract class ShowUploadedPostFrame extends ShowPostFrame {
 					comment();
 			}
 		});
+		
 	}
 
 	@Override
