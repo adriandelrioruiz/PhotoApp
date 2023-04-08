@@ -44,11 +44,11 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().login("juan3@gmail", "password");
 		// PhotoAppController.getInstance().generateExcel("C:\\Users\\adria\\OneDrive\\Escritorio");
 
-		Photo p = PhotoAppController.getInstance().addPhoto("paisaje", "HOLA SOY UNa fto", ViewConstants.RUTA_FOTOS_USER+"\\itza.jpeg");
+		Photo p = PhotoAppController.getInstance().addPhoto("paisaje", "HOLA SOY UNa fto", ViewConstants.RUTA_FOTOS_USER+"itza.jpeg");
 
-		Album a = PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"\\paisaje1.jpeg");
+		Album a = PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje1.jpeg");
 
-		PhotoAppController.getInstance().addPhotoToAlbum("paisaje2", "astonishing",ViewConstants.RUTA_FOTOS_USER+"\\paisaje1.jpeg", a.getCode());
+		PhotoAppController.getInstance().addPhotoToAlbum("paisaje2", "astonishing",ViewConstants.RUTA_FOTOS_USER+"paisaje1.jpeg", a.getCode());
 
 		//PhotoAppController.getInstance().deletePhoto(p.getCode());
 
@@ -63,7 +63,7 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().unLogin();
 		
 		PhotoAppController.getInstance().login("adri@gmail", "password");
-		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"\\itza.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"itza.jpeg");
 		// PhotoAppController.getInstance().getFeed();
 		
 		LoggedFrame fr=new LoggedFrame();

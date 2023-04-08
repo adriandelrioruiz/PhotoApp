@@ -124,7 +124,7 @@ public class AllPostsPane extends JPanel {
 				try {
 					photosInAlbum.add(ImageIO.read(new File(controller.getPath(p))));
 				} catch (IOException e) {
-
+					
 					e.printStackTrace();
 				}
 			});
