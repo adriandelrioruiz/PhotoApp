@@ -87,10 +87,19 @@ public class PostPane extends JPanel {
 			JFrame frame = new ShowOtherUploadedPhotoFrame(controller.getId(controller.getOwnerOfPhoto(id)),id);
 			frame.addWindowListener(new WindowAdapter() {
 	            @Override
+	            public void windowClosed(WindowEvent e) {
+	                atributos.actualizarLikes();
+	            }
+	            @Override
 	            public void windowClosing(WindowEvent e) {
 	                atributos.actualizarLikes();
 	            }
 	        });
+			/* public void windowOpened(WindowEvent e) {}
+			  public void windowClosing(WindowEvent e) {}
+			  public void windowClosed(WindowEvent e) {}
+			  public void windowActivated(WindowEvent e) {}
+			  public void windowDeactivated(WindowEvent e) {}*/
 		}
 	}
 	private void fixSize(JComponent c, int x, int y) {

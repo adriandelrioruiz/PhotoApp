@@ -9,7 +9,6 @@ public class Launcher {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-
 					// LoginView ventana = new LoginView();
 					LoginFrame ventana =  new LoginFrame();
 					// Hacemos visible la ventana

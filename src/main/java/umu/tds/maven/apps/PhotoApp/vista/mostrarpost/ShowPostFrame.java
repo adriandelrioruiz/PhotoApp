@@ -68,7 +68,7 @@ public abstract class ShowPostFrame extends JFrame {
 	protected JPanel southPane;
 
 	// Botón para salir del frame
-	private JButton salirButton;
+	protected JButton salirButton;
 
 	// JTextArea para la descripción/comentario
 	protected JTextArea commentTxtArea;
@@ -135,15 +135,7 @@ public abstract class ShowPostFrame extends JFrame {
 		commentTxtArea.setWrapStyleWord(true);
 		commentTxtArea.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
 		eastPane.add(commentTxtArea);
-		verComentarios=new JLabel("Ver Comentarios");
-		verComentarios.setSize(150, 50);
-		verComentarios.setLocation(10, 200);
-		verComentarios.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-		verComentarios.setForeground(Color.BLACK);
-		verComentarios.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
-		verComentarios.setHorizontalAlignment(SwingConstants.CENTER);
-		verComentarios.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		eastPane.add(verComentarios);
+		
 		//AÑADIR MOUSELISTENERS
 	}
 
@@ -173,6 +165,7 @@ public abstract class ShowPostFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Cerrar frame
+				
 				dispose();
 			}
 		});

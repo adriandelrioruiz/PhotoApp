@@ -37,14 +37,12 @@ public class SearchFrame extends JFrame {
 	private List<DomainObject> resultados;
 	
 	public SearchFrame(String query,LoggedFrame logged) {
-		
 		this.resultados = PhotoAppController.getInstance().search(query);
 		this.loggedFrame=logged;
 		if (!resultados.isEmpty()) {
 			initialize();
 		}
 		else sinResultados(query);
-			//dispose();
 	}
 	
 	private void initialize() {
@@ -101,6 +99,6 @@ public class SearchFrame extends JFrame {
 			
 		}
 	private void sinResultados(String query) {
-		JOptionPane.showMessageDialog(this, "No se han encontrado resultados");
+		JOptionPane.showMessageDialog(this, "No se han encontrado resultados para \""+query+"\"");
 	}
 }

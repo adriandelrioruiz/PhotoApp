@@ -1,6 +1,7 @@
 package umu.tds.maven.apps.PhotoApp.vista.mostrarpost;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -12,9 +13,11 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetDefaultTextListener;
@@ -70,7 +73,15 @@ public abstract class ShowUploadedPostFrame extends ShowPostFrame {
 
 		commentTxtArea.setText("Introduce un comentario...");
 		commentTxtArea.setPreferredSize(new Dimension(commentTxtArea.getWidth(), 100));
-
+		verComentarios=new JLabel("Ver Comentarios");
+		verComentarios.setSize(150, 50);
+		verComentarios.setLocation(10, 200);
+		verComentarios.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		verComentarios.setForeground(Color.BLACK);
+		verComentarios.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
+		verComentarios.setHorizontalAlignment(SwingConstants.CENTER);
+		verComentarios.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		eastPane.add(verComentarios);
 		// Creamos el botón para comentar
 		try {
 			Image image = ImageIO.read(new File(ViewConstants.RUTA_FOTOS + "icono_comentario.png"));
@@ -93,7 +104,7 @@ public abstract class ShowUploadedPostFrame extends ShowPostFrame {
 	protected void addListeners() {
 		super.addListeners();
 		verComentarios.addMouseListener(new ShowCommentsHandler(this.postId));
-		
+		//this.salirButton.addActionListener(null);
 		commentTxtArea.addMouseListener(new SetEmptyTextListener(DEFAULT_COMMENT_TEXT, commentTxtArea));
 		commentTxtArea.addFocusListener(new SetDefaultTextListener(DEFAULT_COMMENT_TEXT, commentTxtArea));
 

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -49,8 +50,8 @@ public class AllPostsPane extends JPanel {
 	private static final byte PHOTOS_GALLERY = 1;
 	private static final byte ALBUMS_GALLERY = 2;
 
-	private ArrayList<Image> photos = new ArrayList<>();
-	private HashMap<Image, List<Image>> albums = new HashMap<>();
+	//private ArrayList<Image> photos = new ArrayList<>();
+	//private HashMap<Image, List<Image>> albums = new HashMap<>();
 
 	private List<Integer> photosId;
 	private List<Integer> albumsId;
@@ -96,14 +97,14 @@ public class AllPostsPane extends JPanel {
 		this.userId = userId;
 
 		// Creamos la lista de fotos
-		photosId.stream().forEach((p) -> {
+		/*photosId.stream().forEach((p) -> {
 			try {
 				this.photos.add(ImageIO.read(new File(controller.getPath(p))));
 			} catch (IOException e) {
 
 				e.printStackTrace();
 			}
-		});
+		});*/
 
 		// Creamos la lista de álbumes
 		for (int albumId : albumsId) {
@@ -111,7 +112,7 @@ public class AllPostsPane extends JPanel {
 			List<Integer> albumPhotos = controller.getPhotosOfAlbum(albumId);
 
 			// Tomamos la clave como la primera foto del album
-			Image key = null;
+			/*Image key = null;
 			try {
 				key = ImageIO.read(new File(controller.getPath(albumId)));
 			} catch (IOException e1) {
@@ -130,15 +131,15 @@ public class AllPostsPane extends JPanel {
 			});
 
 			// Añadimos la entrada al mapa
-			this.albums.put(key, photosInAlbum);
+			this.albums.put(key, photosInAlbum);*/
 		}
 
 		this.deletable = deletable;
 
 		// Calculamos el número de páginas
 		setLayout(new BorderLayout());
-		numPhotosPage = (int) Math.ceil((double) this.photos.size() / MAX_IMAGES_PER_PAGE);
-		numAlbumsPage = (int) Math.ceil((double) this.albums.keySet().size() / MAX_IMAGES_PER_PAGE);
+		numPhotosPage = (int) Math.ceil((double) this.photosId.size() / MAX_IMAGES_PER_PAGE);
+		numAlbumsPage = (int) Math.ceil((double) this.albumsId.size() / MAX_IMAGES_PER_PAGE);
 
 		// Creamos el panel centrals
 		createCenterPane();
@@ -220,9 +221,9 @@ public class AllPostsPane extends JPanel {
 		albumsPane.add(new MovePagePane(ALBUMS_GALLERY), BorderLayout.SOUTH);
 		albumsPane.setVisible(false);
 
-		List<Image> firstAlbumsPhoto = new ArrayList<>(albums.keySet());
-		showPage(photos, imagesPaneForPhotos, actualPhotosPage, PHOTOS_GALLERY);
-		showPage(firstAlbumsPhoto, imagesPaneForAlbums, actualAlbumsPage, ALBUMS_GALLERY);
+	
+		showPage(photosId, imagesPaneForPhotos, actualPhotosPage, PHOTOS_GALLERY);
+		showPage(albumsId, imagesPaneForAlbums, actualAlbumsPage, ALBUMS_GALLERY);
 
 	}
 
@@ -236,7 +237,7 @@ public class AllPostsPane extends JPanel {
 	}
 
 	// Método para mostrar una página de fotos o álbumes
-	private void showPage(List<Image> images, JPanel imagesPane, PageCounter actualPage, byte gallery) {
+	private void showPage(List<Integer> images, JPanel imagesPane, PageCounter actualPage, byte gallery) {
 		List<Integer> listOfPosts = null;
 		if (gallery == ALBUMS_GALLERY)
 			listOfPosts = albumsId;
@@ -245,83 +246,90 @@ public class AllPostsPane extends JPanel {
 
 		for (int i = (actualPage.getPageCount() - 1) * MAX_IMAGES_PER_PAGE; i < Math.min(images.size(),
 				actualPage.getPageCount() * MAX_IMAGES_PER_PAGE); i++)
-			addImage(images.get(i), listOfPosts.get(i), imagesPane, gallery);
+			addImage( listOfPosts.get(i), imagesPane, gallery);
 		revalidate();
 		repaint();
 	}
 
 	// Para pintar una imagen
-	public void addImage(Image image, int imageId, JPanel panel, byte gallery) {
-		JLabel imageIcon = new JLabel(new ImageIcon(
-				image.getScaledInstance(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 3 - 4, 120, Image.SCALE_SMOOTH)));
+	public void addImage(int imageId, JPanel panel, byte gallery) {
+		Image image;
+		try {
+			image = ImageIO.read(new File(controller.getPath(imageId)));
+			JLabel imageIcon = new JLabel(new ImageIcon(
+					image.getScaledInstance(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 3 - 4, 120, Image.SCALE_SMOOTH)));
+			// Añadimos el listener para que aparezca la foto o el álbum
 
-		// Añadimos el listener para que aparezca la foto o el álbum
-
-		if (gallery == PHOTOS_GALLERY)
-			imageIcon.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					@SuppressWarnings("unused")
-					ShowUploadedPhotoFrame frame;
-					// Si es un perfil que puede borrar fotos, será MyProfile
-					if (deletable)
-						frame = new ShowMyUploadedPhotoFrame(userId, imageId);
-					// Si no, será OthersProfile
-					else
-						frame = new ShowOtherUploadedPhotoFrame(userId, imageId);
-				}
-			});
-		else
-			imageIcon.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					@SuppressWarnings("unused")
-					ShowUploadedAlbumFrame frame;
-					// Si es un perfil que puede borrar fotos, será MyProfile
-					if (deletable)
-						frame = new ShowMyUploadedAlbumFrame(userId, imageId);
-					// Si no, será OthersProfile
-					else
-						frame = new ShowOtherUploadedAlbumFrame(userId, imageId);
-				}
-			});
-
-		// Añadimos el menú contextual en caso de que sea una foto o álbum nuestro
-		if (deletable) {
-			JPopupMenu menuContextual = new JPopupMenu();
-			JMenuItem deleteMenuItem = new JMenuItem("Delete");
-			// Si es una foto
 			if (gallery == PHOTOS_GALLERY)
-				deleteMenuItem.addActionListener(new ActionListener() {
-	
+				imageIcon.addMouseListener(new MouseAdapter() {
 					@Override
-					public void actionPerformed(ActionEvent e) {
-						panel.removeAll();
-						controller.deletePhoto(imageId);
-						LoggedFrame.getInstance().updateProfile();
-	
+					public void mouseClicked(MouseEvent e) {
+						@SuppressWarnings("unused")
+						ShowUploadedPhotoFrame frame;
+						// Si es un perfil que puede borrar fotos, será MyProfile
+						if (deletable)
+							frame = new ShowMyUploadedPhotoFrame(userId, imageId);
+						// Si no, será OthersProfile
+						else
+							frame = new ShowOtherUploadedPhotoFrame(userId, imageId);
 					}
 				});
-			
-			// Si es un álbum
-			else {
-				deleteMenuItem.addActionListener(new ActionListener() {
-					
+			else
+				imageIcon.addMouseListener(new MouseAdapter() {
 					@Override
-					public void actionPerformed(ActionEvent e) {
-						panel.removeAll();
-						controller.deleteAlbum(imageId);
-						LoggedFrame.getInstance().updateProfile();
+					public void mouseClicked(MouseEvent e) {
+						@SuppressWarnings("unused")
+						ShowUploadedAlbumFrame frame;
+						// Si es un perfil que puede borrar fotos, será MyProfile
+						if (deletable)
+							frame = new ShowMyUploadedAlbumFrame(userId, imageId);
+						// Si no, será OthersProfile
+						else
+							frame = new ShowOtherUploadedAlbumFrame(userId, imageId);
 					}
 				});
+
+			// Añadimos el menú contextual en caso de que sea una foto o álbum nuestro
+			if (deletable) {
+				JPopupMenu menuContextual = new JPopupMenu();
+				JMenuItem deleteMenuItem = new JMenuItem("Delete");
+				// Si es una foto
+				if (gallery == PHOTOS_GALLERY)
+					deleteMenuItem.addActionListener(new ActionListener() {
+		
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							panel.removeAll();
+							controller.deletePhoto(imageId);
+							LoggedFrame.getInstance().updateProfile();
+		
+						}
+					});
+				
+				// Si es un álbum
+				else {
+					deleteMenuItem.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							panel.removeAll();
+							controller.deleteAlbum(imageId);
+							LoggedFrame.getInstance().updateProfile();
+						}
+					});
+				}
+
+				menuContextual.add(deleteMenuItem);
+				imageIcon.setComponentPopupMenu(menuContextual);
 			}
 
-			menuContextual.add(deleteMenuItem);
-			imageIcon.setComponentPopupMenu(menuContextual);
+			// Añadimos el label al panel
+			panel.add(imageIcon);
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-
-		// Añadimos el label al panel
-		panel.add(imageIcon);
+		
+		
 
 	}
 
@@ -337,16 +345,15 @@ public class AllPostsPane extends JPanel {
 			setPreferredSize(new Dimension(ViewConstants.LOGGEDFRAME_WINDOW_WIDTH, 70));
 			setLayout(null);
 
-			List<Image> images;
-
+			//List<Image> images = new LinkedList<>();
+			int size=0;
 			// Distinguimos foto de álbum
 			if (gallery == PHOTOS_GALLERY) {
-				images = photos;
+				size=photosId.size();
 			}
 
 			else {
-				List<Image> firstAlbumsPhoto = new ArrayList<>(albums.keySet());
-				images = firstAlbumsPhoto;
+				size=albumsId.size();
 			}
 
 			Image rightImage;
@@ -359,7 +366,7 @@ public class AllPostsPane extends JPanel {
 				rightIconLabel.setSize(100, 30);
 				rightIconLabel.setName("right");
 				rightIconLabel.setLocation(400, 10);
-				if (images.size() > MAX_IMAGES_PER_PAGE)
+				if (size > MAX_IMAGES_PER_PAGE)
 					add(rightIconLabel);
 
 				leftIconLabel = new JLabel(new ImageIcon(leftImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
@@ -382,7 +389,7 @@ public class AllPostsPane extends JPanel {
 	class ButtonListener extends MouseAdapter {
 
 		PageCounter actualPage;
-		List<Image> images;
+		List<Integer> images;
 		JPanel imagesPane;
 		int numPages;
 		JLabel rightIconLabel;
@@ -395,15 +402,14 @@ public class AllPostsPane extends JPanel {
 
 			// Distinguimos foto de álbum
 			if (gallery == PHOTOS_GALLERY) {
-				this.images = photos;
+				this.images = photosId;
 				this.actualPage = actualPhotosPage;
 				this.numPages = numPhotosPage;
 				this.imagesPane = imagesPaneForPhotos;
 			}
 
 			else {
-				List<Image> firstAlbumsPhoto = new ArrayList<>(albums.keySet());
-				this.images = firstAlbumsPhoto;
+				this.images = albumsId;
 				this.actualPage = actualAlbumsPage;
 				this.numPages = numAlbumsPage;
 				this.imagesPane = imagesPaneForAlbums;

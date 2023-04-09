@@ -25,7 +25,7 @@ public class PruebasPersistencia {
 	}
 
 	public static void main(String[] args) {
-		//deleteAllDatabase();System.exit(0);
+		deleteAllDatabase();//System.exit(0);
 		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password",
 				new Date(), ViewConstants.RUTA_FOTOS_USER+"animal.jpeg", "myBio");
 		/*
@@ -48,7 +48,7 @@ public class PruebasPersistencia {
 
 		Album a = PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje1.jpeg");
 
-		PhotoAppController.getInstance().addPhotoToAlbum("paisaje2", "astonishing",ViewConstants.RUTA_FOTOS_USER+"paisaje1.jpeg", a.getCode());
+		//PhotoAppController.getInstance().addPhotoToAlbum("paisaje2", "astonishing",ViewConstants.RUTA_FOTOS_USER+"paisaje3.jpeg", a.getCode());
 
 		//PhotoAppController.getInstance().deletePhoto(p.getCode());
 
@@ -63,7 +63,24 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().unLogin();
 		
 		PhotoAppController.getInstance().login("adri@gmail", "password");
-		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"itza.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		 PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje1.jpeg");
+		 PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje2.jpeg");
+		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje3.jpeg");
+		 PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje5.jpeg");
+		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje6.jpeg");
 		// PhotoAppController.getInstance().getFeed();
 		
 		LoggedFrame fr=new LoggedFrame();

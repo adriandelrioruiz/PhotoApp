@@ -107,31 +107,30 @@ public class ShowMyUploadedAlbumFrame extends ShowUploadedAlbumFrame {
 				int returnValue = fileChooser.showOpenDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					absolutePath = fileChooser.getSelectedFile().toString();
-					if (!UploadPhotoFrame.isValidImageFormat(absolutePath)) {
+					if (!UploadPhotoFrame.isValidImageFormat(absolutePath) || absolutePath.isEmpty()) {
 						JOptionPane.showMessageDialog(null, "Introduce una imagen válida", "Mensaje",
 								JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
+					// Añadimos la foto al álbum con el mismo título y descripción que el álbum
+					Codes exit = controller.addPhotoToAlbum(controller.getPostTitle(postId),
+							controller.getPostDescription(postId), absolutePath, postId);
 
+					// éxito
+					if (exit == Codes.OK) {
+						JButton btnAceptar = new JButton("Aceptar");
+						JOptionPane.showMessageDialog(btnAceptar, "La foto se ha añadido con éxito");
+						LoggedFrame.getInstance().updateProfile();
+						dispose();
+					}
+
+					if (exit == Codes.NUM_OF_PHOTOS_IN_ALBUM_EXCEEDED) {
+						JButton btnAceptar = new JButton("Aceptar");
+						JOptionPane.showMessageDialog(btnAceptar, "El álbum ha excedido el máximo de fotos");
+						dispose();
+					}
 				}
-				// Añadimos la foto al álbum con el mismo título y descripción que el álbum
-				Codes exit = controller.addPhotoToAlbum(controller.getPostTitle(postId),
-						controller.getPostDescription(postId), absolutePath, postId);
-
-				// éxito
-				if (exit == Codes.OK) {
-					JButton btnAceptar = new JButton("Aceptar");
-					JOptionPane.showMessageDialog(btnAceptar, "La foto se ha añadido con éxito");
-					LoggedFrame.getInstance().updateProfile();
-					dispose();
-				}
-
-				if (exit == Codes.NUM_OF_PHOTOS_IN_ALBUM_EXCEEDED) {
-					JButton btnAceptar = new JButton("Aceptar");
-					JOptionPane.showMessageDialog(btnAceptar, "El álbum ha excedido el máximo de fotos");
-					dispose();
-				}
-
+				
 			}
 		});
 		

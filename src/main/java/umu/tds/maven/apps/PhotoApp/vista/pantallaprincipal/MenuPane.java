@@ -15,6 +15,7 @@ import java.util.EventObject;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -131,7 +132,8 @@ public class MenuPane extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String query = txtSearch.getText();
 				System.out.println("query: " + query);
-				new SearchFrame(query,frame);
+				if(query.isEmpty()) JOptionPane.showMessageDialog(frame, "Introduce el texto a su búsqueda");
+				else new SearchFrame(query,frame);
 			}
 		});
 		userButton.addActionListener(new ActionListener() {

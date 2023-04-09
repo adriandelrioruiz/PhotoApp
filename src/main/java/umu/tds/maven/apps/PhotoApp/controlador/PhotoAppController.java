@@ -307,7 +307,6 @@ public class PhotoAppController {
 
 		// Actualizamos el álbum den albumAdapter
 		albumAdapter.updateAlbum(album, AlbumAdapterTDS.PHOTOS);
-
 		return Codes.OK;
 
 	}
@@ -340,7 +339,10 @@ public class PhotoAppController {
 
 			// añadir la foto en la persistencia del usuario
 			userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
-
+			Notification notification = new Notification(now, photo,true);//no es un album
+			photo.setNotification(notification);
+			// Habrá que mandar una notificación a todos los seguidores
+			user.getFollowers().stream().forEach((u) -> notify(u, notification));
 			System.out.println("El usuario " + user.getUserName() + " ha añadido el album " + title);
 		}
 
@@ -367,6 +369,7 @@ public class PhotoAppController {
 			if (album.getPhotos().size() == 0) {
 				albumAdapter.deleteAlbum(album.getCode());
 				user.removeAlbum(album.getCode());
+				userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
 			}
 
 			// Si el álbum tenía más de una foto, borramos la foto y actualizamos el álbum
