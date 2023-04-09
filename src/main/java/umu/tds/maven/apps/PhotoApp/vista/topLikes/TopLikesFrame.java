@@ -47,7 +47,7 @@ public class TopLikesFrame extends JFrame {
 		topListPane.setLayout(new BoxLayout(topListPane, BoxLayout.Y_AXIS));
 
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		setTitle("TopLikes");
+		setTitle("Tus 10 post con más likes");
 		setLocationRelativeTo(null);
 		setResizable(false);
 

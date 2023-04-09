@@ -7,16 +7,27 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
+import java.awt.Cursor;
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.notificacion.NotificationPane;
+
 import javax.swing.border.LineBorder;
+
 
 /** Clase JFrame usada para mostrar un post */
 
@@ -61,7 +72,8 @@ public abstract class ShowPostFrame extends JFrame {
 
 	// JTextArea para la descripción/comentario
 	protected JTextArea commentTxtArea;
-
+	//Label para comentarios
+	protected JLabel verComentarios;
 	// Constructor de la clase
 	public ShowPostFrame(int userId) {
 
@@ -119,9 +131,20 @@ public abstract class ShowPostFrame extends JFrame {
 		commentTxtArea.setFocusable(false);
 		commentTxtArea.setBorder(null);
 		commentTxtArea.setForeground(Color.GRAY);
+		commentTxtArea.setLineWrap(true);
+		commentTxtArea.setWrapStyleWord(true);
 		commentTxtArea.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
 		eastPane.add(commentTxtArea);
-
+		verComentarios=new JLabel("Ver Comentarios");
+		verComentarios.setSize(150, 50);
+		verComentarios.setLocation(10, 200);
+		verComentarios.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		verComentarios.setForeground(Color.BLACK);
+		verComentarios.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 14));
+		verComentarios.setHorizontalAlignment(SwingConstants.CENTER);
+		verComentarios.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		eastPane.add(verComentarios);
+		//AÑADIR MOUSELISTENERS
 	}
 
 	// Método para crear el panel sur
@@ -143,7 +166,7 @@ public abstract class ShowPostFrame extends JFrame {
 
 	// Método para crear los listeners
 	protected void addListeners() {
-
+		
 		// Añadimos al botón de salir el listener para que cierre la ventana
 		salirButton.addActionListener(new ActionListener() {
 
@@ -154,6 +177,18 @@ public abstract class ShowPostFrame extends JFrame {
 			}
 		});
 
+	}
+	protected class ShowCommentsHandler extends MouseAdapter {
+		private int postId;
+
+		public  ShowCommentsHandler(int id) {
+			this.postId=id;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			new CommentFrame(postId);
+		}
 	}
 
 }

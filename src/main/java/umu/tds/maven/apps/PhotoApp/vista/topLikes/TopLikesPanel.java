@@ -19,6 +19,10 @@ import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 
 public class TopLikesPanel extends JPanel{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Photo photo;
 	private JLabel west,east;
 	private static final int PANEL_WIDTH=288;

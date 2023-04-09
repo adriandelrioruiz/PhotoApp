@@ -468,7 +468,16 @@ public class PhotoAppController {
 		return true;
 
 	}
-
+	// Método para sacar lista de comentarios
+	public LinkedList<Comment> getComments(int PostId) {
+		LinkedList<Comment> comentarios=new LinkedList<Comment>();
+		// Recuperamos el objeto Photo
+		Photo photo = (Photo) postRepository.getPost(PostId);
+		// Modificamos nuestro objeto photo
+		comentarios=(LinkedList<Comment>) photo.getComments();
+		return comentarios;
+	}
+	
 	// Método para hacer una búsqueda. Devuelve una lista de objetos de dominio
 	public List<DomainObject> search(String search) {
 		List<DomainObject> objetos = new LinkedList<>();

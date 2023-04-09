@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
 import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetDefaultTextListener;
 import umu.tds.maven.apps.PhotoApp.vista.eventoscomunes.SetEmptyTextListener;
+import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowPostFrame.ShowCommentsHandler;
 import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 /** Clase para mostrar una ventana con un post que ya está subido */
@@ -85,12 +86,14 @@ public abstract class ShowUploadedPostFrame extends ShowPostFrame {
 
 			e.printStackTrace();
 		}
+		
 	}
 
 	@Override
 	protected void addListeners() {
 		super.addListeners();
-
+		verComentarios.addMouseListener(new ShowCommentsHandler(this.postId));
+		
 		commentTxtArea.addMouseListener(new SetEmptyTextListener(DEFAULT_COMMENT_TEXT, commentTxtArea));
 		commentTxtArea.addFocusListener(new SetDefaultTextListener(DEFAULT_COMMENT_TEXT, commentTxtArea));
 

@@ -27,7 +27,7 @@ public class PruebasPersistencia {
 	public static void main(String[] args) {
 		//deleteAllDatabase();System.exit(0);
 		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password",
-				new Date(), ViewConstants.RUTA_FOTOS_USER+"\\animal.jpeg", "myBio");
+				new Date(), ViewConstants.RUTA_FOTOS_USER+"animal.jpeg", "myBio");
 		/*
 		 * PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan@gmail",
 		 * "juanhdz", "password", new Date(), "PhotoJuan", "BioJuan");
@@ -35,7 +35,7 @@ public class PruebasPersistencia {
 		 * "juan2@gmail", "juanhdz2", "password", new Date(), "PhotoJuan", "BioJuan");
 		 */
 		PhotoAppController.getInstance().registerUser("Juan Hernandez", "juan3@gmail", "juanhdz3", "password",
-				new Date(), ViewConstants.RUTA_FOTOS_USER+"\\animal2.jpeg", "BioJuan");
+				new Date(), ViewConstants.RUTA_FOTOS_USER+"animal2.jpeg", "BioJuan");
 		PhotoAppController.getInstance().login("adri@gmail", "password");
 		PhotoAppController.getInstance().follow("juanhdz3");
 		PhotoAppController.getInstance().unFollow("juanhdz3");

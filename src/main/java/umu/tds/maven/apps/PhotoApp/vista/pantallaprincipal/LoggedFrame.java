@@ -98,6 +98,7 @@ public class LoggedFrame extends JFrame {
 	public void changeToFeedPanel() {
 		CardLayout cl = (CardLayout) centerPane.getLayout();
 		cl.show(centerPane, "feed");
+		menuPane.changeToDefault();
 		revalidate();
 		repaint();
 	}
@@ -105,6 +106,7 @@ public class LoggedFrame extends JFrame {
 	public void changeToProfilePanel() {
 		myProfilePane = new MyProfilePane(controller.getId());
 		CardLayout cl = (CardLayout) centerPane.getLayout();
+		menuPane.changeToMyProfile();
 		cl.show(centerPane, "profile");
 		revalidate();
 		repaint();
@@ -125,7 +127,7 @@ public class LoggedFrame extends JFrame {
 	public void changeToOtherProfile(int userId) {
 		otherProfilePane = new OthersProfilePane(userId, controller.getId());
 		centerPane.add(otherProfilePane, "otherprofile");
-
+		menuPane.changeToDefault();
 		CardLayout cl = (CardLayout) centerPane.getLayout();
 		cl.show(centerPane, "otherprofile");
 		revalidate();

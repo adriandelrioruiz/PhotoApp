@@ -30,7 +30,7 @@ import umu.tds.maven.apps.PhotoApp.vista.search.SearchFrame;
 public class MenuPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static final int TITULO_WIDTH = 250;
+	private static final int TITULO_WIDTH = 200;
 	private static final int BUTTON_WIDTH = 30;
 	private static final int BUTTON_HEIGHT = 30;
 	private static final int USER_PHOTO_HEIGHT = 50;
@@ -40,7 +40,7 @@ public class MenuPane extends JPanel {
 	private static final int SEARCH_WIDTH = 100;
 
 	private JTextField txtSearch;
-	private JButton uploadButton, lupaButton, userButton, premiumButton, titulo,notiButton;
+	private JButton uploadButton, lupaButton, userButton, premiumButton, titulo,notiButton,uploadAlbum;
 	private LoggedFrame frame;
 
 	private PhotoAppController controller;
@@ -61,7 +61,11 @@ public class MenuPane extends JPanel {
 		titulo = new JButton("PhotoTDS");
 		titulo.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 22));
 		this.setButton(titulo, 0, TITULO_WIDTH, MENU_HEIGHT);
-
+		// Botón para subir ALBUM
+		uploadAlbum = new JButton(
+				this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + "subirAlbum_icon.png"));
+		this.setButton(uploadAlbum, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH / 2 - 140, BUTTON_WIDTH, BUTTON_HEIGHT);
+		uploadAlbum.setVisible(false);
 		// Botón para subir foto
 		uploadButton = new JButton(
 				this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + "iconUploadPhoto.png"));
@@ -109,12 +113,18 @@ public class MenuPane extends JPanel {
 		premiumButton = new JButton(
 				this.getIcon(BUTTON_WIDTH, BUTTON_HEIGHT, ViewConstants.RUTA_FOTOS + "icon_tres_lineas.png"));
 		setButton(premiumButton, ViewConstants.LOGGEDFRAME_WINDOW_WIDTH - 50, BUTTON_WIDTH, BUTTON_HEIGHT);
-
-		uploadButton.addActionListener(new ActionListener() {
+		uploadAlbum.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Mostrar una ventana de diálogo para SUBIR FOTO
 				@SuppressWarnings("unused")
 				UploadPhotoFrame cargar = new UploadPhotoFrame(UploadPhotoFrame.ADD_ALBUM);
+			}
+		});
+		uploadButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Mostrar una ventana de diálogo para SUBIR FOTO
+				@SuppressWarnings("unused")
+				UploadPhotoFrame cargar = new UploadPhotoFrame(UploadPhotoFrame.ADD_PHOTO);
 			}
 		});
 		lupaButton.addActionListener(new ActionListener() {
@@ -188,25 +198,11 @@ public class MenuPane extends JPanel {
 		return new ImageIcon(image);
 	}
 
-	/*
-	 * private void setComponent(JComponent component, int x, int y, int width, int
-	 * height) { component.setAlignmentX(x); LoggedFrame.fixSize(component,
-	 * TITULO_WIDTH, MENU_HEIGHT); this.add(component); }
-	 * 
-	 * private void mostrarMenu(ActionEvent e) { // PopupMenu menu = new
-	 * PopupMenu(); JPopupMenu menu = new JPopupMenu(); JMenuItem cut = new
-	 * JMenuItem("Cut"); JMenuItem copy = new JMenuItem("Copy"); JMenuItem paste =
-	 * new JMenuItem("Paste");
-	 * 
-	 * // menu.add(open); menu.add(cut); menu.add(copy); menu.add(paste); //
-	 * menu.show(e.getComponent(), e.getX(), e.getY()); }
-	 */
-
+	
 	private void setButton(JButton boton, int x, int width, int height) {
 		this.add(boton);
 		boton.setBounds(x, 150, width, height);
 		boton.setAlignmentX(x);
-		// LoggedFrame.fixSize(boton,width,height);
 		boton.setBackground(null);
 		boton.setBorderPainted(false);
 		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -216,5 +212,10 @@ public class MenuPane extends JPanel {
 		revalidate();
 		repaint();
 	}
-
+	public void changeToMyProfile() {
+		uploadAlbum.setVisible(true);
+	}
+	public void changeToDefault() {
+		uploadAlbum.setVisible(false);
+	}
 }
