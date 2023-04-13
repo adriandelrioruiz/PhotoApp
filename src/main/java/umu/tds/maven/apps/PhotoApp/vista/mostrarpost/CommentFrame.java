@@ -1,7 +1,5 @@
 package umu.tds.maven.apps.PhotoApp.vista.mostrarpost;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -12,9 +10,8 @@ import javax.swing.JScrollPane;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.modelo.Comment;
-import umu.tds.maven.apps.PhotoApp.modelo.Photo;
-import umu.tds.maven.apps.PhotoApp.vista.topLikes.TopLikesPanel;
 
+@SuppressWarnings("serial")
 public class CommentFrame extends JFrame{
 	// Ancho y alto del frame
 		private static final int FRAME_WIDTH = 320;

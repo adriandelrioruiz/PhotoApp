@@ -1,12 +1,10 @@
 package umu.tds.maven.apps.PhotoApp.controlador;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EventObject;
 import java.util.HashSet;
@@ -14,19 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
-
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 import fotos.ComponenteCargadorFotos;
 import fotos.Foto;
@@ -599,14 +584,25 @@ public class PhotoAppController {
 
 	// Obtener lista de fotos de un usuario, incluyendo las que incluyen los álbumes
 	public List<Integer> getPhotos(int id) {
-		List<Integer> photos = new ArrayList<>();
 		User user = userRepository.getUser(id);
-		photos.addAll(user.getPhotos().stream().map((p) -> p.getCode()).toList());
-		List<Album> albums = user.getAlbums();
-		for (Album a : albums) {
-			photos.addAll(a.getPhotos().stream().map((p) -> p.getCode()).toList());
+		List<Photo> photos = new ArrayList<>();
+		
+		// Meto todas las fotos sueltas
+		photos.addAll(user.getPhotos());
+		// Meto todas las fotos de todos los álbumes
+		for (Album a : user.getAlbums()) {
+			photos.addAll(a.getPhotos());
 		}
-		return photos;
+		
+		// Ordeno las fotos por fecha
+		Collections.sort(photos);
+		
+		List<Integer> photosId = new ArrayList<>();
+		
+		// Cojo los id
+		photosId.addAll(photos.stream().map((p) -> p.getCode()).toList());
+		
+		return photosId;
 	}
 
 	// Ver si un usuario es premium
@@ -656,7 +652,11 @@ public class PhotoAppController {
 
 	// Obtener la lista de albumes de un usuario
 	public List<Integer> getAlbums(int id) {
-		return userRepository.getUser(id).getAlbums().stream().map((p) -> p.getCode()).toList();
+		List<Album> albums = new ArrayList<>(); 
+		albums.addAll(userRepository.getUser(id).getAlbums());
+		// Ordenamos por fecha descendente
+		Collections.sort(albums);
+		return albums.stream().map((p) -> p.getCode()).toList();
 	}
 	
 	// Obtener la lista de notificaciones de un usuario

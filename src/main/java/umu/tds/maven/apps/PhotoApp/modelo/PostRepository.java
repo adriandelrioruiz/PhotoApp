@@ -145,9 +145,9 @@ public class PostRepository {
 		// Obtenemos todas las fotos de los seguidos por el usuario ordenados por fecha
 		// en orden ascendente
 		List<Photo> photosOfFollowed = photosById.values().stream().filter((p) -> followed.contains(p.getUser()))
-				.sorted().toList();
+				.toList();
 		List<Album> albumOfFollowed = albumsById.values().stream().filter((p) -> followed.contains(p.getUser()))
-				.sorted().toList();
+				.toList();
 		
 		
 		List<Photo> feed= new LinkedList<>();
@@ -155,14 +155,15 @@ public class PostRepository {
 			feed.add(p);
 		for (Album a : albumOfFollowed)
 			feed.addAll(a.getPhotos());
-
+		
+		// Ordenamos en orden descendente
+		Collections.sort(feed);
+		
 		// Nos quedamos con los últimos 10, o en caso de que haya menos de 10, con todos
 		// ellos
 		if (feed.size() <= POSTS_IN_FEED)
 			return feed;
 		
-		// Vamos añadiendo los posts
-		Collections.sort(feed, new PostDateComparator());
 		List<Photo> ultimos10Posts = feed.subList(Math.max(feed.size() - 10, 0), feed.size());
 		
 		return ultimos10Posts;
@@ -194,11 +195,6 @@ public class PostRepository {
 
 		return validPosts;
 	}
-	 class PostDateComparator implements Comparator<Post> {
-		    @Override
-		    public int compare(Post post1, Post post2) {
-		        return post1.getDate().compareTo(post2.getDate());
-		    }
-		}
+	
 }
 

@@ -7,26 +7,16 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-
-import java.awt.Cursor;
-import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
-import umu.tds.maven.apps.PhotoApp.vista.notificacion.NotificationPane;
-
-import javax.swing.border.LineBorder;
 
 
 /** Clase JFrame usada para mostrar un post */
@@ -72,8 +62,7 @@ public abstract class ShowPostFrame extends JFrame {
 
 	// JTextArea para la descripción/comentario
 	protected JTextArea commentTxtArea;
-	//Label para comentarios
-	protected JLabel verComentarios;
+	
 	// Constructor de la clase
 	public ShowPostFrame(int userId) {
 

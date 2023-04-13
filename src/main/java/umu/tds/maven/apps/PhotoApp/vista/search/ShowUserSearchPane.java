@@ -68,15 +68,13 @@ public class ShowUserSearchPane extends ShowSearchPane {
 		}
 	}
 	protected void addListeners() {
-		this.addMouseListener(new ShowProfileHandler(this.userId,this.frame));
+		this.addMouseListener(new ShowProfileHandler(this.frame));
 		
 	}
 	protected class ShowProfileHandler extends MouseAdapter {
-		private int id;
 		private SearchFrame frame;
 
-		public  ShowProfileHandler(int id,SearchFrame frame) {
-			this.id=id;
+		public  ShowProfileHandler(SearchFrame frame) {
 			this.frame=frame;
 		}
 

@@ -7,7 +7,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,10 +14,8 @@ import javax.swing.border.Border;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.modelo.Notification;
-import umu.tds.maven.apps.PhotoApp.modelo.User;
-import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
-import umu.tds.maven.apps.PhotoApp.vista.search.ShowUserSearchPane;
 
+@SuppressWarnings("serial")
 public class NotificationFrame extends JFrame{
 
 	private static final int FRAME_WIDTH = 320;

@@ -19,12 +19,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
-import umu.tds.maven.apps.PhotoApp.modelo.Album;
 import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
-import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedAlbumFrame;
 import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowOtherUploadedPhotoFrame;
-import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 public class PostPane extends JPanel {
 	/**

@@ -35,7 +35,6 @@ public class UploadPhotoFrame extends JFrame {
 	private static final String ALBUM_DESCRIPTION_TEXT = "<h1>Agregar Album</h1><p>An&iacute;mate a compartir un álbum con tus amigos. <br> "
 			+ "Escoge la foto que será la portada de tu álbum. Puedes arrastrar el fichero aqu&iacute;. <br>"
 			+ "Podrás añadir más fotos al álbum desde tu perfil" + ". </p>";
-	private static final String ADD_PHOTO_TO_ALBUM_TEXT = "";
 
 	private JFileChooser fileChooser;
 

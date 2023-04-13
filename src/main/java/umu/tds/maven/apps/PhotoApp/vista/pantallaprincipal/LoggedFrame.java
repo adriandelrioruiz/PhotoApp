@@ -122,6 +122,15 @@ public class LoggedFrame extends JFrame {
 		revalidate();
 		repaint();
 	}
+	
+	// Para que se actualice la vista de la feed en caso de que se sigan/dejen de seguir usuarios
+	public void updateFeed() {
+		centerPane.remove(feedPane);
+		feedPane = new FeedPane(controller.getFeed(), this);
+		centerPane.add(feedPane, "feed");
+		revalidate();
+		repaint();
+	}
 
 
 	public void changeToOtherProfile(int userId) {

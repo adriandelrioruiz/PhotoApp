@@ -12,6 +12,7 @@ import javax.swing.JButton;
 
 import umu.tds.maven.apps.PhotoApp.modelo.User;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.pantallaprincipal.LoggedFrame;
 
 @SuppressWarnings("serial")
 public class OthersProfilePane extends ProfilePane {
@@ -82,6 +83,9 @@ public class OthersProfilePane extends ProfilePane {
 						btnFollow.setForeground(Color.black);
 						// Aumentamos el número de seguidores en la vista
 						lblNFollowers.setText(String.valueOf(Integer.valueOf(lblNFollowers.getText()) + 1));
+						
+						// Actualizamos la feed
+						LoggedFrame.getInstance().updateFeed();
 					}
 				}
 
@@ -94,6 +98,9 @@ public class OthersProfilePane extends ProfilePane {
 						btnFollow.setForeground(Color.white);
 						// Disminuimos el número de seguidores en la vista
 						lblNFollowers.setText(String.valueOf(Integer.valueOf(lblNFollowers.getText()) - 1));
+						
+						// Actualizamos la feed
+						LoggedFrame.getInstance().updateFeed();
 					}
 
 				}

@@ -96,7 +96,7 @@ public abstract class Post extends DomainObject implements Comparable<Post> {
 
 	@Override
 	public int compareTo(Post o) {
-		return this.date.compareTo(o.date);
+		return -this.date.compareTo(o.date);
 	}
 
 	// Para dar like y quitar like a un post

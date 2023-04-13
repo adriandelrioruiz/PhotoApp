@@ -1,11 +1,8 @@
 package umu.tds.maven.apps.PhotoApp.pruebas;
 
 import java.util.Date;
-import java.util.List;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
-import umu.tds.maven.apps.PhotoApp.modelo.Album;
-import umu.tds.maven.apps.PhotoApp.modelo.Photo;
 import umu.tds.maven.apps.PhotoApp.persistencia.AlbumAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.CommentAdapterTDS;
 import umu.tds.maven.apps.PhotoApp.persistencia.NotificationAdapterTDS;
@@ -25,7 +22,7 @@ public class PruebasPersistencia {
 	}
 
 	public static void main(String[] args) {
-		deleteAllDatabase();//System.exit(0);
+		deleteAllDatabase();System.exit(0);
 		PhotoAppController.getInstance().registerUser("Adrian del Rio", "adri@gmail", "adriandelrio", "password",
 				new Date(), ViewConstants.RUTA_FOTOS_USER+"animal.jpeg", "myBio");
 		/*
@@ -44,10 +41,7 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().login("juan3@gmail", "password");
 		// PhotoAppController.getInstance().generateExcel("C:\\Users\\adria\\OneDrive\\Escritorio");
 
-		Photo p = PhotoAppController.getInstance().addPhoto("paisaje", "HOLA SOY UNa fto", ViewConstants.RUTA_FOTOS_USER+"itza.jpeg");
-
-		Album a = PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje1.jpeg");
-
+		
 		//PhotoAppController.getInstance().addPhotoToAlbum("paisaje2", "astonishing",ViewConstants.RUTA_FOTOS_USER+"paisaje3.jpeg", a.getCode());
 
 		//PhotoAppController.getInstance().deletePhoto(p.getCode());

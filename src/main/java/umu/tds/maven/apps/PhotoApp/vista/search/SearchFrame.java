@@ -1,10 +1,8 @@
 package umu.tds.maven.apps.PhotoApp.vista.search;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.List;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;

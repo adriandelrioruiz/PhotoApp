@@ -2,8 +2,6 @@ package umu.tds.maven.apps.PhotoApp.pruebas;
 
 import javax.swing.JFrame;
 
-import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowMyUploadedAlbumFrame;
-
 @SuppressWarnings("serial")
 public class PruebaVista extends JFrame {
 
@@ -26,7 +24,7 @@ public class PruebaVista extends JFrame {
 		 * lf.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		 */
 		
-		ShowMyUploadedAlbumFrame showPhoto = new ShowMyUploadedAlbumFrame(8481, 8533);
+		
 	}
 
 }

@@ -15,29 +15,28 @@ import javax.swing.border.Border;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
-import umu.tds.maven.apps.PhotoApp.vista.search.ShowUserSearchPane.ShowProfileHandler;
 
-public class ShowPostSearchPane extends ShowSearchPane{
+public class ShowPostSearchPane extends ShowSearchPane {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private int postId;
 	private JLabel likesPost;
-	
 
-	public ShowPostSearchPane(int postId,SearchFrame frame) {
+	public ShowPostSearchPane(int postId, SearchFrame frame) {
 		super(frame);
 		this.postId = postId;
 		initialize();
 	}
+
 	@Override
 	protected void createEastPane() {
 		super.createEastPane();
-		//mostrar likes,nombre de user,
+		// mostrar likes,nombre de user,
 		userNameLabel.setText(PhotoAppController.getInstance().getOwnerOfPhoto(postId));
 		int likes = PhotoAppController.getInstance().getLikes(postId);
-		//String user=PhotoAppController.getInstance().getOwnerOfPhoto(postId);
+		// String user=PhotoAppController.getInstance().getOwnerOfPhoto(postId);
 		likesPost = new JLabel(likes + " likes");
 		likesPost.setAlignmentX(CENTER_ALIGNMENT);
 		likesPost.setFont(new Font(ViewConstants.APP_FONT, Font.PLAIN, 10));
@@ -55,7 +54,7 @@ public class ShowPostSearchPane extends ShowSearchPane{
 			String path = PhotoAppController.getInstance().getPath(postId);
 			Image image = ImageIO.read(new File(path));
 			ImageIcon icon = new ImageIcon(
-			image.getScaledInstance((int) this.image.getWidth() - 20, (int) this.image.getHeight() - 60, 0));
+					image.getScaledInstance((int) this.image.getWidth() - 20, (int) this.image.getHeight() - 60, 0));
 			// Lo añadimos al panel oeste
 			this.image.setIcon(icon);
 		}
@@ -64,23 +63,23 @@ public class ShowPostSearchPane extends ShowSearchPane{
 			e.printStackTrace();
 		}
 	}
+
 	protected void addListeners() {
-		this.addMouseListener(new ShowPostHandler(this.postId,this.frame));
-		
+		this.addMouseListener(new ShowPostHandler(frame));
+
 	}
+
 	protected class ShowPostHandler extends MouseAdapter {
-		private int postid;
 		private SearchFrame frame;
 
-		public  ShowPostHandler(int id,SearchFrame frame) {
-			this.postid=id;
-			this.frame=frame;
+		public ShowPostHandler(SearchFrame frame) {
+			this.frame = frame;
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// Mostramos el perfil
-			this.frame.showOtherPost(postId);
+			frame.showOtherPost(postId);
 		}
 
 	}

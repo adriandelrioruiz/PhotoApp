@@ -13,9 +13,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -93,47 +90,7 @@ public class AllPostsPane extends JPanel {
 
 		this.photosId = controller.getPhotos(userId);
 		this.albumsId = controller.getAlbums(userId);
-
 		this.userId = userId;
-
-		// Creamos la lista de fotos
-		/*photosId.stream().forEach((p) -> {
-			try {
-				this.photos.add(ImageIO.read(new File(controller.getPath(p))));
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
-		});*/
-
-		// Creamos la lista de álbumes
-		for (int albumId : albumsId) {
-			// Tomamos la lista de fotos a partir del id del album
-			List<Integer> albumPhotos = controller.getPhotosOfAlbum(albumId);
-
-			// Tomamos la clave como la primera foto del album
-			/*Image key = null;
-			try {
-				key = ImageIO.read(new File(controller.getPath(albumId)));
-			} catch (IOException e1) {
-
-				e1.printStackTrace();
-			}
-			// Creamos una lista con todas las fotos del álbum
-			List<Image> photosInAlbum = new ArrayList<>();
-			albumPhotos.stream().forEach((p) -> {
-				try {
-					photosInAlbum.add(ImageIO.read(new File(controller.getPath(p))));
-				} catch (IOException e) {
-					
-					e.printStackTrace();
-				}
-			});
-
-			// Añadimos la entrada al mapa
-			this.albums.put(key, photosInAlbum);*/
-		}
-
 		this.deletable = deletable;
 
 		// Calculamos el número de páginas
