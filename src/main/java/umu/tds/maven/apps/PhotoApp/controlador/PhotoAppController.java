@@ -563,6 +563,7 @@ public class PhotoAppController {
 
 	public List<Photo> getTopPhotosByLikes() {
 		return user.getPhotos().stream().sorted(new PhotoComparatorByLikes()).limit(NUMBER_OF_TOP_PHOTOS).toList();
+		//
 	}
 
 	
