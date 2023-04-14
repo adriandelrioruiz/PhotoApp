@@ -766,5 +766,4 @@ public class PhotoAppController {
 		
 		cargador.setArchivoFotos(path);
 	}
-
 }
