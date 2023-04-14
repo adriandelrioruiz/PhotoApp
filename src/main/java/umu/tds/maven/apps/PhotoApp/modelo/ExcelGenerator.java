@@ -41,7 +41,7 @@ public class ExcelGenerator {
 
 		FileOutputStream out;
 		try {
-			out = new FileOutputStream(path + "lista-seguidores.xlsx");
+			out = new FileOutputStream(path + "\\lista-seguidores.xlsx");
 			workbook.write(out);
 			out.close();
 			workbook.close();
