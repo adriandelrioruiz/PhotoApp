@@ -5,6 +5,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.EventObject;
 import java.util.HashSet;
@@ -547,9 +548,17 @@ public class PhotoAppController {
 	}
 
 	public List<Photo> getTopPhotosByLikes() {
-		return user.getPhotos().stream().sorted(new PhotoComparatorByLikes()).limit(NUMBER_OF_TOP_PHOTOS).toList();
+		List<Photo> photos = new ArrayList<>();
+		
+		// Meto todas las fotos sueltas
+		photos.addAll(user.getPhotos());
+		// Meto todas las fotos de todos los álbumes
+		for (Album a : user.getAlbums()) {
+			photos.addAll(a.getPhotos());
+		}
+		 Comparator<Photo> comparador = Comparator.comparing(Photo::getLikes).reversed();
+		return photos.stream().sorted(comparador).limit(NUMBER_OF_TOP_PHOTOS).toList();
 	}
-
 	
 	public boolean generatePDF(String path){
 		PdfGenerator generator = new PdfGenerator(user);
