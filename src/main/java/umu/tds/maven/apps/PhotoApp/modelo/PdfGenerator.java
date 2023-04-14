@@ -22,7 +22,7 @@ public class PdfGenerator {
 
 		try {
 			Document document = new Document();
-			PdfWriter.getInstance(document, new FileOutputStream(path + "\\seguidores.pdf"));
+			PdfWriter.getInstance(document, new FileOutputStream(path + "lista-seguidores.pdf"));
 			document.open();
 			PdfPTable table = new PdfPTable(3); // 3 columnas
 			PdfPCell cell1 = new PdfPCell(new Phrase("Nombre"));// nombre usuario

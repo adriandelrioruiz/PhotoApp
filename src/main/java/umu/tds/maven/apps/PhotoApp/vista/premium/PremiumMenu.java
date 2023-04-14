@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPopupMenu;
 
 import umu.tds.maven.apps.PhotoApp.controlador.PhotoAppController;
@@ -48,13 +49,14 @@ public class PremiumMenu extends JPopupMenu{
 		pdf.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PhotoAppController.getInstance().generatePDF("C:\\Users\\elcrio\\Desktop");
+				PhotoAppController.getInstance().generatePDF("C:\\Users\\elcrio\\Desktop\\TDS");
 			}
+			
         });
 		excel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PhotoAppController.getInstance().generateExcel("C:\\Users\\elcrio\\Desktop");
+				PhotoAppController.getInstance().generateExcel("C:\\Users\\elcrio\\Desktop\\TDS");
 			}
         });
 		topLikes.addActionListener(new ActionListener() {
@@ -66,6 +68,7 @@ public class PremiumMenu extends JPopupMenu{
 			
         });
 	}
+
 	public void topLikes() {
 		new TopLikesFrame();
 	}
