@@ -55,6 +55,7 @@ public abstract class ShowUploadedPostFrame extends ShowPostFrame {
 	protected void initialize() {
 
 		super.initialize();
+		
 	}
 
 	@Override
@@ -102,7 +103,7 @@ public abstract class ShowUploadedPostFrame extends ShowPostFrame {
 	@Override
 	protected void addListeners() {
 		super.addListeners();
-		verComentarios.addMouseListener(new ShowCommentsHandler(this.postId));
+		
 		//this.salirButton.addActionListener(null);
 		commentTxtArea.addMouseListener(new SetEmptyTextListener(DEFAULT_COMMENT_TEXT, commentTxtArea));
 		commentTxtArea.addFocusListener(new SetDefaultTextListener(DEFAULT_COMMENT_TEXT, commentTxtArea));

@@ -280,7 +280,7 @@ public class PhotoAppController {
 		// Actualizamos foto y album en usuario en la persistencia
 		userAdapter.updateUser(user, UserAdapterTDS.ALBUMS);
 
-		// Si el álbum del usuario no contenía es foto, la añadimos
+		// Si el álbum del usuario no contenía esta foto, la añadimos
 		user.addPhotoToAlbum(photo, albumId);
 
 		// Miramos si se ha excedido el número de fotos, en cuyo caso el repositorio

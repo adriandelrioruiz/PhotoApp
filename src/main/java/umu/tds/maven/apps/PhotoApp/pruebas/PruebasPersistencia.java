@@ -53,19 +53,31 @@ public class PruebasPersistencia {
 		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
 		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
 		PhotoAppController.getInstance().addPhoto("paisaje9", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
-		 PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje1.jpeg");
-		 PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje2.jpeg");
+		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje1.jpeg");
+		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje2.jpeg");
 		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje3.jpeg");
-		 PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje5.jpeg");
+		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje5.jpeg");
 		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje6.jpeg");
 		
 		
 		PhotoAppController.getInstance().unLogin();
 		PhotoAppController.getInstance().login("juan3@gmail", "password");//se logea juan
-		// PhotoAppController.getInstance().generateExcel("C:\\Users\\adria\\OneDrive\\Escritorio");
-
+		PhotoAppController.getInstance().generateExcel("C:\\Users\\adria\\OneDrive\\Escritorio");
+		PhotoAppController.getInstance().addPhoto("paisaje2", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje3", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje4", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje1", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje2", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje8", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addPhoto("paisaje7", "foto", ViewConstants.RUTA_FOTOS_USER+"paisaje9.jpeg");
+		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje1.jpeg");
+		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje2.jpeg");
+		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje3.jpeg");
+		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje5.jpeg");
+		PhotoAppController.getInstance().addAlbum("ALBUM", "HOLA SOY UN ALBUM", ViewConstants.RUTA_FOTOS_USER+"paisaje6.jpeg");
 		
-		//PhotoAppController.getInstance().addPhotoToAlbum("paisaje2", "astonishing",ViewConstants.RUTA_FOTOS_USER+"paisaje3.jpeg", a.getCode());
+		
+		PhotoAppController.getInstance().addPhoto("paisaje2", "astonishing",ViewConstants.RUTA_FOTOS_USER+"paisaje3.jpeg");
 
 		//PhotoAppController.getInstance().deletePhoto(p.getCode());
 

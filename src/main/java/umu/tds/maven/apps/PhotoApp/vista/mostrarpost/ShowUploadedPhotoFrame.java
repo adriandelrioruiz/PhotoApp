@@ -3,6 +3,8 @@ package umu.tds.maven.apps.PhotoApp.vista.mostrarpost;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -27,9 +29,8 @@ public abstract class ShowUploadedPhotoFrame extends ShowUploadedPostFrame {
 
 	public ShowUploadedPhotoFrame(int userId, int photoId) {
 		super(userId, photoId);
-
 		initialize();
-
+		verComentarios.addMouseListener(new ShowCommentsHandler(photoId));
 	}
 
 	@Override
@@ -72,6 +73,18 @@ public abstract class ShowUploadedPhotoFrame extends ShowUploadedPostFrame {
 			JButton btnAceptar = new JButton("Aceptar");
 			JOptionPane.showMessageDialog(btnAceptar, "El comentario se ha registrado con éxito");
 			commentTxtArea.setText(DEFAULT_COMMENT_TEXT);
+		}
+	}
+	protected class ShowCommentsHandler extends MouseAdapter {
+		private int postId;
+
+		public  ShowCommentsHandler(int id) {
+			this.postId=id;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			new CommentFrame(postId);
 		}
 	}
 

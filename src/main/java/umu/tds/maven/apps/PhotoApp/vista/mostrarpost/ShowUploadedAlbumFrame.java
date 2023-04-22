@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -167,7 +169,7 @@ public abstract class ShowUploadedAlbumFrame extends ShowUploadedPostFrame {
 	@Override
 	protected void addListeners() {
 		super.addListeners();
-
+		verComentarios.addMouseListener(new ShowCommentsAlbumHandler());
 		// Añadimos los listeners de los botones para pasar de página
 		goRightButton.addActionListener(new ChangePhotoButtonListener(goRightButton));
 		goLeftButton.addActionListener(new ChangePhotoButtonListener(goLeftButton));
@@ -224,5 +226,16 @@ public abstract class ShowUploadedAlbumFrame extends ShowUploadedPostFrame {
 		}
 
 	}
+	public int getPhoto() {
+		return photoIdList.get(photoCounter);
+	}
+	protected class ShowCommentsAlbumHandler extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			int post = getPhoto();
+			new CommentFrame(post);
+		}
+	}
 
 }
+

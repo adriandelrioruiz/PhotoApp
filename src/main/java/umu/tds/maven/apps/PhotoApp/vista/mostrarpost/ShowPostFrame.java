@@ -160,17 +160,6 @@ public abstract class ShowPostFrame extends JFrame {
 		});
 
 	}
-	protected class ShowCommentsHandler extends MouseAdapter {
-		private int postId;
-
-		public  ShowCommentsHandler(int id) {
-			this.postId=id;
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			new CommentFrame(postId);
-		}
-	}
+	
 
 }

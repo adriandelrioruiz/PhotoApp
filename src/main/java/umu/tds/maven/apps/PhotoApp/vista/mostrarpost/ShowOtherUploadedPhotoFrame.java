@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import umu.tds.maven.apps.PhotoApp.vista.constantes.ViewConstants;
+import umu.tds.maven.apps.PhotoApp.vista.mostrarpost.ShowUploadedPhotoFrame.ShowCommentsHandler;
 
 /** Clase utilizada para mostrar un álbum de otro usuario */
 
@@ -25,7 +26,7 @@ public class ShowOtherUploadedPhotoFrame extends ShowUploadedPhotoFrame {
 		super(userId, photoId);
 
 		initialize();
-
+		
 		setVisible(true);
 	}
 
@@ -53,7 +54,7 @@ public class ShowOtherUploadedPhotoFrame extends ShowUploadedPhotoFrame {
 	@Override
 	protected void addListeners() {
 		super.addListeners();
-
+		verComentarios.addMouseListener(new ShowCommentsHandler(this.postId));
 		// Añadimos el listener para dar like
 		likePhotoButton.addActionListener(new ActionListener() {
 
